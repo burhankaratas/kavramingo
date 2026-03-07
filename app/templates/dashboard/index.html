@@ -631,7 +631,7 @@
 <!-- ════════════════════════════════════════════════════════════════════════ -->
 <div class="row g-4 align-items-start">
 
-  <!-- ── Sol: Devam Et + Konu Listesi ──────────────────────────────────── -->
+  <!-- ── Sol: Devam Et ────────────────────────────────────────────────── -->
   <div class="col-12 col-lg-8">
 
     <!-- Kütüphane kısayolu -->
@@ -662,8 +662,9 @@
       <i class="bi bi-arrow-right" style="color:var(--kl-primary);font-size:1rem;flex-shrink:0;"></i>
     </a>
 
+    {% if current_unit %}
     <!-- Devam Et kartı -->
-    <div class="continue-card mb-4">
+    <div class="continue-card">
       <div class="kl-card-title">
         <i class="bi bi-play-circle-fill" style="color:var(--kl-primary);font-size:1rem;"></i>
         Kaldığın Yerden Devam Et
@@ -671,31 +672,24 @@
 
       <div class="continue-unit-badge">
         <i class="bi bi-collection-fill"></i>
-        Ünite {{ current_unit.number | default(2) }}
+        Ünite {{ current_unit.number }}
       </div>
 
-      <div class="continue-unit-name">{{ current_unit.name | default("Hz. Peygamber ve Sünnet") }}</div>
-
-      <div class="continue-topic">
-        <i class="bi bi-pin-map-fill" style="color:var(--kl-accent);"></i>
-        Aktif konu: <strong style="color:var(--kl-text);">{{ current_unit.current_topic | default("Miraç Olayı") }}</strong>
-      </div>
+      <div class="continue-unit-name">{{ current_unit.name }}</div>
 
       <div class="continue-progress-label">
         <span>İlerleme</span>
-        <span>{{ current_unit.progress | default(60) }}% &nbsp;·&nbsp; {{ current_unit.done_topics | default(12) }}/{{ current_unit.total_topics | default(20) }} konu</span>
+        <span>{{ current_unit.progress }}% &nbsp;·&nbsp; {{ current_unit.quiz_done }} / {{ current_unit.quiz_target }} quiz</span>
       </div>
       <div class="continue-track">
-        <div class="continue-fill" style="width:{{ current_unit.progress | default(60) }}%;"></div>
+        <div class="continue-fill" style="width:{{ current_unit.progress }}%;"></div>
       </div>
 
       <a href="{{ url_for('quiz.index',
-                          grade=current_user.grade,
+                          grade=current_unit.grade,
                           unit_id=current_unit.unit_id,
-                          quiz_type=current_unit.quiz_type)
-                 if quiz_ready | default(false) else '#' }}"
-         class="btn-kl-continue"
-         {% if not quiz_ready | default(false) %}title="Henüz hazır değil"{% endif %}>
+                          quiz_type=current_unit.quiz_type) }}"
+         class="btn-kl-continue">
         <i class="bi bi-play-fill"></i> Devam Et
       </a>
 
@@ -705,46 +699,19 @@
         <i class="bi bi-lightning-charge-fill" style="color:var(--kl-warning);"></i> +50 XP kazanacaksın
       </div>
     </div>
-
-    <!-- Aktif Ünitedeki Konular -->
-    <div class="kl-card topics-card">
-      <div class="kl-card-title">
-        <i class="bi bi-list-check" style="color:var(--kl-primary);font-size:1rem;"></i>
-        {{ current_unit.name | default("Hz. Peygamber ve Sünnet") }} — Konular
-      </div>
-
-      {% set topics = current_unit.topics if current_unit is defined and current_unit.topics is defined else [
-        {"name": "Hz. Peygamber'in Hayatı",     "status": "done"},
-        {"name": "Vahyin Geliş Süreci",          "status": "done"},
-        {"name": "Hicret ve Önemi",              "status": "done"},
-        {"name": "Miraç Olayı",                  "status": "active"},
-        {"name": "Mekke'nin Fethi",              "status": "upcoming"},
-        {"name": "Veda Hutbesi",                 "status": "upcoming"},
-        {"name": "Sünnetin Önemi ve Çeşitleri",  "status": "locked"},
-        {"name": "Hadis ve Sünnet İlişkisi",     "status": "locked"},
-      ] %}
-
-      {% for t in topics %}
-      <div class="topic-item">
-        <div class="topic-status-icon {{ t.status }}">
-          {% if t.status == 'done'     %}<i class="bi bi-check-lg"></i>
-          {% elif t.status == 'active' %}<i class="bi bi-arrow-right-circle-fill"></i>
-          {% elif t.status == 'upcoming' %}<i class="bi bi-circle"></i>
-          {% else %}                     <i class="bi bi-lock-fill"></i>
-          {% endif %}
-        </div>
-        <span class="topic-name {{ 'locked' if t.status == 'locked' else '' }}">{{ t.name }}</span>
-        <span class="topic-tag {{ t.status }}">
-          {% if t.status == 'done'     %}Tamamlandı
-          {% elif t.status == 'active' %}Aktif
-          {% elif t.status == 'upcoming' %}Sırada
-          {% else %}Kilitli
-          {% endif %}
-        </span>
-      </div>
-      {% endfor %}
-
+    {% else %}
+    <!-- Henüz quiz oynanmadı -->
+    <div class="continue-card" style="text-align:center;padding:2.5rem 1.75rem;">
+      <div style="font-size:2.5rem;margin-bottom:0.75rem;">🚀</div>
+      <div class="continue-unit-name" style="margin-bottom:0.5rem;">İlk quizini oyna!</div>
+      <p style="font-size:0.9rem;font-weight:600;color:var(--kl-muted);margin-bottom:1.5rem;">
+        Henüz hiç quiz tamamlamadın. Kütüphaneden bir ünite seç ve başla.
+      </p>
+      <a href="{{ url_for('library.index') }}" class="btn-kl-continue">
+        <i class="bi bi-collection-fill"></i> Ünitelere Göz At
+      </a>
     </div>
+    {% endif %}
 
   </div>
 

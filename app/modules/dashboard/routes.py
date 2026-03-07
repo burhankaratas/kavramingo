@@ -1,9 +1,37 @@
+import json
+import os
+
 from flask import render_template
 from flask_login import current_user, login_required
 
 from app.modules.dashboard import dashboard_bp
 from app.extensions import mysql
 from app.services.badge_service import get_user_streak
+
+
+# ── Yardımcı: JSON'dan ünite bilgisi ─────────────────────────────────────────
+
+def _load_unit_info(unit_id: int) -> dict | None:
+    """Verilen unit_id için JSON'dan {name, number, grade, total_questions} döndürür."""
+    base = os.path.join(os.path.dirname(__file__), "..", "..", "data", "quiz")
+    for grade in [9, 10, 11, 12]:
+        path = os.path.join(base, f"grade_{grade}.json")
+        try:
+            with open(path, encoding="utf-8") as f:
+                data = json.load(f)
+            units = data.get("units", [])
+            for idx, u in enumerate(units):
+                if u["unit_id"] == unit_id:
+                    return {
+                        "unit_id":         unit_id,
+                        "name":            u.get("name", f"Ünite {unit_id}"),
+                        "number":          idx + 1,
+                        "grade":           grade,
+                        "total_questions": len(u.get("questions", [])),
+                    }
+        except (FileNotFoundError, KeyError, json.JSONDecodeError):
+            pass
+    return None
 
 
 @dashboard_bp.route("/")
@@ -93,52 +121,39 @@ def index():
     )
     badges_preview = (earned_list + locked_list)[:6]
 
-    # TODO: aşağıdakileri DB/API'den al
-    # Kullanıcının sınıfına göre ilk üniteyi belirle (unit_id global 1-16)
-    _GRADE_FIRST_UNIT = {
-        9:  {"unit_id": 1,  "number": 1, "name": "Bilgi ve İnanç",
-              "current_topic": "Tevhid Kavramı", "topics": [
-                  {"name": "Bilgi Nedir?",            "status": "done"},
-                  {"name": "İnanç ve Bilgi İlişkisi", "status": "done"},
-                  {"name": "Tevhid Kavramı",          "status": "active"},
-                  {"name": "İman Esasları",           "status": "upcoming"},
-                  {"name": "Allah'ın Sıfatları",      "status": "upcoming"},
-                  {"name": "Şirk ve Sonuçları",       "status": "locked"},
-              ]},
-        10: {"unit_id": 5,  "number": 1, "name": "Kaza, Kader ve İnsan Özgürlüğü",
-              "current_topic": "Kader İnancı", "topics": [
-                  {"name": "Kaza ve Kader Nedir?",    "status": "done"},
-                  {"name": "Kader İnancı",            "status": "active"},
-                  {"name": "Özgür İrade",             "status": "upcoming"},
-                  {"name": "İnsan Sorumluluğu",       "status": "upcoming"},
-                  {"name": "Tevekkül",                "status": "locked"},
-              ]},
-        11: {"unit_id": 9,  "number": 1, "name": "Din, Kültür ve Medeniyet",
-              "current_topic": "İslam Medeniyeti", "topics": [
-                  {"name": "Kültür ve Medeniyet",     "status": "done"},
-                  {"name": "İslam Medeniyeti",        "status": "active"},
-                  {"name": "Sanat ve Mimari",         "status": "upcoming"},
-                  {"name": "Bilime Katkılar",         "status": "upcoming"},
-                  {"name": "Medeniyet Mirası",        "status": "locked"},
-              ]},
-        12: {"unit_id": 13, "number": 1, "name": "Bir Mesaj Olarak Din",
-              "current_topic": "Dinin Tanımı", "topics": [
-                  {"name": "Dinin Tanımı",            "status": "done"},
-                  {"name": "Dinin İşlevi",            "status": "active"},
-                  {"name": "Dinin Kaynağı",           "status": "upcoming"},
-                  {"name": "Evrensel Mesaj",          "status": "upcoming"},
-                  {"name": "Din ve İnsan",            "status": "locked"},
-              ]},
-    }
-    user_grade = getattr(current_user, "grade", 9) or 9
-    _unit_data = _GRADE_FIRST_UNIT.get(user_grade, _GRADE_FIRST_UNIT[9])
-    current_unit = {
-        **_unit_data,
-        "quiz_type":   "multiple_choice",
-        "progress":    40,
-        "done_topics": 8,
-        "total_topics": 20,
-    }
+    # ── Current Unit: kullanıcının en son oynadığı ünite ─────────────────────
+    UNIT_QUIZ_TARGET = 20  # Bu kadar quiz = %100
+
+    cur2 = mysql.connection.cursor()
+
+    cur2.execute("""
+        SELECT unite_id FROM quiz_sessions
+        WHERE user_id = %s AND finished_at IS NOT NULL
+        ORDER BY finished_at DESC
+        LIMIT 1
+    """, (current_user.id,))
+    last_row = cur2.fetchone()
+
+    current_unit = None
+    if last_row:
+        last_unit_id = last_row["unite_id"]
+        unit_info = _load_unit_info(last_unit_id)
+        if unit_info:
+            cur2.execute("""
+                SELECT COUNT(*) AS cnt FROM quiz_sessions
+                WHERE user_id = %s AND unite_id = %s AND finished_at IS NOT NULL
+            """, (current_user.id, last_unit_id))
+            unit_sessions = cur2.fetchone()["cnt"]
+            progress_pct = min(100, int(unit_sessions / UNIT_QUIZ_TARGET * 100))
+            current_unit = {
+                **unit_info,
+                "quiz_done":    unit_sessions,
+                "quiz_target":  UNIT_QUIZ_TARGET,
+                "progress":     progress_pct,
+                "quiz_type":    "multiple_choice",
+            }
+
+    cur2.close()
 
     return render_template(
         "dashboard/index.html",
@@ -149,5 +164,5 @@ def index():
         streak=streak,
         daily_done=daily_done,
         daily_goal=daily_goal,
-        quiz_ready=True,
+        quiz_ready=current_unit is not None,
     )
