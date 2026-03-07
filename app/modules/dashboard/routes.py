@@ -41,7 +41,7 @@ def index():
     cur.execute("""
         SELECT COUNT(*) AS cnt FROM quiz_sessions
         WHERE user_id = %s AND finished_at IS NOT NULL
-        AND DATE(finished_at) = CURDATE()
+        AND DATE(finished_at) = UTC_DATE()
     """, (current_user.id,))
     daily_done = cur.fetchone()["cnt"]
 

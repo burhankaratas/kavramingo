@@ -24,7 +24,7 @@ def get_user_streak(user_id: int, mysql) -> int:
         return 0
 
     days = [r["day"] for r in rows]   # list[date]
-    today = date.today()
+    today = datetime.utcnow().date()  # UTC — finished_at UTC olarak kaydedildiğinden tutarlı
     yesterday = today - timedelta(days=1)
 
     # Seri ancak bugün veya dün oynandıysa aktiftir
