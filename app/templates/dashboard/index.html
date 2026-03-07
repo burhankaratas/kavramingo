@@ -754,6 +754,11 @@
     </a>
 
     {% if current_unit %}
+    {# Sınıf renk haritası #}
+    {% set _gc = {9: '#4361EE', 10: '#7209B7', 11: '#D9730D', 12: '#059669'} %}
+    {% set _gb = {9: '#EEF1FD', 10: '#F5F3FF', 11: '#FFF4E0', 12: '#ECFDF5'} %}
+    {% set _g  = current_unit.grade %}
+    {% set _cross_grade = (current_unit.grade != current_user.grade) %}
 
     {% if current_unit.completed %}
     <!-- Ünite tamamlandı kartı -->
@@ -762,8 +767,17 @@
       <div style="font-size:1.2rem;font-weight:900;color:#065F46;margin-bottom:0.4rem;">
         Ünite Tamamlandı!
       </div>
-      <div style="font-size:0.88rem;font-weight:700;color:#047857;margin-bottom:0.3rem;">
-        <i class="bi bi-collection-fill"></i> Ünite {{ current_unit.number }} &nbsp;·&nbsp; {{ current_unit.name }}
+      <div style="display:flex;align-items:center;justify-content:center;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.3rem;">
+        <span style="font-size:0.88rem;font-weight:700;color:#047857;">
+          <i class="bi bi-collection-fill"></i> Ünite {{ current_unit.number }} &nbsp;·&nbsp; {{ current_unit.name }}
+        </span>
+        <span style="display:inline-flex;align-items:center;gap:0.3rem;
+                     background:{{ _gb[_g] }};color:{{ _gc[_g] }};
+                     border-radius:50px;padding:3px 10px;
+                     font-size:0.72rem;font-weight:800;">
+          <i class="bi bi-mortarboard-fill"></i> {{ _g }}. Sınıf
+          {% if _cross_grade %}&nbsp;⚠{% endif %}
+        </span>
       </div>
       <p style="font-size:0.85rem;font-weight:600;color:#059669;margin:0.75rem 0 1.5rem;">
         Bu ünitede {{ current_unit.quiz_target }} quiz tamamladın. Yeni bir ünite seçerek devam et!
@@ -781,9 +795,19 @@
         Kaldığın Yerden Devam Et
       </div>
 
-      <div class="continue-unit-badge">
-        <i class="bi bi-collection-fill"></i>
-        Ünite {{ current_unit.number }}
+      <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.85rem;">
+        <div class="continue-unit-badge" style="margin-bottom:0;">
+          <i class="bi bi-collection-fill"></i>
+          Ünite {{ current_unit.number }}
+        </div>
+        <span style="display:inline-flex;align-items:center;gap:0.3rem;
+                     background:{{ _gb[_g] }};color:{{ _gc[_g] }};
+                     border-radius:50px;padding:4px 10px;
+                     font-size:0.72rem;font-weight:800;
+                     {% if _cross_grade %}outline:2px solid {{ _gc[_g] }};outline-offset:1px;{% endif %}">
+          <i class="bi bi-mortarboard-fill"></i> {{ _g }}. Sınıf
+          {% if _cross_grade %}&nbsp;⚠{% endif %}
+        </span>
       </div>
 
       <div class="continue-unit-name">{{ current_unit.name }}</div>
