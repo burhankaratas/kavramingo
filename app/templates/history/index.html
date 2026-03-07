@@ -1,0 +1,360 @@
+{% extends "app_base.html" %}
+{% block title %}Quiz Geçmişi — KavramLingo{% endblock %}
+
+{% block head %}
+<style>
+  /* ── Hero ─────────────────────────────────────────────────────────────── */
+  .history-hero {
+    background: linear-gradient(135deg, #4361EE 0%, #3A0CA3 55%, #7209B7 100%);
+    border-radius: 24px;
+    padding: 2rem 2.5rem;
+    margin-bottom: 1.75rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(67,97,238,0.28);
+  }
+  .history-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1.5px, transparent 1.5px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+  .history-hero-inner { position: relative; z-index: 1; }
+  .history-hero-title {
+    font-size: 1.6rem; font-weight: 900; color: #fff;
+    margin: 0 0 0.3rem; letter-spacing: -0.5px;
+  }
+  .history-hero-sub {
+    font-size: 0.9rem; font-weight: 700;
+    color: rgba(255,255,255,0.75); margin: 0 0 1.25rem;
+  }
+  .history-hero-stats { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .history-hero-stat {
+    background: rgba(255,255,255,0.13);
+    border: 1.5px solid rgba(255,255,255,0.2);
+    border-radius: 14px;
+    padding: 0.6rem 1.1rem;
+    display: flex; align-items: center; gap: 0.5rem;
+    color: #fff; font-weight: 800; font-size: 0.92rem;
+  }
+  .history-hero-stat i { font-size: 1rem; opacity: 0.85; }
+
+  /* ── Filtre barı ─────────────────────────────────────────────────────── */
+  .filter-bar {
+    background: #fff;
+    border: 2px solid var(--kl-border, #E8EAFC);
+    border-radius: 18px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+  }
+  .filter-label {
+    font-size: 0.8rem; font-weight: 800;
+    color: var(--kl-muted); text-transform: uppercase;
+    letter-spacing: 0.5px; flex-shrink: 0;
+  }
+  .filter-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .filter-chip {
+    padding: 0.3rem 0.85rem;
+    border-radius: 50px;
+    font-size: 0.78rem; font-weight: 800;
+    border: 2px solid var(--kl-border, #E8EAFC);
+    background: var(--kl-bg, #F0F2FF);
+    color: var(--kl-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .filter-chip:hover { border-color: #c7d3fc; color: var(--kl-primary); }
+  .filter-chip.active {
+    background: var(--kl-primary);
+    border-color: var(--kl-primary);
+    color: #fff;
+  }
+  .filter-divider {
+    width: 1px; height: 28px;
+    background: var(--kl-border, #E8EAFC);
+    flex-shrink: 0;
+  }
+  .filter-select {
+    padding: 0.3rem 0.85rem;
+    border-radius: 50px;
+    font-size: 0.78rem; font-weight: 800;
+    border: 2px solid var(--kl-border, #E8EAFC);
+    background: var(--kl-bg, #F0F2FF);
+    color: var(--kl-muted);
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .filter-select:focus, .filter-select.active {
+    border-color: var(--kl-primary);
+    color: var(--kl-primary);
+  }
+  .filter-count {
+    margin-left: auto;
+    font-size: 0.78rem; font-weight: 800;
+    color: var(--kl-muted);
+    flex-shrink: 0;
+  }
+
+  /* ── Oturum listesi ──────────────────────────────────────────────────── */
+  .session-list { display: flex; flex-direction: column; gap: 0.65rem; }
+
+  .session-item {
+    background: #fff;
+    border: 2px solid var(--kl-border, #E8EAFC);
+    border-radius: 16px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: box-shadow 0.15s, border-color 0.15s, transform 0.12s;
+  }
+  .session-item:hover {
+    box-shadow: 0 4px 18px rgba(67,97,238,0.11);
+    border-color: #c7d3fc;
+    transform: translateY(-1px);
+  }
+
+  .session-qt-icon {
+    width: 44px; height: 44px;
+    border-radius: 13px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .session-body { flex: 1; min-width: 0; }
+  .session-unit-name {
+    font-size: 0.92rem; font-weight: 800;
+    color: var(--kl-text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    margin-bottom: 0.2rem;
+  }
+  .session-meta {
+    display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+  }
+  .session-qt-badge {
+    font-size: 0.7rem; font-weight: 800;
+    padding: 0.15rem 0.55rem;
+    border-radius: 50px;
+  }
+  .session-grade-badge {
+    font-size: 0.7rem; font-weight: 800;
+    padding: 0.15rem 0.55rem;
+    border-radius: 50px;
+  }
+  .session-time {
+    font-size: 0.7rem; font-weight: 700;
+    color: var(--kl-muted);
+  }
+
+  .session-right {
+    display: flex; flex-direction: column;
+    align-items: flex-end; gap: 0.25rem;
+    flex-shrink: 0;
+  }
+  .session-xp {
+    font-size: 0.88rem; font-weight: 900;
+    color: var(--kl-warning);
+  }
+  .session-xp i { font-size: 0.78rem; }
+  .session-acc {
+    font-size: 0.75rem; font-weight: 800;
+    color: var(--kl-muted);
+  }
+  .session-acc.good { color: var(--kl-success); }
+  .session-acc.mid  { color: var(--kl-warning); }
+  .session-acc.low  { color: var(--kl-danger); }
+
+  /* Boş durum */
+  .history-empty {
+    text-align: center; padding: 3.5rem 1rem;
+    color: var(--kl-muted);
+  }
+  .history-empty i {
+    font-size: 2.5rem; opacity: 0.3;
+    display: block; margin-bottom: 0.75rem;
+  }
+  .history-empty p { font-size: 0.95rem; font-weight: 700; margin: 0; }
+
+  /* Limit notu */
+  .history-limit-note {
+    text-align: center;
+    font-size: 0.78rem; font-weight: 700;
+    color: var(--kl-muted);
+    margin-top: 1rem;
+    padding: 0.6rem;
+  }
+
+  @media (max-width: 575px) {
+    .history-hero { padding: 1.5rem 1.25rem; }
+    .history-hero-title { font-size: 1.25rem; }
+    .session-item { gap: 0.75rem; padding: 0.85rem 1rem; }
+    .filter-divider { display: none; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width:860px;">
+
+  <!-- Hero -->
+  <div class="history-hero">
+    <div class="history-hero-inner">
+      <h1 class="history-hero-title"><i class="bi bi-clock-history me-2"></i>Quiz Geçmişi</h1>
+      <p class="history-hero-sub">Son {{ session_limit }} oturumun listeleniyor.</p>
+      <div class="history-hero-stats">
+        <div class="history-hero-stat">
+          <i class="bi bi-controller"></i>
+          <span>{{ total_sessions }} toplam oturum</span>
+        </div>
+        <div class="history-hero-stat">
+          <i class="bi bi-star-fill"></i>
+          <span>{{ total_xp }} toplam XP</span>
+        </div>
+        <div class="history-hero-stat">
+          <i class="bi bi-bullseye"></i>
+          <span>%{{ avg_accuracy }} ortalama doğruluk</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if sessions %}
+
+  <!-- Filtre barı -->
+  <div class="filter-bar">
+    <span class="filter-label">Tip</span>
+    <div class="filter-chips" id="qtChips">
+      <span class="filter-chip active" data-qt="all">Tümü</span>
+      {% for key, meta in quiz_type_meta.items() %}
+      <span class="filter-chip" data-qt="{{ key }}">
+        <i class="bi {{ meta.icon }} me-1"></i>{{ meta.label }}
+      </span>
+      {% endfor %}
+    </div>
+
+    {% if filter_units %}
+    <div class="filter-divider"></div>
+    <span class="filter-label">Ünite</span>
+    <select class="filter-select" id="unitSelect">
+      <option value="all">Tüm Üniteler</option>
+      {% for u in filter_units %}
+      <option value="{{ u.name }}">{{ u.name }}</option>
+      {% endfor %}
+    </select>
+    {% endif %}
+
+    <span class="filter-count" id="filterCount">{{ sessions|length }} oturum</span>
+  </div>
+
+  <!-- Oturum listesi -->
+  <div class="session-list" id="sessionList">
+    {% for s in sessions %}
+    <div class="session-item"
+         data-qt="{{ s.qt_key }}"
+         data-unit="{{ s.unit_name }}">
+
+      <div class="session-qt-icon"
+           style="background:{{ s.qt_bg }};color:{{ s.qt_color }};">
+        <i class="bi {{ s.qt_icon }}"></i>
+      </div>
+
+      <div class="session-body">
+        <div class="session-unit-name">{{ s.unit_name }}</div>
+        <div class="session-meta">
+          <span class="session-qt-badge"
+                style="background:{{ s.qt_bg }};color:{{ s.qt_color }};">
+            {{ s.qt_label }}
+          </span>
+          <span class="session-grade-badge"
+                style="background:{{ s.grade_meta.bg }};color:{{ s.grade_meta.color }};">
+            {{ s.grade_meta.label }}
+          </span>
+          <span class="session-time">
+            <i class="bi bi-clock me-1"></i>{{ s.time_ago }}
+            {% if s.date_str %}&nbsp;·&nbsp;{{ s.date_str }}{% endif %}
+          </span>
+        </div>
+      </div>
+
+      <div class="session-right">
+        <span class="session-xp">
+          <i class="bi bi-star-fill"></i> +{{ s.xp }} XP
+        </span>
+        {% if s.accuracy is not none %}
+        <span class="session-acc {% if s.accuracy >= 80 %}good{% elif s.accuracy >= 50 %}mid{% else %}low{% endif %}">
+          <i class="bi bi-bullseye"></i>
+          %{{ s.accuracy }} ({{ s.correct_q }}/{{ s.total_q }})
+        </span>
+        {% endif %}
+      </div>
+
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if total_sessions > session_limit %}
+  <p class="history-limit-note">
+    <i class="bi bi-info-circle me-1"></i>
+    Son {{ session_limit }} oturum gösteriliyor. Toplam {{ total_sessions }} oturum var.
+  </p>
+  {% endif %}
+
+  {% else %}
+  <div class="history-empty">
+    <i class="bi bi-clock-history"></i>
+    <p>Henüz hiç quiz tamamlamadın.<br>Kütüphaneden bir ünite seçip başla!</p>
+  </div>
+  {% endif %}
+
+</div>
+
+<script>
+(function () {
+  const items      = Array.from(document.querySelectorAll('.session-item'));
+  const qtChips    = document.querySelectorAll('#qtChips .filter-chip');
+  const unitSelect = document.getElementById('unitSelect');
+  const countEl    = document.getElementById('filterCount');
+
+  let activeQt   = 'all';
+  let activeUnit = 'all';
+
+  function applyFilter() {
+    let visible = 0;
+    items.forEach(el => {
+      const qtMatch   = activeQt   === 'all' || el.dataset.qt   === activeQt;
+      const unitMatch = activeUnit === 'all' || el.dataset.unit === activeUnit;
+      const show      = qtMatch && unitMatch;
+      el.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    if (countEl) countEl.textContent = visible + ' oturum';
+  }
+
+  qtChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      qtChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      activeQt = chip.dataset.qt;
+      applyFilter();
+    });
+  });
+
+  if (unitSelect) {
+    unitSelect.addEventListener('change', () => {
+      activeUnit = unitSelect.value;
+      unitSelect.classList.toggle('active', activeUnit !== 'all');
+      applyFilter();
+    });
+  }
+})();
+</script>
+{% endblock %}

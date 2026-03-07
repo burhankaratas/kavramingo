@@ -124,6 +124,82 @@
 
     .app-nav-links a i { font-size: 1rem; }
 
+    /* "Daha Fazla" dropdown */
+    .nav-more-wrap {
+      position: relative;
+      list-style: none;
+    }
+
+    .nav-more-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--kl-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+
+    .nav-more-btn:hover,
+    .nav-more-btn.active {
+      background: var(--kl-bg);
+      color: var(--kl-primary);
+    }
+
+    .nav-more-btn i.bi-chevron-down {
+      font-size: 0.72rem;
+      transition: transform 0.18s;
+    }
+
+    .nav-more-wrap.open .nav-more-btn i.bi-chevron-down {
+      transform: rotate(180deg);
+    }
+
+    .nav-more-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 190px;
+      background: #fff;
+      border: 2px solid var(--kl-border, #E8EAFC);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(67,97,238,0.13);
+      padding: 0.4rem;
+      z-index: 9999;
+    }
+
+    .nav-more-wrap.open .nav-more-dropdown { display: block; }
+
+    .nav-more-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.55rem 0.85rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--kl-muted);
+      text-decoration: none;
+      transition: background 0.12s, color 0.12s;
+    }
+
+    .nav-more-item:hover,
+    .nav-more-item.active {
+      background: #EEF1FD;
+      color: var(--kl-primary);
+    }
+
+    .nav-more-item i { font-size: 0.95rem; }
+
     /* Sağ alan */
     .app-nav-right {
       display: flex;
@@ -316,16 +392,31 @@
       </a>
     </li>
     <li>
-      <a href="{{ url_for('leaderboard.index') }}"
-         class="{{ 'active' if request.endpoint == 'leaderboard.index' else '' }}">
-        <i class="bi bi-trophy-fill"></i> Sıralama
-      </a>
-    </li>
-    <li>
       <a href="{{ url_for('user.profile') }}"
          class="{{ 'active' if request.endpoint == 'user.profile' else '' }}">
         <i class="bi bi-person-fill"></i> Profil
       </a>
+    </li>
+    <li class="nav-more-wrap" id="navMoreWrap">
+      <button class="nav-more-btn {% if request.endpoint in ['leaderboard.index', 'history.index', 'user.badges'] %}active{% endif %}"
+              id="navMoreBtn" type="button">
+        <i class="bi bi-grid-3x3-gap-fill"></i> Daha Fazla
+        <i class="bi bi-chevron-down"></i>
+      </button>
+      <div class="nav-more-dropdown" id="navMoreDropdown">
+        <a href="{{ url_for('leaderboard.index') }}"
+           class="nav-more-item {{ 'active' if request.endpoint == 'leaderboard.index' else '' }}">
+          <i class="bi bi-trophy-fill" style="color:var(--kl-warning);"></i> Sıralama
+        </a>
+        <a href="{{ url_for('history.index') }}"
+           class="nav-more-item {{ 'active' if request.endpoint == 'history.index' else '' }}">
+          <i class="bi bi-clock-history" style="color:var(--kl-primary);"></i> Quiz Geçmişi
+        </a>
+        <a href="{{ url_for('user.badges') }}"
+           class="nav-more-item {{ 'active' if request.endpoint == 'user.badges' else '' }}">
+          <i class="bi bi-award-fill" style="color:#D9730D;"></i> Rozetlerim
+        </a>
+      </div>
     </li>
   </ul>
 
@@ -426,6 +517,16 @@
          style="font-family:'Nunito',sans-serif;font-weight:700;">
         <i class="bi bi-person-fill me-2" style="color:var(--kl-accent);"></i>Profil
       </a>
+      <a href="{{ url_for('leaderboard.index') }}"
+         class="list-group-item list-group-item-action rounded-3 fw-700 border-0"
+         style="font-family:'Nunito',sans-serif;font-weight:700;">
+        <i class="bi bi-trophy-fill me-2" style="color:var(--kl-warning);"></i>Sıralama
+      </a>
+      <a href="{{ url_for('history.index') }}"
+         class="list-group-item list-group-item-action rounded-3 fw-700 border-0"
+         style="font-family:'Nunito',sans-serif;font-weight:700;">
+        <i class="bi bi-clock-history me-2" style="color:var(--kl-primary);"></i>Quiz Geçmişi
+      </a>
       <a href="{{ url_for('user.badges') }}"
          class="list-group-item list-group-item-action rounded-3 fw-700 border-0"
          style="font-family:'Nunito',sans-serif;font-weight:700;">
@@ -471,6 +572,20 @@
     });
     document.addEventListener('click', function() {
       menu.classList.remove('open');
+    });
+  })();
+
+  /* "Daha Fazla" dropdown toggle */
+  (function() {
+    var wrap = document.getElementById('navMoreWrap');
+    var btn  = document.getElementById('navMoreBtn');
+    if (!wrap || !btn) return;
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      wrap.classList.toggle('open');
+    });
+    document.addEventListener('click', function() {
+      wrap.classList.remove('open');
     });
   })();
 </script>
