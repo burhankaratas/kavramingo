@@ -112,26 +112,28 @@ def _fetch_top(cur, since, grade_filter) -> list:
         cur.execute(sql, grade_params)
     else:
         # ── Dönem tabanlı ─────────────────────────────────────────────────
+        # Cartesian product'ı önlemek için scores ve accuracy ayrı subquery'lerde toplandı.
         sql = f"""
             SELECT
-                u.id, u.name, u.grade,
-                COALESCE(SUM(sc.points), 0)          AS score,
-                u.streak,
-                COALESCE(ROUND(
-                    SUM(CASE WHEN qa.is_correct=1 THEN 1 ELSE 0 END) * 100.0
-                    / NULLIF(COUNT(qa.id), 0)
-                ), 0)                                AS accuracy
+                u.id, u.name, u.grade, u.streak,
+                COALESCE(s_agg.score, 0)    AS score,
+                COALESCE(a_agg.accuracy, 0) AS accuracy
             FROM users u
-            LEFT JOIN scores sc
-                   ON sc.user_id = u.id
-                  AND sc.earned_at >= %s
-            LEFT JOIN quiz_sessions qs
-                   ON qs.user_id = u.id
-                  AND qs.finished_at IS NOT NULL
-                  AND qs.finished_at >= %s
-            LEFT JOIN quiz_answers qa ON qa.session_id = qs.id
+            LEFT JOIN (
+                SELECT user_id, SUM(points) AS score
+                FROM scores
+                WHERE earned_at >= %s
+                GROUP BY user_id
+            ) s_agg ON s_agg.user_id = u.id
+            LEFT JOIN (
+                SELECT qs.user_id,
+                       ROUND(SUM(qa.is_correct) * 100.0 / NULLIF(COUNT(qa.id), 0)) AS accuracy
+                FROM quiz_sessions qs
+                JOIN quiz_answers qa ON qa.session_id = qs.id
+                WHERE qs.finished_at IS NOT NULL AND qs.finished_at >= %s
+                GROUP BY qs.user_id
+            ) a_agg ON a_agg.user_id = u.id
             WHERE 1=1 {grade_cond}
-            GROUP BY u.id, u.name, u.grade, u.streak
             ORDER BY score DESC
             LIMIT {LIMIT}
         """
@@ -181,24 +183,28 @@ def _fetch_user_stats(cur, since, grade_filter, user_id: int) -> dict | None:
 
     else:
         # ── Dönem: kullanıcı skoru ────────────────────────────────────────
+        # Cartesian product'ı önlemek için scores ve accuracy ayrı subquery'lerde toplandı.
         cur.execute("""
             SELECT
-                u.id, u.name, u.grade,
-                COALESCE(SUM(sc.points), 0)  AS score,
-                u.streak,
-                COALESCE(ROUND(
-                    SUM(CASE WHEN qa.is_correct=1 THEN 1 ELSE 0 END) * 100.0
-                    / NULLIF(COUNT(qa.id), 0)
-                ), 0) AS accuracy
+                u.id, u.name, u.grade, u.streak,
+                COALESCE(s_agg.score, 0)    AS score,
+                COALESCE(a_agg.accuracy, 0) AS accuracy
             FROM users u
-            LEFT JOIN scores sc
-                   ON sc.user_id = u.id AND sc.earned_at >= %s
-            LEFT JOIN quiz_sessions qs
-                   ON qs.user_id = u.id
-                  AND qs.finished_at IS NOT NULL AND qs.finished_at >= %s
-            LEFT JOIN quiz_answers qa ON qa.session_id = qs.id
+            LEFT JOIN (
+                SELECT user_id, SUM(points) AS score
+                FROM scores
+                WHERE earned_at >= %s
+                GROUP BY user_id
+            ) s_agg ON s_agg.user_id = u.id
+            LEFT JOIN (
+                SELECT qs.user_id,
+                       ROUND(SUM(qa.is_correct) * 100.0 / NULLIF(COUNT(qa.id), 0)) AS accuracy
+                FROM quiz_sessions qs
+                JOIN quiz_answers qa ON qa.session_id = qs.id
+                WHERE qs.finished_at IS NOT NULL AND qs.finished_at >= %s
+                GROUP BY qs.user_id
+            ) a_agg ON a_agg.user_id = u.id
             WHERE u.id = %s
-            GROUP BY u.id, u.name, u.grade, u.streak
         """, [since, since, user_id])
         u_row = cur.fetchone()
         if not u_row:
