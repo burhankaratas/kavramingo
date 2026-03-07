@@ -173,7 +173,7 @@ def answer():
         for i, pair in enumerate(pairs):
             val = request.form.get(f"match_{i}", "").strip()
             given_map[i] = val
-            if val == pair.get("right", ""):
+            if val == pair.get("definition", ""):
                 correct += 1
         given      = str(given_map)
         is_correct = (correct == len(pairs))

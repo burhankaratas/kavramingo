@@ -120,7 +120,7 @@
       {% for pair in question.pairs %}
       <div class="match-term-item">
         <div class="match-num">{{ loop.index }}</div>
-        {{ pair.left }}
+        {{ pair.term }}
       </div>
       {% endfor %}
     </div>
@@ -128,7 +128,7 @@
     <!-- Sağ: dropdown seçim -->
     <div>
       <div class="match-col-label"><i class="bi bi-chat-square-text-fill"></i> Tanımlar</div>
-      {% set all_rights = question.pairs | map(attribute='right') | list %}
+      {% set all_rights = question.pairs | map(attribute='definition') | list %}
       {% for pair in question.pairs %}
       <div class="match-select-wrap">
         <select name="match_{{ loop.index0 }}" class="match-select" required>

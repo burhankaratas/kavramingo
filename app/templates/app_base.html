@@ -55,24 +55,36 @@
     .app-logo {
       display: flex;
       align-items: center;
-      gap: 0.55rem;
+      gap: 0.6rem;
       text-decoration: none;
-      font-weight: 900;
-      font-size: 1.25rem;
-      color: var(--kl-primary);
-      letter-spacing: -0.3px;
       flex-shrink: 0;
     }
 
-    .app-logo .logo-icon {
+    .app-logo .logo-mark {
       width: 38px; height: 38px;
       border-radius: 11px;
       background: linear-gradient(135deg, var(--kl-primary) 0%, var(--kl-accent) 100%);
       display: flex; align-items: center; justify-content: center;
-      color: #fff;
-      font-size: 1.1rem;
       flex-shrink: 0;
-      box-shadow: 0 3px 10px rgba(67,97,238,0.3);
+      box-shadow: 0 3px 12px rgba(67,97,238,0.35);
+    }
+
+    .app-logo .logo-wordmark {
+      font-size: 1.25rem;
+      font-weight: 900;
+      letter-spacing: -0.3px;
+      line-height: 1;
+    }
+
+    .app-logo .logo-w1 {
+      color: var(--kl-text);
+    }
+
+    .app-logo .logo-w2 {
+      background: linear-gradient(135deg, var(--kl-primary) 0%, var(--kl-accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     /* Nav linkleri */
@@ -276,8 +288,12 @@
 <nav class="app-nav">
 
   <a href="{{ url_for('dashboard.index') }}" class="app-logo">
-    <span class="logo-icon"><i class="bi bi-book-half"></i></span>
-    KavramLingo
+    <span class="logo-mark">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M11 2L12.8 8.2H19.2L14 12.1L15.8 18.3L11 14.4L6.2 18.3L8 12.1L2.8 8.2H9.2L11 2Z" fill="white"/>
+      </svg>
+    </span>
+    <span class="logo-wordmark"><span class="logo-w1">Kavram</span><span class="logo-w2">Lingo</span></span>
   </a>
 
   <ul class="app-nav-links">
@@ -291,6 +307,12 @@
       <a href="{{ url_for('library.index') }}"
          class="{{ 'active' if request.endpoint and request.endpoint.startswith('library.') else '' }}">
         <i class="bi bi-collection-fill"></i> Kütüphane
+      </a>
+    </li>
+    <li>
+      <a href="{{ url_for('progress.index') }}"
+         class="{{ 'active' if request.endpoint and request.endpoint.startswith('progress.') else '' }}">
+        <i class="bi bi-graph-up-arrow"></i> İlerleme
       </a>
     </li>
     <li>
@@ -388,6 +410,11 @@
          class="list-group-item list-group-item-action rounded-3 fw-700 border-0"
          style="font-family:'Nunito',sans-serif;font-weight:700;">
         <i class="bi bi-collection-fill me-2" style="color:var(--kl-accent);"></i>Kütüphane
+      </a>
+      <a href="{{ url_for('progress.index') }}"
+         class="list-group-item list-group-item-action rounded-3 fw-700 border-0"
+         style="font-family:'Nunito',sans-serif;font-weight:700;">
+        <i class="bi bi-graph-up-arrow me-2" style="color:var(--kl-success);"></i>İlerleme
       </a>
       <a href="{{ url_for('leaderboard.index') }}"
          class="list-group-item list-group-item-action rounded-3 fw-700 border-0"
