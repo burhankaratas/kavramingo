@@ -1,17 +1,19 @@
 {#
-  Onboarding Stepper — 3 adım göstergesi
-  Kullanım: {% set ob_step = 1 %} (veya 2, 3) üst şablonda tanımla, sonra include et.
+  Onboarding Stepper — 4 adım göstergesi
+  Kullanım: {% set ob_step = 1 %} (veya 2, 3, 4) üst şablonda tanımla, sonra include et.
 
   Adımlar:
     1 = Sınıf Seçimi
     2 = Yerleştirme Testi
     3 = Sonuç & Başlangıç
+    4 = Günlük Hedef
 #}
 <div class="ob-stepper">
   {% set steps = [
     (1, "Sınıf Seçimi",   "bi-person-badge"),
     (2, "Kısa Test",       "bi-pencil-square"),
     (3, "Sonuç",           "bi-bar-chart-fill"),
+    (4, "Günlük Hedef",    "bi-bullseye"),
   ] %}
 
   {% for num, label, icon in steps %}

@@ -279,8 +279,9 @@ def settings():
 @user_bp.route("/settings/profile", methods=["POST"])
 @login_required
 def settings_profile():
-    name  = request.form.get("full_name", "").strip()
-    grade = request.form.get("grade", "").strip()
+    name       = request.form.get("full_name", "").strip()
+    grade      = request.form.get("grade", "").strip()
+    daily_goal = request.form.get("daily_goal", "").strip()
 
     if not name:
         flash("Ad soyad boş bırakılamaz.", "danger")
@@ -290,10 +291,14 @@ def settings_profile():
         flash("Geçersiz sınıf değeri.", "danger")
         return redirect(url_for("user.settings"))
 
+    if daily_goal not in {"3", "5", "10", "15"}:
+        flash("Geçersiz günlük hedef değeri.", "danger")
+        return redirect(url_for("user.settings"))
+
     cur = mysql.connection.cursor()
     cur.execute(
-        "UPDATE users SET name = %s, grade = %s WHERE id = %s",
-        (name, int(grade), current_user.id),
+        "UPDATE users SET name = %s, grade = %s, daily_goal = %s WHERE id = %s",
+        (name, int(grade), int(daily_goal), current_user.id),
     )
     mysql.connection.commit()
     cur.close()

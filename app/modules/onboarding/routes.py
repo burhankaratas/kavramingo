@@ -153,6 +153,37 @@ def placement_result():
     )
 
 
+# ── Günlük Hedef Seçimi ───────────────────────────────────────────────────────
+@onboarding_bp.route("/daily-goal", methods=["GET", "POST"])
+@login_required
+def daily_goal_select():
+    if not current_user.grade:
+        return redirect(url_for("onboarding.class_select"))
+
+    # placement_result'tan gelen başlangıç tercihi (beginning / recommended)
+    choice = request.args.get("choice", "recommended")
+
+    if request.method == "POST":
+        goal   = request.form.get("daily_goal", type=int)
+        choice = request.form.get("choice", "recommended")
+
+        if goal not in (3, 5, 10, 15):
+            goal = 5  # güvenli fallback
+
+        cur = mysql.connection.cursor()
+        cur.execute(
+            "UPDATE users SET daily_goal = %s WHERE id = %s",
+            (goal, current_user.id)
+        )
+        mysql.connection.commit()
+        cur.close()
+
+        current_user.daily_goal = goal
+        return redirect(url_for("onboarding.start", choice=choice))
+
+    return render_template("onboarding/daily_goal.html", choice=choice)
+
+
 # ── Başlangıç Tercihi ─────────────────────────────────────────────────────────
 @onboarding_bp.route("/start")
 @login_required
