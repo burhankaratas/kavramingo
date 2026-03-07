@@ -24,6 +24,7 @@ def create_app(env=None):
     from app.modules.dashboard import dashboard_bp
     from app.modules.leaderboard import leaderboard_bp
     from app.modules.library import library_bp
+    from app.modules.progress import progress_bp
 
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(user_bp, url_prefix="/user")
@@ -32,6 +33,7 @@ def create_app(env=None):
     app.register_blueprint(dashboard_bp, url_prefix="/")
     app.register_blueprint(leaderboard_bp, url_prefix="/leaderboard")
     app.register_blueprint(library_bp, url_prefix="/kutuphane")
+    app.register_blueprint(progress_bp, url_prefix="/ilerleme")
 
     # Veritabanı tablolarını oluştur (uygulama ilk başladığında)
     with app.app_context():

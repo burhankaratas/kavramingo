@@ -1,0 +1,335 @@
+{% extends "app_base.html" %}
+{% block title %}İlerleme Takibi — KavramLingo{% endblock %}
+
+{% block head %}
+<style>
+  /* ── Sayfa başlığı ────────────────────────────────────────────────────── */
+  .progress-page-hero {
+    background: linear-gradient(135deg, #4361EE 0%, #3A0CA3 55%, #7209B7 100%);
+    border-radius: 24px;
+    padding: 2rem 2.5rem;
+    margin-bottom: 1.75rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(67,97,238,0.28);
+  }
+
+  .progress-page-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1.5px, transparent 1.5px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+
+  .progress-hero-inner { position: relative; z-index: 1; }
+
+  .progress-hero-title {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: #fff;
+    margin: 0 0 0.35rem;
+    letter-spacing: -0.5px;
+  }
+
+  .progress-hero-sub {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.75);
+    margin: 0 0 1.25rem;
+  }
+
+  .progress-hero-stats {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .progress-hero-stat {
+    background: rgba(255,255,255,0.13);
+    border: 1.5px solid rgba(255,255,255,0.2);
+    border-radius: 14px;
+    padding: 0.6rem 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.92rem;
+  }
+
+  .progress-hero-stat i { font-size: 1rem; opacity: 0.85; }
+
+  /* ── Sınıf grubu ──────────────────────────────────────────────────────── */
+  .grade-section { margin-bottom: 2rem; }
+
+  .grade-section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .grade-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 50px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    border: 2px solid transparent;
+  }
+
+  .grade-section-meta {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--kl-muted);
+    margin-left: auto;
+  }
+
+  .grade-own-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 0.2rem 0.65rem;
+    border-radius: 50px;
+    background: #EEF1FD;
+    color: var(--kl-primary);
+  }
+
+  /* ── Ünite kart grid ──────────────────────────────────────────────────── */
+  .unit-progress-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+
+  .unit-progress-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 1.25rem 1.35rem;
+    border: 2px solid var(--kl-border, #E8EAFC);
+    transition: box-shadow 0.18s, border-color 0.18s, transform 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .unit-progress-card:hover {
+    box-shadow: 0 6px 24px rgba(67,97,238,0.13);
+    border-color: #c7d3fc;
+    transform: translateY(-2px);
+  }
+
+  .unit-progress-card.completed {
+    border-color: var(--kl-success);
+    background: linear-gradient(135deg, #f0fdf8 0%, #fff 100%);
+  }
+
+  .unit-progress-card.not-started {
+    opacity: 0.72;
+  }
+
+  .unit-card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .unit-num-badge {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 900;
+    flex-shrink: 0;
+  }
+
+  .unit-card-info { flex: 1; }
+
+  .unit-card-name {
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: var(--kl-text);
+    line-height: 1.3;
+    margin-bottom: 0.2rem;
+  }
+
+  .unit-card-grade-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--kl-muted);
+  }
+
+  .unit-card-status {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  /* Progress bar */
+  .unit-pb-wrap {
+    margin-bottom: 0.55rem;
+  }
+
+  .unit-pb-track {
+    height: 8px;
+    border-radius: 99px;
+    background: #EEF1FD;
+    overflow: hidden;
+  }
+
+  .unit-pb-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.4s cubic-bezier(.4,0,.2,1);
+  }
+
+  .unit-pb-labels {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.35rem;
+  }
+
+  .unit-pb-pct {
+    font-size: 0.78rem;
+    font-weight: 900;
+  }
+
+  .unit-pb-count {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--kl-muted);
+  }
+
+  /* Tamamlandı damgası */
+  .unit-completed-stamp {
+    position: absolute;
+    top: 0.75rem; right: 0.9rem;
+    background: var(--kl-success);
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 900;
+    padding: 0.2rem 0.6rem;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  /* Boş durum */
+  .progress-empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--kl-muted);
+  }
+
+  .progress-empty i { font-size: 2.5rem; opacity: 0.35; margin-bottom: 0.75rem; display: block; }
+  .progress-empty p { font-size: 0.95rem; font-weight: 700; margin: 0; }
+
+  /* ── Responsive ───────────────────────────────────────────────────────── */
+  @media (max-width: 575px) {
+    .progress-page-hero { padding: 1.5rem 1.25rem; }
+    .progress-hero-title { font-size: 1.25rem; }
+    .unit-progress-grid { grid-template-columns: 1fr; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width:900px;">
+
+  <!-- ── Hero başlık ──────────────────────────────────────────────────────── -->
+  <div class="progress-page-hero">
+    <div class="progress-hero-inner">
+      <h1 class="progress-hero-title"><i class="bi bi-graph-up-arrow me-2"></i>İlerleme Takibi</h1>
+      <p class="progress-hero-sub">Her ünitede kaç quiz tamamladığını takip et.</p>
+      <div class="progress-hero-stats">
+        <div class="progress-hero-stat">
+          <i class="bi bi-collection-fill"></i>
+          <span>{{ completed_units }} / {{ total_units }} ünite tamamlandı</span>
+        </div>
+        <div class="progress-hero-stat">
+          <i class="bi bi-controller"></i>
+          <span>{{ total_sessions }} toplam oturum</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Sınıf grupları ───────────────────────────────────────────────────── -->
+  {% if grouped %}
+    {% for group in grouped %}
+    {% set gm = group.meta %}
+    <div class="grade-section">
+
+      <!-- Grup başlığı -->
+      <div class="grade-section-header">
+        <span class="grade-badge-pill"
+              style="background:{{ gm.bg }};color:{{ gm.color }};border-color:{{ gm.color }}20;">
+          <i class="bi bi-mortarboard-fill"></i> {{ gm.label }}
+        </span>
+        {% if group.is_user_grade %}
+          <span class="grade-own-label">Senin sınıfın</span>
+        {% endif %}
+        <span class="grade-section-meta">
+          {{ group.completed }} / {{ group.total }} tamamlandı
+        </span>
+      </div>
+
+      <!-- Ünite kartları -->
+      <div class="unit-progress-grid">
+        {% for u in group.units %}
+        <div class="unit-progress-card {% if u.completed %}completed{% elif not u.started %}not-started{% endif %}">
+
+          {% if u.completed %}
+          <div class="unit-completed-stamp">
+            <i class="bi bi-check-lg"></i> Tamamlandı
+          </div>
+          {% endif %}
+
+          <div class="unit-card-top">
+            <div class="unit-num-badge"
+                 style="background:{{ gm.bg }};color:{{ gm.color }};">
+              {{ u.number }}
+            </div>
+            <div class="unit-card-info">
+              <div class="unit-card-name">{{ u.name }}</div>
+              <div class="unit-card-grade-label">{{ gm.label }} · Ünite {{ u.number }}</div>
+            </div>
+          </div>
+
+          <!-- Progress bar -->
+          <div class="unit-pb-wrap">
+            <div class="unit-pb-track">
+              <div class="unit-pb-fill"
+                   style="width:{{ u.progress_pct }}%;
+                          background:{% if u.completed %}var(--kl-success){% else %}{{ gm.color }}{% endif %};">
+              </div>
+            </div>
+            <div class="unit-pb-labels">
+              <span class="unit-pb-pct"
+                    style="color:{% if u.completed %}var(--kl-success){% else %}{{ gm.color }}{% endif %};">
+                %{{ u.progress_pct }}
+              </span>
+              <span class="unit-pb-count">{{ u.sessions_done }} / {{ u.sessions_target }} oturum</span>
+            </div>
+          </div>
+
+        </div>
+        {% endfor %}
+      </div>
+
+    </div>
+    {% endfor %}
+
+  {% else %}
+  <div class="progress-empty">
+    <i class="bi bi-bar-chart-line"></i>
+    <p>Henüz hiç quiz oynamamışsın.<br>Kütüphaneden bir ünite seçerek başla!</p>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

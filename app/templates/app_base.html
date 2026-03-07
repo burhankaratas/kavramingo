@@ -310,6 +310,12 @@
       </a>
     </li>
     <li>
+      <a href="{{ url_for('progress.index') }}"
+         class="{{ 'active' if request.endpoint and request.endpoint.startswith('progress.') else '' }}">
+        <i class="bi bi-graph-up-arrow"></i> İlerleme
+      </a>
+    </li>
+    <li>
       <a href="{{ url_for('leaderboard.index') }}"
          class="{{ 'active' if request.endpoint == 'leaderboard.index' else '' }}">
         <i class="bi bi-trophy-fill"></i> Sıralama
@@ -404,6 +410,11 @@
          class="list-group-item list-group-item-action rounded-3 fw-700 border-0"
          style="font-family:'Nunito',sans-serif;font-weight:700;">
         <i class="bi bi-collection-fill me-2" style="color:var(--kl-accent);"></i>Kütüphane
+      </a>
+      <a href="{{ url_for('progress.index') }}"
+         class="list-group-item list-group-item-action rounded-3 fw-700 border-0"
+         style="font-family:'Nunito',sans-serif;font-weight:700;">
+        <i class="bi bi-graph-up-arrow me-2" style="color:var(--kl-success);"></i>İlerleme
       </a>
       <a href="{{ url_for('leaderboard.index') }}"
          class="list-group-item list-group-item-action rounded-3 fw-700 border-0"
