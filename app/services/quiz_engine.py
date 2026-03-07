@@ -255,6 +255,28 @@ def finish_session(user_id: int, mysql) -> dict:
             (result["total_score"], user_id),
         )
 
+        # ── progress tablosu upsert ──────────────────────────────────────────
+        # Bu ünite için toplam tamamlanan oturum sayısını hesapla
+        cur.execute(
+            """SELECT COUNT(*) AS cnt FROM quiz_sessions
+               WHERE user_id = %s AND unite_id = %s AND finished_at IS NOT NULL""",
+            (user_id, state["unit_id"]),
+        )
+        unit_sessions = (cur.fetchone() or {}).get("cnt", 0)
+
+        from app.modules.progress.routes import UNIT_QUIZ_TARGET  # yerel import — döngüsel bağımlılığı önler
+        if unit_sessions >= UNIT_QUIZ_TARGET:
+            new_status = "completed"
+        else:
+            new_status = "in_progress"
+
+        cur.execute(
+            """INSERT INTO progress (user_id, unite_id, status, updated_at)
+               VALUES (%s, %s, %s, %s)
+               ON DUPLICATE KEY UPDATE status = VALUES(status), updated_at = VALUES(updated_at)""",
+            (user_id, state["unit_id"], new_status, now),
+        )
+
         mysql.connection.commit()
 
     except Exception:

@@ -152,7 +152,7 @@ def index():
             "correct_q":  correct_q,
             "accuracy":   acc,
             "time_ago":   _time_ago(r["finished_at"]),
-            "date_str":   r["finished_at"].strftime("%-d %b %Y") if r["finished_at"] else "",
+            "date_str":   f"{r['finished_at'].day} {r['finished_at'].strftime('%b %Y')}" if r["finished_at"] else "",
         })
 
     # Filtre barı için benzersiz üniteler (oynananlar)
