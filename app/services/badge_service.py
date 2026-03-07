@@ -99,6 +99,9 @@ def check_badges(user_id: int, mysql) -> list:
                 else:
                     break
 
+    # users.streak kolonunu güncelle (leaderboard'da kullanılır)
+    cur.execute("UPDATE users SET streak = %s WHERE id = %s", (streak, user_id))
+
     # Kullanıcının zaten sahip olduğu rozet ID'leri
     cur.execute("SELECT badge_id FROM user_badges WHERE user_id = %s", (user_id,))
     owned_ids = {r["badge_id"] for r in cur.fetchall()}

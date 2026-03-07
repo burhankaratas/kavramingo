@@ -80,9 +80,17 @@ def init_db(app):
                 password_hash VARCHAR(255)  NOT NULL,
                 grade         INT           DEFAULT NULL COMMENT '9,10,11 veya 12',
                 total_score   INT           NOT NULL DEFAULT 0,
+                streak        INT           NOT NULL DEFAULT 0 COMMENT 'Güncel günlük seri (her quiz sonunda güncellenir)',
                 created_at    DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci;
         """)
+
+        # Mevcut users tablosuna streak kolonu güvenle ekle (migration)
+        if not _column_exists(cur, "users", "streak"):
+            cur.execute(
+                "ALTER TABLE users ADD COLUMN streak INT NOT NULL DEFAULT 0 "
+                "COMMENT 'Güncel günlük seri (her quiz sonunda güncellenir)'"
+            )
 
         # ── progress ───────────────────────────────────────────────────────────
         cur.execute("""
