@@ -2,12 +2,33 @@ import json
 import os
 from datetime import datetime, timedelta
 
-from flask import render_template
-from flask_login import login_required, current_user
+from flask import render_template, redirect, url_for, flash, request, current_app
+from flask_login import login_required, login_user, logout_user, current_user
+from flask_mail import Message
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.modules.user import user_bp
-from app.extensions import mysql
+from app.extensions import mysql, mail
+from app.models.user import User
 from app.services.badge_service import get_user_streak
+
+
+# ── Ayarlar: token yardımcıları ───────────────────────────────────────────────
+
+def _make_delete_token(user_id: int) -> str:
+    """Hesap silme için imzalı, 1 saatlik token üretir."""
+    s = URLSafeTimedSerializer(current_app.config["SECRET_KEY"])
+    return s.dumps(user_id, salt="account-delete")
+
+
+def _verify_delete_token(token: str, max_age: int = 3600):
+    """Token'ı doğrular; geçersizse None döner."""
+    s = URLSafeTimedSerializer(current_app.config["SECRET_KEY"])
+    try:
+        return s.loads(token, salt="account-delete", max_age=max_age)
+    except (SignatureExpired, BadSignature):
+        return None
 
 # Kategori meta verisi — sıralı
 CATEGORY_ORDER = ["baslangic", "seri", "quiz", "mukemmellik", "unite"]
@@ -251,6 +272,155 @@ def profile():
 @login_required
 def settings():
     return render_template("user/settings.html")
+
+
+# ── Ayarlar: Profil güncelleme ────────────────────────────────────────────────
+
+@user_bp.route("/settings/profile", methods=["POST"])
+@login_required
+def settings_profile():
+    name  = request.form.get("full_name", "").strip()
+    grade = request.form.get("grade", "").strip()
+
+    if not name:
+        flash("Ad soyad boş bırakılamaz.", "danger")
+        return redirect(url_for("user.settings"))
+
+    if grade not in {"9", "10", "11", "12"}:
+        flash("Geçersiz sınıf değeri.", "danger")
+        return redirect(url_for("user.settings"))
+
+    cur = mysql.connection.cursor()
+    cur.execute(
+        "UPDATE users SET name = %s, grade = %s WHERE id = %s",
+        (name, int(grade), current_user.id),
+    )
+    mysql.connection.commit()
+    cur.close()
+
+    flash("Bilgiler başarıyla güncellendi.", "success")
+    return redirect(url_for("user.settings"))
+
+
+# ── Ayarlar: Şifre değiştirme ─────────────────────────────────────────────────
+
+@user_bp.route("/settings/password", methods=["POST"])
+@login_required
+def settings_password():
+    current_pw  = request.form.get("current_password", "")
+    new_pw      = request.form.get("new_password", "")
+    confirm_pw  = request.form.get("confirm_password", "")
+
+    if not check_password_hash(current_user.password_hash, current_pw):
+        flash("Mevcut şifre hatalı.", "danger")
+        return redirect(url_for("user.settings"))
+
+    if len(new_pw) < 8:
+        flash("Yeni şifre en az 8 karakter olmalıdır.", "danger")
+        return redirect(url_for("user.settings"))
+
+    if new_pw != confirm_pw:
+        flash("Yeni şifreler eşleşmiyor.", "danger")
+        return redirect(url_for("user.settings"))
+
+    new_hash = generate_password_hash(new_pw)
+    cur = mysql.connection.cursor()
+    cur.execute(
+        "UPDATE users SET password_hash = %s WHERE id = %s",
+        (new_hash, current_user.id),
+    )
+    mysql.connection.commit()
+    cur.close()
+
+    flash("Şifren başarıyla güncellendi.", "success")
+    return redirect(url_for("user.settings"))
+
+
+# ── Ayarlar: Hesap silme isteği (mail gönder) ─────────────────────────────────
+
+@user_bp.route("/settings/delete/request", methods=["POST"])
+@login_required
+def settings_delete_request():
+    token       = _make_delete_token(current_user.id)
+    confirm_url = url_for("user.settings_delete_confirm", token=token, _external=True)
+
+    try:
+        msg = Message(
+            subject="KavramLingo — Hesap Silme Onayı",
+            recipients=[current_user.email],
+        )
+        msg.html = f"""
+        <div style="font-family:'Nunito',Arial,sans-serif;max-width:520px;margin:auto;
+                    background:#F0F2FF;border-radius:20px;padding:2.5rem;">
+          <h2 style="color:#4361EE;margin-top:0;">Hesap Silme İsteği</h2>
+          <p style="color:#1B1F3B;font-size:1rem;line-height:1.6;">
+            KavramLingo hesabını kalıcı olarak silmek istediğine dair bir istek aldık.<br>
+            Eğer bu isteği sen gönderdiysen, aşağıdaki düğmeye tıkla.
+          </p>
+          <p style="text-align:center;margin:2rem 0;">
+            <a href="{confirm_url}"
+               style="background:#EF233C;color:#fff;padding:14px 30px;border-radius:12px;
+                      text-decoration:none;font-weight:800;font-size:1rem;">
+              Hesabımı Kalıcı Olarak Sil
+            </a>
+          </p>
+          <p style="color:#6B7280;font-size:0.85rem;line-height:1.55;">
+            Bu bağlantı <strong>1 saat</strong> geçerlidir.<br>
+            Eğer bu isteği sen göndermediysen bu e-postayı yoksay — hesabın güvende.
+          </p>
+          <hr style="border:none;border-top:1px solid #D1D5DB;margin:1.5rem 0;">
+          <p style="color:#9CA3AF;font-size:0.78rem;margin:0;">
+            KavramLingo &middot; Din Kültürü &amp; Ahlak Bilgisi Öğrenme Platformu
+          </p>
+        </div>
+        """
+        mail.send(msg)
+        flash(
+            "Silme onay bağlantısı e-posta adresine gönderildi. "
+            "Bağlantı 1 saat geçerlidir.",
+            "warning",
+        )
+    except Exception:
+        flash("Mail gönderilemedi. Lütfen daha sonra tekrar dene.", "danger")
+
+    return redirect(url_for("user.settings"))
+
+
+# ── Ayarlar: Hesap silme onayı (token doğrula + sil) ─────────────────────────
+
+@user_bp.route("/settings/delete/confirm/<token>")
+@login_required
+def settings_delete_confirm(token):
+    user_id = _verify_delete_token(token)
+
+    if user_id is None:
+        flash("Bağlantı geçersiz veya süresi dolmuş.", "danger")
+        return redirect(url_for("user.settings"))
+
+    if int(user_id) != int(current_user.id):
+        flash("Bu bağlantı sana ait değil.", "danger")
+        return redirect(url_for("user.settings"))
+
+    uid = int(user_id)
+    cur = mysql.connection.cursor()
+
+    # Bağlı verileri CASCADE sıraya göre sil
+    cur.execute("""
+        DELETE qa FROM quiz_answers qa
+        JOIN quiz_sessions qs ON qs.id = qa.session_id
+        WHERE qs.user_id = %s
+    """, (uid,))
+    cur.execute("DELETE FROM quiz_sessions WHERE user_id = %s", (uid,))
+    cur.execute("DELETE FROM scores WHERE user_id = %s", (uid,))
+    cur.execute("DELETE FROM user_badges WHERE user_id = %s", (uid,))
+    cur.execute("DELETE FROM progress WHERE user_id = %s", (uid,))
+    cur.execute("DELETE FROM users WHERE id = %s", (uid,))
+    mysql.connection.commit()
+    cur.close()
+
+    logout_user()
+    flash("Hesabın kalıcı olarak silindi.", "info")
+    return redirect(url_for("auth.login"))
 
 
 @user_bp.route("/rozetler")
