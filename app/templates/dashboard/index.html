@@ -667,7 +667,7 @@
       </div>
 
       <h1 class="hero-greeting">
-        Merhaba, {{ current_user.name.split()[0] }}! 👋
+        Merhaba, {{ current_user.name.split()[0] if current_user.name and current_user.name.strip() else 'Kullanıcı' }}! 👋
       </h1>
 
       <p class="hero-sub">

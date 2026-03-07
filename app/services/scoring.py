@@ -67,6 +67,9 @@ TYPE_MULTIPLIERS: dict[str, float] = {
     "fill_blank":      1.5,   # en zor  → en çok puan
 }
 
+# Bu tiplerde XP kazanılmaz (kullanıcı "bildim/bilmedim" seçimine göre puan kasmasın)
+ZERO_SCORE_TYPES: set[str] = {"flashcard"}
+
 # Combo eşikleri: {üst_üste_doğru_sayısı: çarpan}
 # Örn: 3 üst üste doğru cevap → tüm çarpanlar ×1.2 olur
 COMBO_THRESHOLDS: dict[int, float] = {
@@ -172,6 +175,20 @@ def calculate_quiz_score(
     """
     if times is not None and len(times) != len(answers):
         raise ValueError("times ve answers listeleri aynı uzunlukta olmalı.")
+
+    # Flashcard gibi "zero-score" tiplerde XP verilmez ama doğru/yanlış sayısı tutulur
+    if quiz_type in ZERO_SCORE_TYPES:
+        return {
+            "total_score":   0,
+            "perfect_bonus": 0,
+            "is_perfect":    all(answers),
+            "correct_count": sum(1 for a in answers if a),
+            "wrong_count":   sum(1 for a in answers if not a),
+            "breakdown":     [
+                {"question_index": i, "is_correct": a, "score": 0, "combo_at_end": 0, "time_taken": None}
+                for i, a in enumerate(answers)
+            ],
+        }
 
     running_total: int = 0
     combo: int = 0

@@ -189,7 +189,7 @@ def profile():
             "name":   r["name"],
             "earned": True,
             "style":  style,
-            "date":   r["earned_at"].strftime("%-d %B %Y") if r["earned_at"] else "",
+            "date":   f"{r['earned_at'].day} {r['earned_at'].strftime('%B %Y')}" if r["earned_at"] else "",
         })
 
     # ── 5. Son aktiviteler ────────────────────────────────────────────────────

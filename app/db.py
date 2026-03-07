@@ -116,6 +116,20 @@ def init_db(app):
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci;
         """)
 
+        # progress(user_id, unite_id) üzerinde UNIQUE key yoksa ekle (ON DUPLICATE KEY UPDATE için)
+        cur.execute("""
+            SELECT COUNT(*) AS cnt
+            FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+            WHERE TABLE_SCHEMA = DATABASE()
+              AND TABLE_NAME   = 'progress'
+              AND CONSTRAINT_NAME = 'uq_progress_user_unit'
+        """)
+        if cur.fetchone()["cnt"] == 0:
+            cur.execute(
+                "ALTER TABLE progress ADD CONSTRAINT uq_progress_user_unit "
+                "UNIQUE (user_id, unite_id)"
+            )
+
         # ── quiz_sessions ──────────────────────────────────────────────────────
         cur.execute("""
             CREATE TABLE IF NOT EXISTS quiz_sessions (

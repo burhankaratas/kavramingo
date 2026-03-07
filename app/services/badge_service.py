@@ -2,7 +2,7 @@
 Rozet kazanma koşullarını kontrol eder ve yeni rozetleri veritabanına yazar.
 mysql: flask_mysqldb.MySQL nesnesi (current_app dışından inject edilir)
 """
-from datetime import datetime, date, timedelta
+from datetime import datetime, timedelta
 
 
 def get_user_streak(user_id: int, mysql) -> int:
@@ -88,7 +88,7 @@ def check_badges(user_id: int, mysql) -> list:
     streak = 0
     if streak_rows:
         days = [r["day"] for r in streak_rows]
-        today = date.today()
+        today = datetime.utcnow().date()  # UTC — finished_at UTC olarak kaydedildiğinden tutarlı
         yesterday = today - timedelta(days=1)
         if days[0] >= yesterday:
             expected = days[0]
