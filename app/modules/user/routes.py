@@ -1,3 +1,7 @@
+import json
+import os
+from datetime import datetime, timedelta
+
 from flask import render_template
 from flask_login import login_required, current_user
 
@@ -16,11 +20,231 @@ CATEGORY_META = {
     "unite":       {"label": "Ünite",        "icon": "bi-collection-fill",     "color": "#0099B8"},
 }
 
+# Quiz tipi → (template type, Türkçe başlık)
+_QUIZ_TYPE_MAP = {
+    "multiple_choice": ("quiz",  "Çoktan Seçmeli Quiz"),
+    "flashcard":       ("flash", "Flashcard Çalışması"),
+    "matching":        ("match", "Eşleştirme Oyunu"),
+    "fill_blank":      ("fill",  "Boşluk Doldurma"),
+}
+
+
+# ── Yardımcılar ───────────────────────────────────────────────────────────────
+
+def _load_unit_map() -> dict:
+    """Tüm grade JSON'larından {unit_id: (unit_name, grade)} sözlüğü döndürür."""
+    base = os.path.join(os.path.dirname(__file__), "..", "..", "data", "quiz")
+    unit_map = {}
+    for grade in [9, 10, 11, 12]:
+        path = os.path.join(base, f"grade_{grade}.json")
+        try:
+            with open(path, encoding="utf-8") as f:
+                data = json.load(f)
+            for u in data.get("units", []):
+                unit_map[u["unit_id"]] = (u.get("name", f"Ünite {u['unit_id']}"), grade)
+        except (FileNotFoundError, KeyError):
+            pass
+    return unit_map
+
+
+def _time_ago(dt: datetime) -> str:
+    """datetime → '2 saat önce' biçiminde Türkçe göreli zaman."""
+    if dt is None:
+        return ""
+    now = datetime.utcnow()
+    diff = now - dt
+    minutes = int(diff.total_seconds() // 60)
+    if minutes < 2:
+        return "Az önce"
+    if minutes < 60:
+        return f"{minutes} dakika önce"
+    hours = minutes // 60
+    if hours < 24:
+        return f"{hours} saat önce"
+    days = hours // 24
+    if days == 1:
+        return "Dün"
+    if days < 7:
+        return f"{days} gün önce"
+    weeks = days // 7
+    if weeks == 1:
+        return "1 hafta önce"
+    return f"{weeks} hafta önce"
+
+
+# ── Route: Profil ─────────────────────────────────────────────────────────────
 
 @user_bp.route("/profile")
 @login_required
 def profile():
-    return render_template("user/profile.html")
+    uid   = current_user.id
+    grade = current_user.grade or 9
+    cur   = mysql.connection.cursor()
+
+    # ── 1. Streak ────────────────────────────────────────────────────────────
+    cur.execute("SELECT streak FROM users WHERE id = %s", (uid,))
+    row    = cur.fetchone()
+    streak = row["streak"] if row else 0
+
+    # ── 2. Temel istatistikler ────────────────────────────────────────────────
+    cur.execute("""
+        SELECT COUNT(*) AS cnt
+        FROM quiz_sessions
+        WHERE user_id = %s AND finished_at IS NOT NULL
+    """, (uid,))
+    total_quizzes = cur.fetchone()["cnt"]
+
+    cur.execute("""
+        SELECT COALESCE(ROUND(
+            SUM(qa.is_correct) * 100.0 / NULLIF(COUNT(qa.id), 0)
+        ), 0) AS acc
+        FROM quiz_answers qa
+        JOIN quiz_sessions qs ON qs.id = qa.session_id
+        WHERE qs.user_id = %s AND qs.finished_at IS NOT NULL
+    """, (uid,))
+    accuracy = int(cur.fetchone()["acc"] or 0)
+
+    # Sınıf içi sıralama (aynı grade'deki kullanıcılar arasında)
+    cur.execute("""
+        SELECT COUNT(*) + 1 AS rnk
+        FROM users
+        WHERE total_score > %s AND grade = %s
+    """, (current_user.total_score or 0, grade))
+    rank = cur.fetchone()["rnk"]
+
+    cur.execute("""
+        SELECT COUNT(*) AS cnt FROM user_badges WHERE user_id = %s
+    """, (uid,))
+    earned_badge_count = cur.fetchone()["cnt"]
+
+    # ── 3. Bu haftanın istatistikleri ─────────────────────────────────────────
+    week_ago = datetime.utcnow() - timedelta(days=7)
+
+    cur.execute("""
+        SELECT COUNT(*) AS cnt
+        FROM quiz_sessions
+        WHERE user_id = %s AND finished_at IS NOT NULL AND finished_at >= %s
+    """, (uid, week_ago))
+    weekly_quizzes = cur.fetchone()["cnt"]
+
+    cur.execute("""
+        SELECT COALESCE(SUM(points), 0) AS xp
+        FROM scores
+        WHERE user_id = %s AND earned_at >= %s
+    """, (uid, week_ago))
+    weekly_xp = int(cur.fetchone()["xp"] or 0)
+
+    cur.execute("""
+        SELECT COALESCE(ROUND(
+            SUM(qa.is_correct) * 100.0 / NULLIF(COUNT(qa.id), 0)
+        ), 0) AS acc
+        FROM quiz_answers qa
+        JOIN quiz_sessions qs ON qs.id = qa.session_id
+        WHERE qs.user_id = %s AND qs.finished_at IS NOT NULL AND qs.finished_at >= %s
+    """, (uid, week_ago))
+    weekly_accuracy = int(cur.fetchone()["acc"] or 0)
+
+    cur.execute("""
+        SELECT COALESCE(SUM(TIMESTAMPDIFF(MINUTE, started_at, finished_at)), 0) AS mins
+        FROM quiz_sessions
+        WHERE user_id = %s AND finished_at IS NOT NULL AND finished_at >= %s
+    """, (uid, week_ago))
+    weekly_minutes = int(cur.fetchone()["mins"] or 0)
+
+    # ── 4. Kazanılan rozetler ─────────────────────────────────────────────────
+    cur.execute("""
+        SELECT b.emoji, b.name, b.color, b.category, ub.earned_at
+        FROM user_badges ub
+        JOIN badges b ON b.id = ub.badge_id
+        WHERE ub.user_id = %s
+        ORDER BY ub.earned_at DESC
+    """, (uid,))
+    badges = []
+    for r in cur.fetchall():
+        cat   = r.get("category", "")
+        style = {"seri": "blue", "quiz": "purple", "unite": "green"}.get(cat, "")
+        badges.append({
+            "icon":   r["emoji"] or "🏅",
+            "name":   r["name"],
+            "earned": True,
+            "style":  style,
+            "date":   r["earned_at"].strftime("%-d %B %Y") if r["earned_at"] else "",
+        })
+
+    # ── 5. Son aktiviteler ────────────────────────────────────────────────────
+    cur.execute("""
+        SELECT qs.id, qs.unite_id, qs.quiz_type, qs.finished_at,
+               COALESCE(sc.points, 0) AS xp
+        FROM quiz_sessions qs
+        LEFT JOIN scores sc ON sc.source_quiz_id = qs.id
+        WHERE qs.user_id = %s AND qs.finished_at IS NOT NULL
+        ORDER BY qs.finished_at DESC
+        LIMIT 5
+    """, (uid,))
+    unit_map = _load_unit_map()
+    recent_activities = []
+    for r in cur.fetchall():
+        qtype, qtitle = _QUIZ_TYPE_MAP.get(r["quiz_type"], ("quiz", r["quiz_type"]))
+        unit_id = r["unite_id"]
+        if unit_id and unit_id in unit_map:
+            uname, ugrade = unit_map[unit_id]
+            sub = f"{uname} — {ugrade}. Sınıf"
+        else:
+            sub = f"{grade}. Sınıf"
+        recent_activities.append({
+            "type":  qtype,
+            "title": qtitle,
+            "sub":   sub,
+            "xp":    r["xp"],
+            "time":  _time_ago(r["finished_at"]),
+        })
+
+    # ── 6. Ünite ilerleme ─────────────────────────────────────────────────────
+    base_path = os.path.join(
+        os.path.dirname(__file__), "..", "..", "data", "quiz", f"grade_{grade}.json"
+    )
+    grade_units = []
+    try:
+        with open(base_path, encoding="utf-8") as f:
+            grade_units = json.load(f).get("units", [])
+    except (FileNotFoundError, KeyError):
+        pass
+
+    unit_progress = []
+    if grade_units:
+        unit_ids = [u["unit_id"] for u in grade_units]
+        fmt = ",".join(["%s"] * len(unit_ids))
+        cur.execute(f"""
+            SELECT unite_id, COUNT(DISTINCT quiz_type) AS done
+            FROM quiz_sessions
+            WHERE user_id = %s AND finished_at IS NOT NULL AND unite_id IN ({fmt})
+            GROUP BY unite_id
+        """, [uid] + unit_ids)
+        done_map = {r["unite_id"]: r["done"] for r in cur.fetchall()}
+        for u in grade_units:
+            done = done_map.get(u["unit_id"], 0)
+            unit_progress.append({
+                "name": u.get("name", f"Ünite {u['unit_id']}"),
+                "pct":  min(100, int(done / 4 * 100)),
+            })
+
+    cur.close()
+
+    return render_template(
+        "user/profile.html",
+        streak             = streak,
+        total_quizzes      = total_quizzes,
+        accuracy           = accuracy,
+        rank               = rank,
+        earned_badge_count = earned_badge_count,
+        badges             = badges,
+        recent_activities  = recent_activities,
+        unit_progress      = unit_progress,
+        weekly_quizzes     = weekly_quizzes,
+        weekly_xp          = weekly_xp,
+        weekly_accuracy    = weekly_accuracy,
+        weekly_minutes     = weekly_minutes,
+    )
 
 
 @user_bp.route("/settings")

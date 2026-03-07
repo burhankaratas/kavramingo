@@ -502,35 +502,24 @@
         </a>
       </div>
 
-      {% set badges_data = badges if badges is defined else [
-        {"icon": "🏅", "name": "İlk Adım",      "earned": true,  "style": "",       "date": "Ocak 2025"},
-        {"icon": "🔥", "name": "3 Gün Serisi",  "earned": true,  "style": "blue",   "date": "Şubat 2025"},
-        {"icon": "📚", "name": "10 Quiz",        "earned": true,  "style": "green",  "date": "Şubat 2025"},
-        {"icon": "⭐", "name": "7 Gün Serisi",  "earned": false, "style": "",       "date": ""},
-        {"icon": "⚡", "name": "Hız Treni",      "earned": false, "style": "",       "date": ""},
-        {"icon": "💎", "name": "Mükemmel",       "earned": false, "style": "",       "date": ""},
-        {"icon": "🌟", "name": "30 Gün Serisi",  "earned": false, "style": "",       "date": ""},
-        {"icon": "🎯", "name": "%100 Doğru",     "earned": false, "style": "",       "date": ""},
-        {"icon": "🦅", "name": "Hız Kartalı",    "earned": false, "style": "",       "date": ""},
-        {"icon": "📖", "name": "Kur'an Ustası",  "earned": false, "style": "purple", "date": ""},
-        {"icon": "🏆", "name": "Şampiyon",       "earned": false, "style": "",       "date": ""},
-        {"icon": "🌙", "name": "Gece Çalışkanı", "earned": false, "style": "",       "date": ""},
-      ] %}
-
+      {% if badges %}
       <div class="badges-grid-lg">
-        {% for b in badges_data %}
+        {% for b in badges %}
         <div class="badge-item">
-          <div class="badge-icon {{ ('earned ' + b.style) if b.earned else 'locked' }}"
-               title="{{ b.name }}{% if b.earned and b.date %} — {{ b.date }}{% endif %}">
+          <div class="badge-icon earned {{ b.style }}" title="{{ b.name }}{% if b.date %} — {{ b.date }}{% endif %}">
             {{ b.icon }}
           </div>
-          <span class="badge-name {{ 'earned' if b.earned else '' }}">{{ b.name }}</span>
-          {% if b.earned and b.date %}
-            <span class="badge-date">{{ b.date }}</span>
-          {% endif %}
+          <span class="badge-name earned">{{ b.name }}</span>
+          {% if b.date %}<span class="badge-date">{{ b.date }}</span>{% endif %}
         </div>
         {% endfor %}
       </div>
+      {% else %}
+      <div style="padding:1.5rem 0;text-align:center;color:var(--kl-muted);">
+        <i class="bi bi-award" style="font-size:2rem;opacity:0.3;display:block;margin-bottom:0.5rem;"></i>
+        <p style="font-size:0.85rem;font-weight:700;margin:0;">Henüz rozet kazanılmadı. Quiz çözerek rozet kazan!</p>
+      </div>
+      {% endif %}
     </div>
 
     <!-- Son Aktiviteler -->
@@ -540,16 +529,9 @@
         Son Aktiviteler
       </div>
 
-      {% set activities = recent_activities if recent_activities is defined else [
-        {"type": "quiz",  "title": "Çoktan Seçmeli Quiz",  "sub": "Bilgi ve İnanç — 9. Sınıf",                "xp": 50,  "time": "2 saat önce"},
-        {"type": "flash", "title": "Flashcard Çalışması",  "sub": "Kur'an-ı Kerim — 9. Sınıf",               "xp": 30,  "time": "Dün"},
-        {"type": "match", "title": "Eşleştirme Oyunu",     "sub": "Hz. Muhammed'i Tanıyalım — 9. Sınıf",     "xp": 40,  "time": "2 gün önce"},
-        {"type": "fill",  "title": "Boşluk Doldurma",      "sub": "İbadet — 9. Sınıf",                       "xp": 35,  "time": "3 gün önce"},
-        {"type": "quiz",  "title": "Çoktan Seçmeli Quiz",  "sub": "Kaza, Kader ve İnsan Özgürlüğü — 10. Sınıf", "xp": 55, "time": "4 gün önce"},
-      ] %}
-
       <div class="activity-list">
-        {% for a in activities %}
+        {% if recent_activities %}
+        {% for a in recent_activities %}
         <div class="activity-item">
           <div class="activity-icon {{ a.type }}">
             {% if a.type == 'quiz'  %}<i class="bi bi-check2-circle"></i>
@@ -568,6 +550,12 @@
           </div>
         </div>
         {% endfor %}
+        {% else %}
+        <div style="padding:1.5rem 0;text-align:center;color:var(--kl-muted);">
+          <i class="bi bi-clock-history" style="font-size:2rem;opacity:0.3;display:block;margin-bottom:0.5rem;"></i>
+          <p style="font-size:0.85rem;font-weight:700;margin:0;">Henüz aktivite yok. İlk quizini çöz!</p>
+        </div>
+        {% endif %}
       </div>
     </div>
 
@@ -582,14 +570,7 @@
         Ünite İlerlemesi
       </div>
 
-      {% set unit_progress = unit_progress if unit_progress is defined else [
-        {"name": "Bilgi ve İnanç",          "pct": 85},
-        {"name": "Kur'an-ı Kerim",          "pct": 60},
-        {"name": "Hz. Muhammed'i Tanıyalım","pct": 40},
-        {"name": "İbadet",                  "pct": 20},
-        {"name": "Kaza, Kader...",          "pct": 10},
-      ] %}
-
+      {% if unit_progress %}
       <div class="progress-table">
         {% for u in unit_progress %}
         <div class="progress-row">
@@ -603,7 +584,7 @@
       </div>
 
       <!-- Toplam ilerleme -->
-      {% set total_pct = (unit_progress | map(attribute='pct') | sum / (unit_progress | length)) | int if unit_progress else 43 %}
+      {% set total_pct = (unit_progress | map(attribute='pct') | sum / (unit_progress | length)) | int %}
       <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:2px solid var(--kl-bg);">
         <div style="display:flex;justify-content:space-between;
                     font-size:0.8rem;font-weight:800;color:var(--kl-muted);margin-bottom:6px;">
@@ -616,6 +597,12 @@
                       border-radius:10px;transition:width 0.6s ease;"></div>
         </div>
       </div>
+      {% else %}
+      <div style="padding:1.5rem 0;text-align:center;color:var(--kl-muted);">
+        <i class="bi bi-bar-chart" style="font-size:2rem;opacity:0.3;display:block;margin-bottom:0.5rem;"></i>
+        <p style="font-size:0.85rem;font-weight:700;margin:0;">Henüz ilerleme kaydedilmedi.</p>
+      </div>
+      {% endif %}
     </div>
 
     <!-- Mini istatistik kutuları -->
