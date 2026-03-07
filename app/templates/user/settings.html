@@ -393,10 +393,17 @@
 
   .btn-confirm-delete:hover { background: #d41c34; }
 
-  /* ── Responsive ──────────────────────────────────────────────────────── */
+  /* Responsive */
   @media (max-width: 767px) {
     .danger-action { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
     .btn-danger-outline { width: 100%; justify-content: center; }
+  }
+
+  /* Select override: native ok işaretini geri getir */
+  select.form-control-kl {
+    -webkit-appearance: auto;
+    appearance: auto;
+    cursor: pointer;
   }
 </style>
 {% endblock %}
@@ -428,7 +435,7 @@
     Hesap Bilgileri
   </div>
 
-  <form id="profileForm" method="POST" action="#">
+  <form id="profileForm" method="POST" action="{{ url_for('user.settings_profile') }}">
 
     <!-- Ad Soyad -->
     <div class="form-group">
@@ -471,23 +478,20 @@
       </div>
     </div>
 
-    <!-- Sınıf (readonly, onboarding'de belirlendi) -->
+    <!-- Sınıf -->
     <div class="form-group">
-      <label class="form-label" for="gradeField">
-        Sınıf
-        <span class="label-hint">(değiştirilemez)</span>
-      </label>
-      <div class="email-locked-wrap">
-        <input
-          type="text"
-          id="gradeField"
-          class="form-control-kl"
-          value="{{ current_user.grade | default(9) }}. Sınıf"
-          readonly
-          tabindex="-1"
-        />
-        <i class="bi bi-mortarboard-fill email-locked-icon"></i>
-      </div>
+      <label class="form-label" for="gradeField">Sınıf</label>
+      <select
+        id="gradeField"
+        name="grade"
+        class="form-control-kl"
+      >
+        {% for g in [9, 10, 11, 12] %}
+          <option value="{{ g }}" {% if current_user.grade == g %}selected{% endif %}>
+            {{ g }}. Sınıf
+          </option>
+        {% endfor %}
+      </select>
     </div>
 
     <button type="submit" class="btn-save">
@@ -507,7 +511,7 @@
     Şifre Değiştir
   </div>
 
-  <form id="passwordForm" method="POST" action="#" autocomplete="off">
+  <form id="passwordForm" method="POST" action="{{ url_for('user.settings_password') }}" autocomplete="off">
 
     <!-- Mevcut şifre -->
     <div class="form-group">
@@ -617,21 +621,22 @@
     <div class="delete-modal-icon">
       <i class="bi bi-exclamation-triangle-fill" style="color:var(--kl-danger);"></i>
     </div>
-    <h3>Hesabını silmek istediğine emin misin?</h3>
-    <p>
-      Tüm ilerleme verilerin, rozetlerin ve quiz geçmişin kalıcı olarak silinecek.
-      Bu işlem <strong>geri alınamaz.</strong>
-    </p>
-    <div class="delete-modal-actions">
-      <button type="button" class="btn-cancel-modal" id="cancelDeleteBtn">
-        Vazgeç
-      </button>
-      <form method="POST" action="#" style="flex:1;">
-        <button type="submit" class="btn-confirm-delete" style="width:100%;">
-          Evet, Sil
-        </button>
-      </form>
-    </div>
+          <h3>Hesabını silmek istediğine emin misin?</h3>
+          <p>
+            E-posta adresine bir onay bağlantısı göndereceğiz.
+            Bağlantıya tıkladığında tüm veriler — ilerleme, rozetler,
+            quiz geçmişi — <strong>kalıcı olarak silinecek.</strong>
+          </p>
+          <div class="delete-modal-actions">
+            <button type="button" class="btn-cancel-modal" id="cancelDeleteBtn">
+              Vazgeç
+            </button>
+            <form method="POST" action="{{ url_for('user.settings_delete_request') }}" style="flex:1;">
+              <button type="submit" class="btn-confirm-delete" style="width:100%;">
+                Onay Maili Gönder
+              </button>
+            </form>
+          </div>
   </div>
 </div>
 
