@@ -81,6 +81,7 @@ def init_db(app):
                 grade         INT           DEFAULT NULL COMMENT '9,10,11 veya 12',
                 total_score   INT           NOT NULL DEFAULT 0,
                 streak        INT           NOT NULL DEFAULT 0 COMMENT 'Güncel günlük seri (her quiz sonunda güncellenir)',
+                daily_goal    INT           NOT NULL DEFAULT 5 COMMENT 'Günlük quiz hedefi (onboarding/ayarlardan seçilir)',
                 created_at    DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci;
         """)
@@ -90,6 +91,13 @@ def init_db(app):
             cur.execute(
                 "ALTER TABLE users ADD COLUMN streak INT NOT NULL DEFAULT 0 "
                 "COMMENT 'Güncel günlük seri (her quiz sonunda güncellenir)'"
+            )
+
+        # Mevcut users tablosuna daily_goal kolonu güvenle ekle (migration)
+        if not _column_exists(cur, "users", "daily_goal"):
+            cur.execute(
+                "ALTER TABLE users ADD COLUMN daily_goal INT NOT NULL DEFAULT 5 "
+                "COMMENT 'Günlük quiz hedefi (onboarding/ayarlardan seçilir)'"
             )
 
         # ── progress ───────────────────────────────────────────────────────────

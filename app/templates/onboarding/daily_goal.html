@@ -1,0 +1,237 @@
+{% extends "onboarding/onboarding_base.html" %}
+
+{% block title %}Günlük Hedef — KavramLingo{% endblock %}
+
+{% block step_label %}Günlük Hedef{% endblock %}
+
+{% block head %}
+<style>
+  /* ── Hedef kartları ──────────────────────────────────────────────────────── */
+  .goal-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+    margin: 1.75rem 0;
+  }
+
+  .goal-card-label {
+    display: block;
+    cursor: pointer;
+  }
+
+  .goal-card {
+    border: 2.5px solid var(--kl-border);
+    border-radius: 20px;
+    padding: 1.4rem 1.2rem 1.2rem;
+    background: #fff;
+    text-align: center;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.12s;
+    position: relative;
+  }
+
+  .goal-card:hover {
+    border-color: var(--kl-primary);
+    box-shadow: 0 4px 18px rgba(67,97,238,0.12);
+    transform: translateY(-2px);
+  }
+
+  /* Gizli radio input */
+  .goal-radio { display: none; }
+
+  .goal-radio:checked + .goal-card {
+    border-color: var(--kl-primary);
+    background: #F0F2FF;
+    box-shadow: 0 4px 20px rgba(67,97,238,0.18);
+  }
+
+  .goal-radio:checked + .goal-card .goal-check {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .goal-check {
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 22px; height: 22px;
+    background: var(--kl-primary);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-size: 0.65rem;
+    opacity: 0;
+    transform: scale(0.6);
+    transition: opacity 0.15s, transform 0.15s;
+  }
+
+  .goal-emoji {
+    font-size: 2.2rem;
+    line-height: 1;
+    margin-bottom: 0.6rem;
+  }
+
+  .goal-num {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--kl-primary);
+    line-height: 1;
+    margin-bottom: 0.15rem;
+  }
+
+  .goal-unit {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--kl-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .goal-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 50px;
+    letter-spacing: 0.3px;
+  }
+
+  /* Hafif */
+  .goal-card.light .goal-tag  { background: #E0F5EF; color: #059669; }
+  .goal-radio:checked + .goal-card.light { border-color: #059669; background: #F0FBF6; }
+  .goal-radio:checked + .goal-card.light .goal-check { background: #059669; }
+  .goal-card.light .goal-num  { color: #059669; }
+  .goal-card.light:hover      { border-color: #059669; }
+
+  /* Normal */
+  .goal-card.normal .goal-tag { background: #EEF1FD; color: var(--kl-primary); }
+
+  /* Yoğun */
+  .goal-card.intense .goal-tag { background: #FFF4E0; color: #D9730D; }
+  .goal-radio:checked + .goal-card.intense { border-color: #D9730D; background: #FFF9F0; }
+  .goal-radio:checked + .goal-card.intense .goal-check { background: #D9730D; }
+  .goal-card.intense .goal-num { color: #D9730D; }
+  .goal-card.intense:hover     { border-color: #D9730D; }
+
+  /* Ciddi */
+  .goal-card.serious .goal-tag { background: #FFF0F3; color: var(--kl-danger); }
+  .goal-radio:checked + .goal-card.serious { border-color: var(--kl-danger); background: #FFF5F6; }
+  .goal-radio:checked + .goal-card.serious .goal-check { background: var(--kl-danger); }
+  .goal-card.serious .goal-num { color: var(--kl-danger); }
+  .goal-card.serious:hover     { border-color: var(--kl-danger); }
+
+  /* ── Bilgi notu ──────────────────────────────────────────────────────────── */
+  .goal-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: #F0F2FF;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #4361EE;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+  }
+
+  .goal-note i { flex-shrink: 0; margin-top: 1px; }
+
+  @media (max-width: 380px) {
+    .goal-cards { grid-template-columns: 1fr; }
+    .goal-card  { padding: 1.1rem 1rem; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+  <!-- Sayfa başlığı -->
+  <div class="ob-page-title">
+    <h1>Günlük Hedefin</h1>
+    <p>Düzenli çalışmak serini korumana yardımcı olur. İstediğin zaman değiştirebilirsin.</p>
+  </div>
+
+  <!-- Stepper -->
+  {% set ob_step = 4 %}
+  {% include "onboarding/_stepper.html" %}
+
+  <!-- Bilgi notu -->
+  <div class="goal-note">
+    <i class="bi bi-info-circle-fill"></i>
+    Hedefine ulaştığında dashboard'unda yeşil bir halka göreceksin — tıpkı Duolingo gibi!
+  </div>
+
+  <!-- Seçim formu -->
+  <form method="POST"
+        action="{{ url_for('onboarding.daily_goal_select') }}?choice={{ choice }}">
+    <input type="hidden" name="choice" value="{{ choice }}">
+
+    <div class="goal-cards">
+
+      <!-- Hafif: 3 quiz/gün -->
+      <label class="goal-card-label">
+        <input type="radio" name="daily_goal" value="3" class="goal-radio">
+        <div class="goal-card light">
+          <div class="goal-check"><i class="bi bi-check-lg"></i></div>
+          <div class="goal-emoji">🌱</div>
+          <div class="goal-num">3</div>
+          <div class="goal-unit">quiz / gün</div>
+          <span class="goal-tag">Hafif</span>
+        </div>
+      </label>
+
+      <!-- Normal: 5 quiz/gün -->
+      <label class="goal-card-label">
+        <input type="radio" name="daily_goal" value="5" class="goal-radio" checked>
+        <div class="goal-card normal">
+          <div class="goal-check"><i class="bi bi-check-lg"></i></div>
+          <div class="goal-emoji">📚</div>
+          <div class="goal-num">5</div>
+          <div class="goal-unit">quiz / gün</div>
+          <span class="goal-tag">Normal</span>
+        </div>
+      </label>
+
+      <!-- Yoğun: 10 quiz/gün -->
+      <label class="goal-card-label">
+        <input type="radio" name="daily_goal" value="10" class="goal-radio">
+        <div class="goal-card intense">
+          <div class="goal-check"><i class="bi bi-check-lg"></i></div>
+          <div class="goal-emoji">⚡</div>
+          <div class="goal-num">10</div>
+          <div class="goal-unit">quiz / gün</div>
+          <span class="goal-tag">Yoğun</span>
+        </div>
+      </label>
+
+      <!-- Ciddi: 15 quiz/gün -->
+      <label class="goal-card-label">
+        <input type="radio" name="daily_goal" value="15" class="goal-radio">
+        <div class="goal-card serious">
+          <div class="goal-check"><i class="bi bi-check-lg"></i></div>
+          <div class="goal-emoji">🔥</div>
+          <div class="goal-num">15</div>
+          <div class="goal-unit">quiz / gün</div>
+          <span class="goal-tag">Ciddi</span>
+        </div>
+      </label>
+
+    </div>
+
+    <button type="submit" class="btn-kl btn-kl-primary" style="width:100%;">
+      <i class="bi bi-play-fill me-1"></i>Hadi Başlayalım!
+    </button>
+
+  </form>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  /* Seçim animasyonu için native radio checked state yetiyor.
+     Sayfa yüklendiğinde default seçili (5) kartı aktif göster. */
+  document.querySelectorAll('.goal-radio').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+      /* Tüm kartlardaki odak stilini kaldır — CSS :checked ile hallediliyor */
+    });
+  });
+</script>
+{% endblock %}

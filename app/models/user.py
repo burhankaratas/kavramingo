@@ -15,8 +15,9 @@ class User(UserMixin):
     name: str = ""
     email: str = ""
     password_hash: str = ""
-    grade: Optional[int] = None        # 5, 6, 7 veya 8
+    grade: Optional[int] = None        # 9, 10, 11 veya 12
     total_score: int = 0
+    daily_goal: int = 5                # Günlük quiz hedefi (onboarding/ayarlardan seçilir)
     created_at: Optional[datetime] = None
 
     # Flask-Login get_id() — UserMixin bunu id üzerinden döndürür
@@ -33,5 +34,6 @@ class User(UserMixin):
             password_hash=row.get("password_hash", ""),
             grade=row.get("grade"),
             total_score=row.get("total_score", 0),
+            daily_goal=row.get("daily_goal", 5),
             created_at=row.get("created_at"),
         )

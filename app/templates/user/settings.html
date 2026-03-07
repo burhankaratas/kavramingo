@@ -494,6 +494,25 @@
       </select>
     </div>
 
+    <!-- Günlük Hedef -->
+    <div class="form-group">
+      <label class="form-label" for="dailyGoalField">
+        Günlük Hedef
+        <span class="label-hint">(günlük tamamlamak istediğin quiz sayısı)</span>
+      </label>
+      <select
+        id="dailyGoalField"
+        name="daily_goal"
+        class="form-control-kl"
+      >
+        {% for opt, lbl in [(3, 'Hafif — 3 quiz/gün'), (5, 'Normal — 5 quiz/gün'), (10, 'Yoğun — 10 quiz/gün'), (15, 'Maraton — 15 quiz/gün')] %}
+          <option value="{{ opt }}" {% if current_user.daily_goal == opt %}selected{% endif %}>
+            {{ lbl }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
     <button type="submit" class="btn-save">
       <i class="bi bi-check2"></i> Bilgileri Kaydet
     </button>

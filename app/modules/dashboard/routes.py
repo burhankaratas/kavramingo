@@ -21,9 +21,10 @@ def index():
     )
     earned_map = {r["badge_id"]: r["earned_at"] for r in cur.fetchall()}
 
-    cur.execute("SELECT total_score FROM users WHERE id = %s", (current_user.id,))
+    cur.execute("SELECT total_score, daily_goal FROM users WHERE id = %s", (current_user.id,))
     user_row = cur.fetchone()
     total_score = user_row["total_score"] if user_row else 0
+    daily_goal  = user_row["daily_goal"]  if user_row else 5
 
     cur.execute(
         "SELECT COUNT(*) AS cnt FROM quiz_sessions WHERE user_id=%s AND finished_at IS NOT NULL",
@@ -36,6 +37,13 @@ def index():
         (current_user.id,)
     )
     unit_count = cur.fetchone()["cnt"]
+
+    cur.execute("""
+        SELECT COUNT(*) AS cnt FROM quiz_sessions
+        WHERE user_id = %s AND finished_at IS NOT NULL
+        AND DATE(finished_at) = CURDATE()
+    """, (current_user.id,))
+    daily_done = cur.fetchone()["cnt"]
 
     cur.close()
 
@@ -139,7 +147,7 @@ def index():
         earned_total=len(earned_map),
         total_badges=len(all_badges),
         streak=streak,
-        daily_done=3,
-        daily_goal=5,
+        daily_done=daily_done,
+        daily_goal=daily_goal,
         quiz_ready=True,
     )
