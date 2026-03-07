@@ -76,8 +76,8 @@ def index():
         return redirect(url_for("dashboard.index"))
 
     if quiz_type not in VALID_QUIZ_TYPES:
-        flash("Geçersiz quiz tipi.", "danger")
-        return redirect(url_for("dashboard.index"))
+        flash("Lütfen kütüphaneden bir quiz tipi seçerek başlayın.", "warning")
+        return redirect(url_for("library.index"))
 
     ok = quiz_engine.start_session(grade, unit_id, quiz_type)
     if not ok:

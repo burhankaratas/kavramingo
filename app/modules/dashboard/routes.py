@@ -86,23 +86,50 @@ def index():
     badges_preview = (earned_list + locked_list)[:6]
 
     # TODO: aşağıdakileri DB/API'den al
+    # Kullanıcının sınıfına göre ilk üniteyi belirle (unit_id global 1-16)
+    _GRADE_FIRST_UNIT = {
+        9:  {"unit_id": 1,  "number": 1, "name": "Bilgi ve İnanç",
+              "current_topic": "Tevhid Kavramı", "topics": [
+                  {"name": "Bilgi Nedir?",            "status": "done"},
+                  {"name": "İnanç ve Bilgi İlişkisi", "status": "done"},
+                  {"name": "Tevhid Kavramı",          "status": "active"},
+                  {"name": "İman Esasları",           "status": "upcoming"},
+                  {"name": "Allah'ın Sıfatları",      "status": "upcoming"},
+                  {"name": "Şirk ve Sonuçları",       "status": "locked"},
+              ]},
+        10: {"unit_id": 5,  "number": 1, "name": "Kaza, Kader ve İnsan Özgürlüğü",
+              "current_topic": "Kader İnancı", "topics": [
+                  {"name": "Kaza ve Kader Nedir?",    "status": "done"},
+                  {"name": "Kader İnancı",            "status": "active"},
+                  {"name": "Özgür İrade",             "status": "upcoming"},
+                  {"name": "İnsan Sorumluluğu",       "status": "upcoming"},
+                  {"name": "Tevekkül",                "status": "locked"},
+              ]},
+        11: {"unit_id": 9,  "number": 1, "name": "Din, Kültür ve Medeniyet",
+              "current_topic": "İslam Medeniyeti", "topics": [
+                  {"name": "Kültür ve Medeniyet",     "status": "done"},
+                  {"name": "İslam Medeniyeti",        "status": "active"},
+                  {"name": "Sanat ve Mimari",         "status": "upcoming"},
+                  {"name": "Bilime Katkılar",         "status": "upcoming"},
+                  {"name": "Medeniyet Mirası",        "status": "locked"},
+              ]},
+        12: {"unit_id": 13, "number": 1, "name": "Bir Mesaj Olarak Din",
+              "current_topic": "Dinin Tanımı", "topics": [
+                  {"name": "Dinin Tanımı",            "status": "done"},
+                  {"name": "Dinin İşlevi",            "status": "active"},
+                  {"name": "Dinin Kaynağı",           "status": "upcoming"},
+                  {"name": "Evrensel Mesaj",          "status": "upcoming"},
+                  {"name": "Din ve İnsan",            "status": "locked"},
+              ]},
+    }
+    user_grade = getattr(current_user, "grade", 9) or 9
+    _unit_data = _GRADE_FIRST_UNIT.get(user_grade, _GRADE_FIRST_UNIT[9])
     current_unit = {
-        "unit_id": 1,
-        "quiz_type": "multiple_choice",
-        "number": 1,
-        "name": "Bilgi ve İnanç",
-        "current_topic": "Tevhid Kavramı",
-        "progress": 40,
+        **_unit_data,
+        "quiz_type":   "multiple_choice",
+        "progress":    40,
         "done_topics": 8,
         "total_topics": 20,
-        "topics": [
-            {"name": "Bilgi Nedir?",            "status": "done"},
-            {"name": "İnanç ve Bilgi İlişkisi", "status": "done"},
-            {"name": "Tevhid Kavramı",          "status": "active"},
-            {"name": "İman Esasları",           "status": "upcoming"},
-            {"name": "Allah'ın Sıfatları",      "status": "upcoming"},
-            {"name": "Şirk ve Sonuçları",       "status": "locked"},
-        ],
     }
 
     return render_template(
