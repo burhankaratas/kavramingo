@@ -1,0 +1,672 @@
+{% extends "app_base.html" %}
+{% block title %}Profilim — KavramLingo{% endblock %}
+
+{% block head %}
+<style>
+  /* ── Hero ─────────────────────────────────────────────────────────────── */
+  .profile-hero {
+    background: linear-gradient(135deg, #4361EE 0%, #3A0CA3 55%, #7209B7 100%);
+    border-radius: 24px;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 1.75rem;
+    border: none;
+    box-shadow: 0 8px 32px rgba(67,97,238,0.28);
+  }
+
+  .profile-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.08) 1.5px, transparent 1.5px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+
+  .profile-hero-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 2.5rem 2.5rem;
+  }
+
+  /* Avatar büyük */
+  .profile-avatar-lg {
+    width: 96px; height: 96px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: 4px solid rgba(255,255,255,0.35);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+    font-weight: 900;
+    flex-shrink: 0;
+    letter-spacing: 1px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+
+  .profile-hero-info { flex: 1; color: #fff; }
+
+  .profile-hero-grade {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: rgba(255,255,255,0.15);
+    border: 1.5px solid rgba(255,255,255,0.25);
+    border-radius: 50px;
+    padding: 4px 12px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    margin-bottom: 0.6rem;
+    backdrop-filter: blur(8px);
+  }
+
+  .profile-hero-name {
+    font-size: 1.85rem;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 0.25rem;
+    letter-spacing: -0.3px;
+  }
+
+  .profile-hero-email {
+    font-size: 0.88rem;
+    font-weight: 600;
+    opacity: 0.75;
+    margin-bottom: 1.25rem;
+  }
+
+  .profile-hero-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .profile-stat-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(255,255,255,0.15);
+    border: 1.5px solid rgba(255,255,255,0.22);
+    border-radius: 50px;
+    padding: 6px 14px;
+    font-size: 0.88rem;
+    font-weight: 800;
+    backdrop-filter: blur(8px);
+    color: #fff;
+  }
+
+  /* Ayarlar butonu (hero sağ üst) */
+  .profile-settings-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255,255,255,0.15);
+    border: 1.5px solid rgba(255,255,255,0.3);
+    border-radius: 12px;
+    padding: 9px 18px;
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: #fff;
+    text-decoration: none;
+    backdrop-filter: blur(8px);
+    transition: background 0.15s;
+    align-self: flex-start;
+    flex-shrink: 0;
+  }
+
+  .profile-settings-btn:hover {
+    background: rgba(255,255,255,0.25);
+    color: #fff;
+  }
+
+  /* ── Shared card ─────────────────────────────────────────────────────── */
+  .kl-card {
+    background: #fff;
+    border-radius: 22px;
+    border: 2px solid var(--kl-border);
+    padding: 1.75rem;
+    box-shadow: 0 2px 16px rgba(67,97,238,0.06);
+  }
+
+  .kl-card-title {
+    font-size: 0.78rem;
+    font-weight: 900;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--kl-muted);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* ── İstatistik kartları ─────────────────────────────────────────────── */
+  .stat-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .stat-card {
+    background: #fff;
+    border-radius: 18px;
+    border: 2px solid var(--kl-border);
+    padding: 1.25rem 1rem;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(67,97,238,0.05);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(67,97,238,0.12);
+  }
+
+  .stat-card-icon {
+    width: 44px; height: 44px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+    margin: 0 auto 0.65rem;
+  }
+
+  .stat-card-val {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--kl-text);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-card-lbl {
+    font-size: 0.73rem;
+    font-weight: 800;
+    color: var(--kl-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  /* ── Rozetler ────────────────────────────────────────────────────────── */
+  .badges-grid-lg {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1rem;
+  }
+
+  .badge-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+    text-align: center;
+  }
+
+  .badge-icon {
+    width: 58px; height: 58px;
+    border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.55rem;
+    position: relative;
+    transition: transform 0.2s;
+    cursor: default;
+  }
+
+  .badge-icon:hover { transform: translateY(-4px); }
+
+  .badge-icon.earned {
+    background: linear-gradient(135deg, #FFF9C4, #FFE066);
+    box-shadow: 0 4px 14px rgba(255,183,3,0.28);
+  }
+
+  .badge-icon.earned.blue {
+    background: linear-gradient(135deg, #EEF1FD, #C7D3FC);
+    box-shadow: 0 4px 14px rgba(67,97,238,0.22);
+  }
+
+  .badge-icon.earned.green {
+    background: linear-gradient(135deg, #ECFDF5, #A7F3D0);
+    box-shadow: 0 4px 14px rgba(6,214,160,0.22);
+  }
+
+  .badge-icon.earned.purple {
+    background: linear-gradient(135deg, #F5F3FF, #DDD6FE);
+    box-shadow: 0 4px 14px rgba(114,9,183,0.18);
+  }
+
+  .badge-icon.locked {
+    background: var(--kl-bg);
+    filter: grayscale(1) opacity(0.4);
+  }
+
+  .badge-icon.locked::after {
+    content: '🔒';
+    position: absolute;
+    bottom: -4px; right: -4px;
+    font-size: 0.7rem;
+    background: #fff;
+    border-radius: 50%;
+    padding: 1px;
+  }
+
+  .badge-name {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--kl-muted);
+    line-height: 1.25;
+  }
+
+  .badge-name.earned { color: var(--kl-text); }
+
+  .badge-date {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--kl-muted);
+    opacity: 0.75;
+  }
+
+  /* ── Son Aktiviteler ─────────────────────────────────────────────────── */
+  .activity-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .activity-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 1rem;
+    background: var(--kl-bg);
+    border-radius: 14px;
+    border: 1.5px solid transparent;
+    transition: border-color 0.15s;
+  }
+
+  .activity-item:hover { border-color: var(--kl-border); }
+
+  .activity-icon {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .activity-icon.quiz     { background: #EEF1FD; color: var(--kl-primary); }
+  .activity-icon.flash    { background: #FFF4E0; color: #D9730D; }
+  .activity-icon.match    { background: #ECFDF5; color: var(--kl-success); }
+  .activity-icon.fill     { background: #F5F3FF; color: var(--kl-accent); }
+
+  .activity-body { flex: 1; }
+
+  .activity-title {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--kl-text);
+    margin-bottom: 0.1rem;
+  }
+
+  .activity-sub {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--kl-muted);
+  }
+
+  .activity-right { text-align: right; flex-shrink: 0; }
+
+  .activity-xp {
+    font-size: 0.85rem;
+    font-weight: 900;
+    color: var(--kl-warning);
+  }
+
+  .activity-xp i { font-size: 0.75rem; }
+
+  .activity-time {
+    font-size: 0.73rem;
+    font-weight: 700;
+    color: var(--kl-muted);
+    margin-top: 2px;
+  }
+
+  /* ── İlerleme tablosu ────────────────────────────────────────────────── */
+  .progress-table { display: flex; flex-direction: column; gap: 0.6rem; }
+
+  .progress-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .progress-unit-name {
+    flex: 0 0 200px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--kl-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .progress-track {
+    flex: 1;
+    height: 8px;
+    background: var(--kl-bg);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 8px;
+    background: linear-gradient(90deg, var(--kl-primary), var(--kl-accent));
+    transition: width 0.6s ease;
+  }
+
+  .progress-pct {
+    flex: 0 0 38px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--kl-primary);
+    text-align: right;
+  }
+
+  /* ── Responsive ──────────────────────────────────────────────────────── */
+  @media (max-width: 991px) {
+    .stat-cards { grid-template-columns: repeat(2, 1fr); }
+    .badges-grid-lg { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  @media (max-width: 767px) {
+    .profile-hero-inner { flex-direction: column; align-items: flex-start; gap: 1.25rem; padding: 1.75rem 1.5rem; }
+    .profile-avatar-lg  { width: 72px; height: 72px; font-size: 1.5rem; }
+    .profile-hero-name  { font-size: 1.45rem; }
+    .profile-settings-btn { align-self: auto; }
+    .stat-cards { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+    .badges-grid-lg { grid-template-columns: repeat(3, 1fr); }
+    .progress-unit-name { flex: 0 0 130px; }
+  }
+
+  @media (max-width: 420px) {
+    .badges-grid-lg { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!--  HERO: Avatar + İsim + Grade + Stats                                    -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="profile-hero">
+  <div class="profile-hero-inner">
+
+    <!-- Avatar -->
+    <div class="profile-avatar-lg">
+      {{ (current_user.name[:2]) | upper }}
+    </div>
+
+    <!-- Bilgiler -->
+    <div class="profile-hero-info">
+      <div class="profile-hero-grade">
+        <i class="bi bi-mortarboard-fill"></i>
+        {{ current_user.grade | default(9) }}. Sınıf &nbsp;·&nbsp; Din Kültürü ve Ahlak Bilgisi
+      </div>
+      <div class="profile-hero-name">{{ current_user.name }}</div>
+      <div class="profile-hero-email">{{ current_user.email }}</div>
+
+      <div class="profile-hero-stats">
+        <div class="profile-stat-pill">
+          <i class="bi bi-fire" style="color:#FFD580;"></i>
+          {{ streak | default(7) }} günlük seri
+        </div>
+        <div class="profile-stat-pill">
+          <i class="bi bi-star-fill" style="color:#FFD580;"></i>
+          {{ current_user.total_score | default(1250) | int }} XP
+        </div>
+        <div class="profile-stat-pill">
+          <i class="bi bi-award-fill" style="color:#E9C46A;"></i>
+          {{ earned_badge_count | default(3) }} rozet
+        </div>
+      </div>
+    </div>
+
+    <!-- Ayarlar butonu -->
+    <a href="{{ url_for('user.settings') }}" class="profile-settings-btn">
+      <i class="bi bi-gear-fill"></i> Ayarlar
+    </a>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!--  İSTATİSTİK KARTLARI                                                    -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="stat-cards">
+
+  <div class="stat-card">
+    <div class="stat-card-icon" style="background:#EEF1FD;color:var(--kl-primary);">
+      <i class="bi bi-patch-check-fill"></i>
+    </div>
+    <div class="stat-card-val">{{ total_quizzes | default(48) }}</div>
+    <div class="stat-card-lbl">Quiz Yapıldı</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-card-icon" style="background:#ECFDF5;color:var(--kl-success);">
+      <i class="bi bi-graph-up-arrow"></i>
+    </div>
+    <div class="stat-card-val">{{ accuracy | default(78) }}%</div>
+    <div class="stat-card-lbl">Doğruluk Oranı</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-card-icon" style="background:#FFF4E0;color:#D9730D;">
+      <i class="bi bi-fire"></i>
+    </div>
+    <div class="stat-card-val">{{ streak | default(7) }}</div>
+    <div class="stat-card-lbl">Günlük Seri</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-card-icon" style="background:#F5F3FF;color:var(--kl-accent);">
+      <i class="bi bi-trophy-fill"></i>
+    </div>
+    <div class="stat-card-val">#{{ rank | default(12) }}</div>
+    <div class="stat-card-lbl">Sınıf Sıralaması</div>
+  </div>
+
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!--  İKİ KOLON: sol rozetler + aktiviteler, sağ ilerleme                   -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="row g-4 align-items-start">
+
+  <!-- ── Sol kolon ─────────────────────────────────────────────────────── -->
+  <div class="col-12 col-lg-8">
+
+    <!-- Rozetler -->
+    <div class="kl-card mb-4">
+      <div class="kl-card-title">
+        <i class="bi bi-award-fill" style="color:var(--kl-warning);font-size:1rem;"></i>
+        Rozetlerim
+        <a href="{{ url_for('user.badges') }}"
+           style="margin-left:auto;font-size:0.78rem;font-weight:800;color:var(--kl-primary);
+                  text-decoration:none;display:flex;align-items:center;gap:0.3rem;">
+          Tümünü gör <i class="bi bi-arrow-right-short"></i>
+        </a>
+      </div>
+
+      {% set badges_data = badges if badges is defined else [
+        {"icon": "🏅", "name": "İlk Adım",      "earned": true,  "style": "",       "date": "Ocak 2025"},
+        {"icon": "🔥", "name": "3 Gün Serisi",  "earned": true,  "style": "blue",   "date": "Şubat 2025"},
+        {"icon": "📚", "name": "10 Quiz",        "earned": true,  "style": "green",  "date": "Şubat 2025"},
+        {"icon": "⭐", "name": "7 Gün Serisi",  "earned": false, "style": "",       "date": ""},
+        {"icon": "⚡", "name": "Hız Treni",      "earned": false, "style": "",       "date": ""},
+        {"icon": "💎", "name": "Mükemmel",       "earned": false, "style": "",       "date": ""},
+        {"icon": "🌟", "name": "30 Gün Serisi",  "earned": false, "style": "",       "date": ""},
+        {"icon": "🎯", "name": "%100 Doğru",     "earned": false, "style": "",       "date": ""},
+        {"icon": "🦅", "name": "Hız Kartalı",    "earned": false, "style": "",       "date": ""},
+        {"icon": "📖", "name": "Kur'an Ustası",  "earned": false, "style": "purple", "date": ""},
+        {"icon": "🏆", "name": "Şampiyon",       "earned": false, "style": "",       "date": ""},
+        {"icon": "🌙", "name": "Gece Çalışkanı", "earned": false, "style": "",       "date": ""},
+      ] %}
+
+      <div class="badges-grid-lg">
+        {% for b in badges_data %}
+        <div class="badge-item">
+          <div class="badge-icon {{ ('earned ' + b.style) if b.earned else 'locked' }}"
+               title="{{ b.name }}{% if b.earned and b.date %} — {{ b.date }}{% endif %}">
+            {{ b.icon }}
+          </div>
+          <span class="badge-name {{ 'earned' if b.earned else '' }}">{{ b.name }}</span>
+          {% if b.earned and b.date %}
+            <span class="badge-date">{{ b.date }}</span>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Son Aktiviteler -->
+    <div class="kl-card">
+      <div class="kl-card-title">
+        <i class="bi bi-clock-history" style="color:var(--kl-primary);font-size:1rem;"></i>
+        Son Aktiviteler
+      </div>
+
+      {% set activities = recent_activities if recent_activities is defined else [
+        {"type": "quiz",  "title": "Çoktan Seçmeli Quiz",  "sub": "Bilgi ve İnanç — 9. Sınıf",                "xp": 50,  "time": "2 saat önce"},
+        {"type": "flash", "title": "Flashcard Çalışması",  "sub": "Kur'an-ı Kerim — 9. Sınıf",               "xp": 30,  "time": "Dün"},
+        {"type": "match", "title": "Eşleştirme Oyunu",     "sub": "Hz. Muhammed'i Tanıyalım — 9. Sınıf",     "xp": 40,  "time": "2 gün önce"},
+        {"type": "fill",  "title": "Boşluk Doldurma",      "sub": "İbadet — 9. Sınıf",                       "xp": 35,  "time": "3 gün önce"},
+        {"type": "quiz",  "title": "Çoktan Seçmeli Quiz",  "sub": "Kaza, Kader ve İnsan Özgürlüğü — 10. Sınıf", "xp": 55, "time": "4 gün önce"},
+      ] %}
+
+      <div class="activity-list">
+        {% for a in activities %}
+        <div class="activity-item">
+          <div class="activity-icon {{ a.type }}">
+            {% if a.type == 'quiz'  %}<i class="bi bi-check2-circle"></i>
+            {% elif a.type == 'flash' %}<i class="bi bi-card-text"></i>
+            {% elif a.type == 'match' %}<i class="bi bi-shuffle"></i>
+            {% else %}<i class="bi bi-pencil-fill"></i>
+            {% endif %}
+          </div>
+          <div class="activity-body">
+            <div class="activity-title">{{ a.title }}</div>
+            <div class="activity-sub">{{ a.sub }}</div>
+          </div>
+          <div class="activity-right">
+            <div class="activity-xp"><i class="bi bi-star-fill"></i> +{{ a.xp }} XP</div>
+            <div class="activity-time">{{ a.time }}</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Sağ kolon: İlerleme ─────────────────────────────────────────── -->
+  <div class="col-12 col-lg-4">
+
+    <div class="kl-card">
+      <div class="kl-card-title">
+        <i class="bi bi-bar-chart-fill" style="color:var(--kl-primary);font-size:1rem;"></i>
+        Ünite İlerlemesi
+      </div>
+
+      {% set unit_progress = unit_progress if unit_progress is defined else [
+        {"name": "Bilgi ve İnanç",          "pct": 85},
+        {"name": "Kur'an-ı Kerim",          "pct": 60},
+        {"name": "Hz. Muhammed'i Tanıyalım","pct": 40},
+        {"name": "İbadet",                  "pct": 20},
+        {"name": "Kaza, Kader...",          "pct": 10},
+      ] %}
+
+      <div class="progress-table">
+        {% for u in unit_progress %}
+        <div class="progress-row">
+          <div class="progress-unit-name" title="{{ u.name }}">{{ u.name }}</div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width:{{ u.pct }}%;"></div>
+          </div>
+          <div class="progress-pct">{{ u.pct }}%</div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Toplam ilerleme -->
+      {% set total_pct = (unit_progress | map(attribute='pct') | sum / (unit_progress | length)) | int if unit_progress else 43 %}
+      <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:2px solid var(--kl-bg);">
+        <div style="display:flex;justify-content:space-between;
+                    font-size:0.8rem;font-weight:800;color:var(--kl-muted);margin-bottom:6px;">
+          <span>Genel İlerleme</span>
+          <span style="color:var(--kl-primary);">{{ total_pct }}%</span>
+        </div>
+        <div style="height:10px;background:var(--kl-bg);border-radius:10px;overflow:hidden;">
+          <div style="height:100%;width:{{ total_pct }}%;
+                      background:linear-gradient(90deg,var(--kl-primary),var(--kl-accent));
+                      border-radius:10px;transition:width 0.6s ease;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mini istatistik kutuları -->
+    <div class="kl-card mt-4">
+      <div class="kl-card-title">
+        <i class="bi bi-lightning-charge-fill" style="color:var(--kl-warning);font-size:1rem;"></i>
+        Bu Hafta
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:0.8rem;">
+
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:0.88rem;font-weight:700;color:var(--kl-muted);">
+            <i class="bi bi-check2-square me-1" style="color:var(--kl-primary);"></i> Quiz Sayısı
+          </div>
+          <div style="font-size:1rem;font-weight:900;color:var(--kl-text);">
+            {{ weekly_quizzes | default(9) }}
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:0.88rem;font-weight:700;color:var(--kl-muted);">
+            <i class="bi bi-star-fill me-1" style="color:var(--kl-warning);"></i> Kazanılan XP
+          </div>
+          <div style="font-size:1rem;font-weight:900;color:var(--kl-text);">
+            {{ weekly_xp | default(320) }}
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:0.88rem;font-weight:700;color:var(--kl-muted);">
+            <i class="bi bi-bullseye me-1" style="color:var(--kl-success);"></i> Doğruluk
+          </div>
+          <div style="font-size:1rem;font-weight:900;color:var(--kl-text);">
+            {{ weekly_accuracy | default(81) }}%
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:0.88rem;font-weight:700;color:var(--kl-muted);">
+            <i class="bi bi-clock me-1" style="color:var(--kl-accent);"></i> Çalışma Süresi
+          </div>
+          <div style="font-size:1rem;font-weight:900;color:var(--kl-text);">
+            {{ weekly_minutes | default(42) }} dk
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,125 @@
+{% extends "quiz/_quiz_base.html" %}
+{% block title %}Çoktan Seçmeli — KavramLingo{% endblock %}
+
+{% block quiz_head %}
+<style>
+  .mc-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .mc-option {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border-radius: 16px;
+    border: 2.5px solid var(--kl-border);
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    position: relative;
+  }
+
+  .mc-option:hover {
+    border-color: var(--kl-primary);
+    background: #F5F7FF;
+    transform: translateX(3px);
+  }
+
+  .mc-option input[type="radio"] { display: none; }
+
+  .mc-option.selected {
+    border-color: var(--kl-primary);
+    background: #EEF1FD;
+  }
+
+  .mc-letter {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900;
+    font-size: 0.95rem;
+    background: var(--kl-bg);
+    color: var(--kl-muted);
+    flex-shrink: 0;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .mc-option.selected .mc-letter {
+    background: var(--kl-primary);
+    color: #fff;
+  }
+
+  .mc-text {
+    font-size: 0.97rem;
+    font-weight: 700;
+    color: var(--kl-text);
+    line-height: 1.4;
+  }
+
+  .btn-kl-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 14px;
+    background: var(--kl-primary);
+    color: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    box-shadow: 0 5px 0 var(--kl-primary-dark);
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+
+  .btn-kl-submit:hover   { transform: translateY(-2px); box-shadow: 0 7px 0 var(--kl-primary-dark); }
+  .btn-kl-submit:active  { transform: translateY(3px);  box-shadow: 0 2px 0 var(--kl-primary-dark); }
+  .btn-kl-submit:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; }
+</style>
+{% endblock %}
+
+{% block quiz_content %}
+<p class="quiz-question-text">{{ question.question }}</p>
+
+<form method="POST" action="{{ url_for('quiz.answer') }}" id="mcForm">
+  <div class="mc-options">
+    {% set letters = ['A', 'B', 'C', 'D', 'E'] %}
+    {% for opt in question.options %}
+    <label class="mc-option" id="opt_{{ loop.index0 }}">
+      <input type="radio" name="choice" value="{{ loop.index0 }}" required>
+      <span class="mc-letter">{{ letters[loop.index0] }}</span>
+      <span class="mc-text">{{ opt }}</span>
+    </label>
+    {% endfor %}
+  </div>
+
+  <button type="submit" class="btn-kl-submit" id="submitBtn" disabled>
+    <i class="bi bi-arrow-right-circle-fill"></i>
+    {% if current_index == total %}Sonucu Gör{% else %}Sonraki Soru{% endif %}
+  </button>
+</form>
+{% endblock %}
+
+{% block quiz_scripts %}
+<script>
+  var radios = document.querySelectorAll('input[name="choice"]');
+  var btn    = document.getElementById('submitBtn');
+  radios.forEach(function(r) {
+    r.addEventListener('change', function() {
+      btn.disabled = false;
+      // Seçili görünümü güncelle
+      document.querySelectorAll('.mc-option').forEach(function(el) {
+        el.classList.remove('selected');
+      });
+      r.closest('.mc-option').classList.add('selected');
+    });
+  });
+</script>
+{% endblock %}

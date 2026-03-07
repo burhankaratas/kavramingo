@@ -1,0 +1,48 @@
+{# app/templates/library/_unit_card.html — Ünite kartı partial #}
+
+{% set meta = grade_meta[u.grade] %}
+
+<div class="unit-card">
+
+  <!-- Renkli üst şerit -->
+  <div class="unit-card-stripe" style="background:{{ meta.color }};"></div>
+
+  <div class="unit-card-body">
+
+    <!-- Meta: sınıf badge + ünite no -->
+    <div class="unit-card-meta">
+      <span class="unit-grade-badge"
+            style="background:{{ meta.bg }};color:{{ meta.color }};">
+        <i class="bi bi-mortarboard-fill"></i>
+        {{ meta.label }}
+      </span>
+      <span class="unit-number">Ünite {{ u.number }}</span>
+    </div>
+
+    <!-- Ünite adı -->
+    <div class="unit-card-name">{{ u.name }}</div>
+
+    <!-- Açıklama -->
+    <div class="unit-card-desc">{{ u.description }}</div>
+
+    <!-- Soru sayısı -->
+    <div class="unit-card-qcount">
+      <i class="bi bi-question-circle-fill" style="color:{{ meta.color }};opacity:0.6;"></i>
+      {{ u.question_count }} soru
+    </div>
+
+    <!-- Quiz tipi butonları -->
+    <div class="quiz-type-btns">
+      {% for qt in quiz_types %}
+      <a href="{{ url_for('quiz.index', grade=u.grade, unit_id=u.unit_id, quiz_type=qt.key) }}"
+         class="qt-btn"
+         data-type="{{ qt.key }}"
+         title="{{ qt.label }}">
+        <i class="bi {{ qt.icon }}" style="color:{{ qt.color }};"></i>
+        {{ qt.label }}
+      </a>
+      {% endfor %}
+    </div>
+
+  </div>
+</div>

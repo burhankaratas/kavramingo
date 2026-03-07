@@ -1,0 +1,467 @@
+{% extends "app_base.html" %}
+{% block title %}Ünite Kütüphanesi — KavramLingo{% endblock %}
+
+{% block head %}
+<style>
+  /* ── Sayfa başlığı ───────────────────────────────────────────────────── */
+  .lib-hero {
+    background: linear-gradient(135deg, #4361EE 0%, #3A0CA3 55%, #7209B7 100%);
+    border-radius: 24px;
+    padding: 2.25rem 2.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(67,97,238,0.28);
+  }
+
+  .lib-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.08) 1.5px, transparent 1.5px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+
+  .lib-hero-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .lib-hero-left { color: #fff; }
+
+  .lib-hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(255,255,255,0.15);
+    border: 1.5px solid rgba(255,255,255,0.25);
+    border-radius: 50px;
+    padding: 4px 13px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    backdrop-filter: blur(8px);
+  }
+
+  .lib-hero-title {
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin: 0 0 0.35rem;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+  }
+
+  .lib-hero-sub {
+    font-size: 0.92rem;
+    font-weight: 600;
+    opacity: 0.82;
+    margin: 0;
+  }
+
+  .lib-hero-stats {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+  }
+
+  .lib-stat-box {
+    background: rgba(255,255,255,0.15);
+    border: 1.5px solid rgba(255,255,255,0.22);
+    border-radius: 16px;
+    padding: 0.9rem 1.25rem;
+    text-align: center;
+    backdrop-filter: blur(8px);
+    min-width: 80px;
+  }
+
+  .lib-stat-val {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+
+  .lib-stat-lbl {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: rgba(255,255,255,0.75);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  /* ── Grade filtre sekmesi ────────────────────────────────────────────── */
+  .grade-tabs {
+    display: flex;
+    gap: 0.4rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .grade-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 8px 18px;
+    border-radius: 50px;
+    border: 2.5px solid var(--kl-border);
+    background: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--kl-muted);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .grade-tab:hover {
+    border-color: var(--kl-primary);
+    color: var(--kl-primary);
+    background: #EEF1FD;
+  }
+
+  .grade-tab.active-all {
+    background: var(--kl-primary);
+    border-color: var(--kl-primary);
+    color: #fff;
+  }
+
+  .grade-tab.active-9  { background: #4361EE; border-color: #4361EE; color: #fff; }
+  .grade-tab.active-10 { background: #7209B7; border-color: #7209B7; color: #fff; }
+  .grade-tab.active-11 { background: #D9730D; border-color: #D9730D; color: #fff; }
+  .grade-tab.active-12 { background: #059669; border-color: #059669; color: #fff; }
+
+  .grade-tab-count {
+    background: rgba(255,255,255,0.25);
+    border-radius: 50px;
+    padding: 1px 7px;
+    font-size: 0.72rem;
+    font-weight: 900;
+  }
+
+  .grade-tab:not(.active-all):not(.active-9):not(.active-10):not(.active-11):not(.active-12) .grade-tab-count {
+    background: var(--kl-bg);
+    color: var(--kl-muted);
+  }
+
+  /* ── Sınıf grubu başlığı ─────────────────────────────────────────────── */
+  .grade-section { margin-bottom: 2.5rem; }
+
+  .grade-section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .grade-section-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 5px 14px;
+    border-radius: 50px;
+    font-size: 0.82rem;
+    font-weight: 900;
+    color: #fff;
+  }
+
+  .grade-section-line {
+    flex: 1;
+    height: 2px;
+    border-radius: 2px;
+    opacity: 0.15;
+  }
+
+  /* ── Ünite kartları grid ─────────────────────────────────────────────── */
+  .units-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  .unit-card {
+    background: #fff;
+    border-radius: 20px;
+    border: 2px solid var(--kl-border);
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(67,97,238,0.06);
+    transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .unit-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(67,97,238,0.14);
+    border-color: var(--kl-primary);
+  }
+
+  /* Renkli üst şerit */
+  .unit-card-stripe {
+    height: 5px;
+    width: 100%;
+    flex-shrink: 0;
+  }
+
+  /* Kart gövdesi */
+  .unit-card-body {
+    padding: 1.3rem 1.4rem 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Üst meta: sınıf badge + ünite no */
+  .unit-card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+
+  .unit-grade-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 3px 10px;
+    border-radius: 50px;
+    font-size: 0.72rem;
+    font-weight: 900;
+  }
+
+  .unit-number {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--kl-muted);
+  }
+
+  /* Ünite adı */
+  .unit-card-name {
+    font-size: 1.05rem;
+    font-weight: 900;
+    color: var(--kl-text);
+    line-height: 1.3;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.2px;
+  }
+
+  /* Açıklama */
+  .unit-card-desc {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--kl-muted);
+    line-height: 1.5;
+    flex: 1;
+    margin-bottom: 1.1rem;
+  }
+
+  /* Soru sayısı */
+  .unit-card-qcount {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.73rem;
+    font-weight: 800;
+    color: var(--kl-muted);
+    margin-bottom: 1rem;
+  }
+
+  /* Quiz tipi butonları */
+  .quiz-type-btns {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    padding-top: 0.85rem;
+    border-top: 1.5px solid var(--kl-bg);
+  }
+
+  .qt-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 8px 6px;
+    border-radius: 10px;
+    border: 2px solid var(--kl-border);
+    background: var(--kl-bg);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.73rem;
+    font-weight: 800;
+    color: var(--kl-muted);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    line-height: 1.2;
+  }
+
+  .qt-btn i { font-size: 0.85rem; flex-shrink: 0; }
+
+  .qt-btn:hover {
+    background: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  }
+
+  /* Her quiz tipi için hover rengi */
+  .qt-btn[data-type="multiple_choice"]:hover { border-color: #4361EE; color: #4361EE; }
+  .qt-btn[data-type="flashcard"]:hover        { border-color: #D9730D; color: #D9730D; }
+  .qt-btn[data-type="matching"]:hover         { border-color: #06D6A0; color: #059669; }
+  .qt-btn[data-type="fill_blank"]:hover       { border-color: #7209B7; color: #7209B7; }
+
+  /* ── Boş durum ───────────────────────────────────────────────────────── */
+  .lib-empty {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--kl-muted);
+  }
+
+  .lib-empty i { font-size: 3rem; opacity: 0.25; display: block; margin-bottom: 0.75rem; }
+  .lib-empty p { font-size: 0.92rem; font-weight: 700; }
+
+  /* ── Responsive ──────────────────────────────────────────────────────── */
+  @media (max-width: 991px) {
+    .units-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 767px) {
+    .lib-hero { padding: 1.75rem 1.5rem; }
+    .lib-hero-title { font-size: 1.45rem; }
+    .lib-hero-stats { display: none; }
+    .units-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .quiz-type-btns { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 420px) {
+    .grade-tabs { gap: 0.25rem; }
+    .grade-tab  { padding: 7px 12px; font-size: 0.78rem; }
+    .qt-btn     { font-size: 0.68rem; padding: 7px 4px; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!--  HERO                                                                   -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="lib-hero">
+  <div class="lib-hero-inner">
+
+    <div class="lib-hero-left">
+      <div class="lib-hero-tag">
+        <i class="bi bi-collection-fill"></i>
+        Din Kültürü ve Ahlak Bilgisi
+      </div>
+      <h1 class="lib-hero-title">Ünite Kütüphanesi</h1>
+      <p class="lib-hero-sub">
+        Tüm sınıflara ait üniteleri seç, istediğin çalışma modunu başlat.
+      </p>
+    </div>
+
+    <div class="lib-hero-stats">
+      <div class="lib-stat-box">
+        <div class="lib-stat-val">{{ total_units }}</div>
+        <div class="lib-stat-lbl">Ünite</div>
+      </div>
+      <div class="lib-stat-box">
+        <div class="lib-stat-val">4</div>
+        <div class="lib-stat-lbl">Sınıf</div>
+      </div>
+      <div class="lib-stat-box">
+        <div class="lib-stat-val">4</div>
+        <div class="lib-stat-lbl">Mod</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!--  GRADE FİLTRE SEKMELERİ                                                -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="grade-tabs">
+
+  <a href="{{ url_for('library.index') }}"
+     class="grade-tab {{ 'active-all' if grade_filter == 'all' else '' }}">
+    <i class="bi bi-grid-3x3-gap-fill"></i>
+    Tümü
+    <span class="grade-tab-count">{{ total_units }}</span>
+  </a>
+
+  {% set grade_counts = {9: 4, 10: 4, 11: 4, 12: 4} %}
+  {% set grade_icons  = {9: 'bi-1-circle-fill', 10: 'bi-2-circle-fill', 11: 'bi-3-circle-fill', 12: 'bi-4-circle-fill'} %}
+
+  {% for g in [9, 10, 11, 12] %}
+  <a href="{{ url_for('library.index', grade=g) }}"
+     class="grade-tab {{ ('active-' ~ g) if grade_filter == g|string else '' }}">
+    <i class="bi {{ grade_icons[g] }}"></i>
+    {{ g }}. Sınıf
+    <span class="grade-tab-count">{{ grade_counts[g] }}</span>
+  </a>
+  {% endfor %}
+
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!--  ÜNİTE LİSTESİ                                                         -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+
+{% if not units %}
+  <div class="lib-empty">
+    <i class="bi bi-journal-x"></i>
+    <p>Bu filtre için ünite bulunamadı.</p>
+  </div>
+
+{% elif grade_filter == 'all' %}
+  {# Tüm sınıflar — sınıfa göre gruplu göster #}
+  {% for g in [9, 10, 11, 12] %}
+    {% set g_units = grouped.get(g, []) %}
+    {% if g_units %}
+
+    {% set meta = grade_meta[g] %}
+
+    <div class="grade-section">
+
+      <!-- Sınıf başlığı -->
+      <div class="grade-section-header">
+        <span class="grade-section-badge" style="background:{{ meta.color }};">
+          <i class="bi bi-mortarboard-fill"></i>
+          {{ g }}. Sınıf
+        </span>
+        <div class="grade-section-line" style="background:{{ meta.color }};"></div>
+      </div>
+
+      <!-- Ünite grid -->
+      <div class="units-grid">
+        {% for u in g_units %}
+        {% include "library/_unit_card.html" %}
+        {% endfor %}
+      </div>
+
+    </div>
+    {% endif %}
+  {% endfor %}
+
+{% else %}
+  {# Tek sınıf filtresi — grup başlığı yok, direkt grid #}
+  <div class="units-grid">
+    {% for u in units %}
+    {% include "library/_unit_card.html" %}
+    {% endfor %}
+  </div>
+{% endif %}
+
+{% endblock %}

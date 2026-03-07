@@ -1,0 +1,231 @@
+{% extends "app_base.html" %}
+
+{% block head %}
+<style>
+  /* ── Quiz ortak layout ───────────────────────────────────────────────────── */
+  .quiz-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  /* Üst bar */
+  .quiz-topbar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .quiz-cancel-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 7px 14px;
+    border-radius: 10px;
+    border: 2px solid var(--kl-border);
+    background: #fff;
+    color: var(--kl-muted);
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-decoration: none;
+    transition: border-color 0.15s, color 0.15s;
+    flex-shrink: 0;
+  }
+
+  .quiz-cancel-btn:hover {
+    border-color: var(--kl-danger);
+    color: var(--kl-danger);
+  }
+
+  .quiz-progress-wrap { flex: 1; }
+
+  .quiz-progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--kl-muted);
+    margin-bottom: 5px;
+  }
+
+  .quiz-progress-track {
+    height: 8px;
+    background: var(--kl-border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .quiz-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--kl-primary), var(--kl-accent));
+    border-radius: 8px;
+    transition: width 0.5s ease;
+  }
+
+  /* Tip rozeti */
+  .quiz-type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 5px 13px;
+    border-radius: 50px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    background: #EEF1FD;
+    color: var(--kl-primary);
+    flex-shrink: 0;
+  }
+
+  /* Kart */
+  .quiz-card {
+    background: #fff;
+    border-radius: 24px;
+    border: 2px solid var(--kl-border);
+    padding: 2rem 2.25rem;
+    box-shadow: 0 4px 24px rgba(67,97,238,0.08);
+    margin-bottom: 1rem;
+  }
+
+  .quiz-unit-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--kl-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .quiz-question-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--kl-text);
+    line-height: 1.45;
+    margin-bottom: 1.75rem;
+  }
+
+  /* Timer bar */
+  .quiz-timer {
+    height: 5px;
+    background: var(--kl-border);
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+
+  .quiz-timer-fill {
+    height: 100%;
+    background: var(--kl-success);
+    border-radius: 5px;
+    transition: width 1s linear, background 1s;
+    width: 100%;
+  }
+
+  .quiz-timer-fill.warn  { background: var(--kl-warning); }
+  .quiz-timer-fill.alert { background: var(--kl-danger); }
+
+  /* İpucu */
+  .quiz-hint {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    background: #FEFCE8;
+    border: 1.5px solid #FEF08A;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #92400E;
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 600px) {
+    .quiz-card { padding: 1.5rem 1.25rem; }
+    .quiz-question-text { font-size: 1.08rem; }
+  }
+</style>
+{% block quiz_head %}{% endblock %}
+{% endblock %}
+
+{% block content %}
+<div class="quiz-wrap">
+
+  <!-- Üst bar: iptal + progress -->
+  <div class="quiz-topbar">
+    <a href="{{ url_for('quiz.cancel') }}" class="quiz-cancel-btn"
+       onclick="return confirm('Quiz\'i iptal etmek istediğinize emin misiniz?')">
+      <i class="bi bi-x-lg"></i> İptal
+    </a>
+
+    <div class="quiz-progress-wrap">
+      <div class="quiz-progress-label">
+        <span>{{ unit_name }}</span>
+        <span>{{ current_index }} / {{ total }}</span>
+      </div>
+      <div class="quiz-progress-track">
+        <div class="quiz-progress-fill" style="width:{{ progress_pct }}%;"></div>
+      </div>
+    </div>
+
+    <div class="quiz-type-badge">
+      {% if quiz_type == 'multiple_choice' %}<i class="bi bi-list-check"></i>
+      {% elif quiz_type == 'flashcard' %}<i class="bi bi-card-text"></i>
+      {% elif quiz_type == 'matching' %}<i class="bi bi-shuffle"></i>
+      {% elif quiz_type == 'fill_blank' %}<i class="bi bi-pencil-fill"></i>
+      {% endif %}
+      {{ quiz_type_label }}
+    </div>
+  </div>
+
+  <!-- Soru kartı -->
+  <div class="quiz-card">
+    <div class="quiz-unit-label">
+      <i class="bi bi-collection-fill" style="color:var(--kl-primary);"></i>
+      {{ unit_name }}
+    </div>
+
+    <!-- Timer -->
+    <div class="quiz-timer">
+      <div class="quiz-timer-fill" id="timerFill"></div>
+    </div>
+
+    {% block quiz_content %}{% endblock %}
+  </div>
+
+  {% if question.hint is defined and question.hint %}
+  <div class="quiz-hint">
+    <i class="bi bi-lightbulb-fill" style="margin-top:2px;color:#D97706;"></i>
+    <span>{{ question.hint }}</span>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+  var maxTime = {{ max_time | default(30) }};
+  var fill    = document.getElementById('timerFill');
+  if (!fill) return;
+
+  var start = Date.now();
+
+  function tick() {
+    var elapsed = (Date.now() - start) / 1000;
+    var ratio   = Math.max(0, 1 - elapsed / maxTime);
+    fill.style.width = (ratio * 100).toFixed(1) + '%';
+
+    if (ratio < 0.33) fill.className = 'quiz-timer-fill alert';
+    else if (ratio < 0.6) fill.className = 'quiz-timer-fill warn';
+    else fill.className = 'quiz-timer-fill';
+
+    if (ratio > 0) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+{% block quiz_scripts %}{% endblock %}
+{% endblock %}

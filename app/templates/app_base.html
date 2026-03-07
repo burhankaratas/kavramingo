@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}KavramLingo{% endblock %}</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <style>
+    /* ── Renk paleti ─────────────────────────────────────────────────────────── */
+    :root {
+      --kl-primary:      #4361EE;
+      --kl-primary-dark: #3A0CA3;
+      --kl-accent:       #7209B7;
+      --kl-success:      #06D6A0;
+      --kl-warning:      #FFB703;
+      --kl-danger:       #EF233C;
+      --kl-bg:           #F0F2FF;
+      --kl-text:         #1B1F3B;
+      --kl-muted:        #6B7280;
+      --kl-border:       #E2E8F0;
+      --kl-card:         #FFFFFF;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--kl-bg);
+      color: var(--kl-text);
+      margin: 0;
+      min-height: 100vh;
+    }
+
+    /* ── Navbar ──────────────────────────────────────────────────────────────── */
+    .app-nav {
+      background: #fff;
+      border-bottom: 2px solid var(--kl-border);
+      height: 66px;
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      gap: 1rem;
+    }
+
+    /* Logo */
+    .app-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      text-decoration: none;
+      font-weight: 900;
+      font-size: 1.25rem;
+      color: var(--kl-primary);
+      letter-spacing: -0.3px;
+      flex-shrink: 0;
+    }
+
+    .app-logo .logo-icon {
+      width: 38px; height: 38px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, var(--kl-primary) 0%, var(--kl-accent) 100%);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      box-shadow: 0 3px 10px rgba(67,97,238,0.3);
+    }
+
+    /* Nav linkleri */
+    .app-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      list-style: none;
+      margin: 0; padding: 0;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .app-nav-links a {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--kl-muted);
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+
+    .app-nav-links a:hover {
+      background: var(--kl-bg);
+      color: var(--kl-primary);
+    }
+
+    .app-nav-links a.active {
+      background: #EEF1FD;
+      color: var(--kl-primary);
+    }
+
+    .app-nav-links a i { font-size: 1rem; }
+
+    /* Sağ alan */
+    .app-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      flex-shrink: 0;
+    }
+
+    .nav-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 6px 13px;
+      border-radius: 50px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      border: 2px solid;
+      white-space: nowrap;
+      cursor: default;
+    }
+
+    .nav-pill-streak {
+      background: #FFF4E0;
+      color: #D9730D;
+      border-color: #FFD8A8;
+    }
+
+    .nav-pill-xp {
+      background: #FEFCE8;
+      color: #A16207;
+      border-color: #FEF08A;
+    }
+
+    /* Avatar */
+    .nav-avatar-wrap { position: relative; }
+
+    .nav-avatar {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--kl-primary) 0%, var(--kl-accent) 100%);
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 900;
+      cursor: pointer;
+      border: 3px solid var(--kl-bg);
+      transition: box-shadow 0.15s;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-avatar:hover {
+      box-shadow: 0 0 0 3px rgba(67,97,238,0.2);
+    }
+
+    /* Dropdown */
+    .nav-dropdown {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      background: #fff;
+      border: 2px solid var(--kl-border);
+      border-radius: 16px;
+      min-width: 200px;
+      padding: 0.5rem;
+      box-shadow: 0 8px 32px rgba(67,97,238,0.12);
+      display: none;
+      z-index: 300;
+    }
+
+    .nav-dropdown.open { display: block; }
+
+    .nav-dropdown-header {
+      padding: 0.6rem 0.85rem 0.85rem;
+      border-bottom: 1px solid var(--kl-border);
+      margin-bottom: 0.4rem;
+    }
+
+    .nav-dropdown-name {
+      font-weight: 900;
+      font-size: 0.95rem;
+      color: var(--kl-text);
+    }
+
+    .nav-dropdown-grade {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--kl-muted);
+    }
+
+    .nav-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 9px 12px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--kl-text);
+      text-decoration: none;
+      transition: background 0.12s;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+    }
+
+    .nav-dropdown-item:hover { background: var(--kl-bg); color: var(--kl-primary); }
+    .nav-dropdown-item.danger { color: var(--kl-danger); }
+    .nav-dropdown-item.danger:hover { background: #FFF1F3; color: var(--kl-danger); }
+
+    /* Mobil hamburger */
+    .nav-hamburger {
+      display: none;
+      background: none;
+      border: 2px solid var(--kl-border);
+      border-radius: 10px;
+      padding: 6px 10px;
+      color: var(--kl-text);
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .nav-hamburger:hover { background: var(--kl-bg); }
+
+    /* Flash mesajları */
+    .app-flash {
+      max-width: 900px;
+      margin: 1rem auto 0;
+      padding: 0 1.25rem;
+    }
+
+    .app-flash .alert {
+      border: none;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    /* ── Sayfa içeriği ──────────────────────────────────────────────────────── */
+    .app-main {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 4rem;
+    }
+
+    /* ── Mobil ──────────────────────────────────────────────────────────────── */
+    @media (max-width: 767px) {
+      .app-nav { padding: 0 1rem; }
+      .app-nav-links { display: none; }
+      .nav-pill { display: none; }
+      .nav-hamburger { display: flex; }
+      .app-main { padding: 1.25rem 1rem 3rem; }
+    }
+  </style>
+
+  {% block head %}{% endblock %}
+</head>
+<body>
+
+<!-- ── Navbar ─────────────────────────────────────────────────────────────── -->
+<nav class="app-nav">
+
+  <a href="{{ url_for('dashboard.index') }}" class="app-logo">
+    <span class="logo-icon"><i class="bi bi-book-half"></i></span>
+    KavramLingo
+  </a>
+
+  <ul class="app-nav-links">
+    <li>
+      <a href="{{ url_for('dashboard.index') }}"
+         class="{{ 'active' if request.endpoint == 'dashboard.index' else '' }}">
+        <i class="bi bi-house-fill"></i> Ana Sayfa
+      </a>
+    </li>
+    <li>
+      <a href="{{ url_for('library.index') }}"
+         class="{{ 'active' if request.endpoint and request.endpoint.startswith('library.') else '' }}">
+        <i class="bi bi-collection-fill"></i> Kütüphane
+      </a>
+    </li>
+    <li>
+      <a href="{{ url_for('leaderboard.index') }}"
+         class="{{ 'active' if request.endpoint == 'leaderboard.index' else '' }}">
+        <i class="bi bi-trophy-fill"></i> Sıralama
+      </a>
+    </li>
+    <li>
+      <a href="{{ url_for('user.profile') }}"
+         class="{{ 'active' if request.endpoint == 'user.profile' else '' }}">
+        <i class="bi bi-person-fill"></i> Profil
+      </a>
+    </li>
+  </ul>
+
+  <div class="app-nav-right">
+
+    <!-- Seri rozeti -->
+    {% if current_user.is_authenticated %}
+    <div class="nav-pill nav-pill-streak" title="Günlük seri">
+      <i class="bi bi-fire"></i>
+      <span>{{ streak | default(0) }}</span>
+    </div>
+
+    <!-- XP rozeti -->
+    <div class="nav-pill nav-pill-xp" title="Toplam puan">
+      <i class="bi bi-star-fill"></i>
+      <span>{{ current_user.total_score | default(0) | int }}</span>
+    </div>
+
+    <!-- Avatar + dropdown -->
+    <div class="nav-avatar-wrap" id="avatarWrap">
+      <div class="nav-avatar" id="avatarBtn" title="{{ current_user.name }}">
+        {{ (current_user.name[:2]) | upper }}
+      </div>
+      <div class="nav-dropdown" id="navDropdown">
+        <div class="nav-dropdown-header">
+          <div class="nav-dropdown-name">{{ current_user.name }}</div>
+          <div class="nav-dropdown-grade">{{ current_user.grade }}. Sınıf</div>
+        </div>
+        <a href="{{ url_for('user.profile') }}" class="nav-dropdown-item">
+          <i class="bi bi-person-circle"></i> Profilim
+        </a>
+        <a href="{{ url_for('user.badges') }}" class="nav-dropdown-item">
+          <i class="bi bi-award-fill"></i> Rozetlerim
+        </a>
+        <a href="{{ url_for('user.settings') }}" class="nav-dropdown-item">
+          <i class="bi bi-gear-fill"></i> Ayarlar
+        </a>
+        <a href="{{ url_for('auth.logout') }}" class="nav-dropdown-item danger">
+          <i class="bi bi-box-arrow-right"></i> Çıkış Yap
+        </a>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Mobil hamburger -->
+    <button class="nav-hamburger" type="button"
+            data-bs-toggle="offcanvas" data-bs-target="#mobileNav">
+      <i class="bi bi-list"></i>
+    </button>
+
+  </div>
+</nav>
+
+<!-- ── Mobil offcanvas nav ────────────────────────────────────────────────── -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="mobileNav"
+     style="font-family:'Nunito',sans-serif;">
+  <div class="offcanvas-header border-bottom">
+    <div class="d-flex align-items-center gap-2">
+      <div style="width:34px;height:34px;border-radius:9px;
+                  background:linear-gradient(135deg,var(--kl-primary),var(--kl-accent));
+                  display:flex;align-items:center;justify-content:center;color:#fff;">
+        <i class="bi bi-book-half"></i>
+      </div>
+      <span style="font-weight:900;color:var(--kl-primary);">KavramLingo</span>
+    </div>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body">
+    {% if current_user.is_authenticated %}
+    <div class="d-flex gap-2 mb-3">
+      <div class="nav-pill nav-pill-streak"><i class="bi bi-fire"></i> {{ streak | default(0) }} gün seri</div>
+      <div class="nav-pill nav-pill-xp"><i class="bi bi-star-fill"></i> {{ current_user.total_score | default(0) }} XP</div>
+    </div>
+    {% endif %}
+    <div class="list-group list-group-flush gap-1" style="border:none;">
+      <a href="{{ url_for('dashboard.index') }}"
+         class="list-group-item list-group-item-action rounded-3 fw-700 border-0"
+         style="font-family:'Nunito',sans-serif;font-weight:700;">
+        <i class="bi bi-house-fill me-2" style="color:var(--kl-primary);"></i>Ana Sayfa
+      </a>
+      <a href="{{ url_for('library.index') }}"
+         class="list-group-item list-group-item-action rounded-3 fw-700 border-0"
+         style="font-family:'Nunito',sans-serif;font-weight:700;">
+        <i class="bi bi-collection-fill me-2" style="color:var(--kl-accent);"></i>Kütüphane
+      </a>
+      <a href="{{ url_for('leaderboard.index') }}"
+         class="list-group-item list-group-item-action rounded-3 fw-700 border-0"
+         style="font-family:'Nunito',sans-serif;font-weight:700;">
+        <i class="bi bi-trophy-fill me-2" style="color:var(--kl-warning);"></i>Sıralama
+      </a>
+      <a href="{{ url_for('user.profile') }}"
+         class="list-group-item list-group-item-action rounded-3 fw-700 border-0"
+         style="font-family:'Nunito',sans-serif;font-weight:700;">
+        <i class="bi bi-person-fill me-2" style="color:var(--kl-accent);"></i>Profil
+      </a>
+      <a href="{{ url_for('user.badges') }}"
+         class="list-group-item list-group-item-action rounded-3 fw-700 border-0"
+         style="font-family:'Nunito',sans-serif;font-weight:700;">
+        <i class="bi bi-award-fill me-2" style="color:var(--kl-warning);"></i>Rozetlerim
+      </a>
+      <a href="{{ url_for('auth.logout') }}"
+         class="list-group-item list-group-item-action rounded-3 fw-700 border-0"
+         style="font-family:'Nunito',sans-serif;font-weight:700;color:var(--kl-danger);">
+        <i class="bi bi-box-arrow-right me-2"></i>Çıkış Yap
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ── Flash mesajları ────────────────────────────────────────────────────── -->
+<div class="app-flash">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }} alert-dismissible fade show mt-2" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endfor %}
+  {% endwith %}
+</div>
+
+<!-- ── Sayfa içeriği ──────────────────────────────────────────────────────── -->
+<main class="app-main">
+  {% block content %}{% endblock %}
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  /* Avatar dropdown toggle */
+  (function() {
+    var btn  = document.getElementById('avatarBtn');
+    var menu = document.getElementById('navDropdown');
+    if (!btn || !menu) return;
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      menu.classList.toggle('open');
+    });
+    document.addEventListener('click', function() {
+      menu.classList.remove('open');
+    });
+  })();
+</script>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>

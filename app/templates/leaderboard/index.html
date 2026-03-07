@@ -1,0 +1,463 @@
+{% extends "app_base.html" %}
+{% block title %}Sıralama — KavramLingo{% endblock %}
+
+{% block head %}
+<style>
+  /* ── Başlık + filtre ─────────────────────────────────────────────────── */
+  .lb-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .lb-header-text h1 {
+    font-size: 1.55rem;
+    font-weight: 900;
+    color: var(--kl-text);
+    margin: 0 0 0.15rem;
+    letter-spacing: -0.3px;
+  }
+
+  .lb-header-text p {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--kl-muted);
+    margin: 0;
+  }
+
+  /* Grade filtre butonları */
+  .grade-filter {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .grade-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 7px 15px;
+    border-radius: 50px;
+    border: 2px solid var(--kl-border);
+    background: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--kl-muted);
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    white-space: nowrap;
+  }
+
+  .grade-btn:hover {
+    border-color: var(--kl-primary);
+    color: var(--kl-primary);
+    background: #EEF1FD;
+  }
+
+  .grade-btn.active {
+    background: var(--kl-primary);
+    border-color: var(--kl-primary);
+    color: #fff;
+  }
+
+  /* ── Podium (ilk 3) ──────────────────────────────────────────────────── */
+  .podium-wrap {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .podium-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 0 0 140px;
+    max-width: 160px;
+  }
+
+  .podium-avatar {
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    color: #fff;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .podium-crown {
+    position: absolute;
+    top: -18px;
+    font-size: 1.3rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  }
+
+  .podium-item.rank-1 .podium-avatar {
+    width: 76px; height: 76px; font-size: 1.5rem;
+    background: linear-gradient(135deg, #FFD700, #F4A01C);
+    box-shadow: 0 6px 24px rgba(255,183,3,0.45);
+    border: 4px solid #FFF3C4;
+  }
+
+  .podium-item.rank-2 .podium-avatar {
+    width: 64px; height: 64px; font-size: 1.2rem;
+    background: linear-gradient(135deg, #94A3B8, #64748B);
+    box-shadow: 0 4px 16px rgba(100,116,139,0.35);
+    border: 3px solid #E2E8F0;
+  }
+
+  .podium-item.rank-3 .podium-avatar {
+    width: 58px; height: 58px; font-size: 1.1rem;
+    background: linear-gradient(135deg, #D97706, #B45309);
+    box-shadow: 0 4px 14px rgba(180,83,9,0.3);
+    border: 3px solid #FDE68A;
+  }
+
+  .podium-name {
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--kl-text);
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .podium-score {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--kl-muted);
+  }
+
+  .podium-base {
+    width: 100%;
+    border-radius: 16px 16px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: rgba(255,255,255,0.85);
+  }
+
+  .podium-item.rank-1 .podium-base {
+    background: linear-gradient(180deg, #FFD700, #F59E0B);
+    height: 70px;
+    box-shadow: 0 -4px 0 rgba(0,0,0,0.08) inset;
+  }
+
+  .podium-item.rank-2 .podium-base {
+    background: linear-gradient(180deg, #94A3B8, #64748B);
+    height: 50px;
+  }
+
+  .podium-item.rank-3 .podium-base {
+    background: linear-gradient(180deg, #D97706, #92400E);
+    height: 38px;
+  }
+
+  /* ── Liste tablosu ───────────────────────────────────────────────────── */
+  .lb-card {
+    background: #fff;
+    border-radius: 22px;
+    border: 2px solid var(--kl-border);
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(67,97,238,0.06);
+  }
+
+  .lb-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.85rem 1.5rem;
+    border-bottom: 1px solid var(--kl-bg);
+    transition: background 0.12s;
+  }
+
+  .lb-row:last-child { border-bottom: none; }
+
+  .lb-row:hover { background: #FAFBFF; }
+
+  .lb-row.you {
+    background: #EEF1FD;
+    border-left: 4px solid var(--kl-primary);
+    padding-left: calc(1.5rem - 4px);
+  }
+
+  .lb-row.you:hover { background: #E8ECFC; }
+
+  /* Sıra numarası */
+  .lb-rank {
+    flex: 0 0 36px;
+    font-size: 0.9rem;
+    font-weight: 900;
+    color: var(--kl-muted);
+    text-align: center;
+  }
+
+  .lb-rank.gold   { color: #D97706; }
+  .lb-rank.silver { color: #64748B; }
+  .lb-rank.bronze { color: #92400E; }
+
+  /* Küçük avatar */
+  .lb-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.82rem;
+    font-weight: 900;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  /* İsim + sınıf */
+  .lb-info { flex: 1; }
+
+  .lb-name {
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: var(--kl-text);
+    margin-bottom: 0.1rem;
+  }
+
+  .lb-grade {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--kl-muted);
+  }
+
+  /* Metrikler */
+  .lb-metrics {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .lb-metric {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1px;
+  }
+
+  .lb-metric-val {
+    font-size: 0.9rem;
+    font-weight: 900;
+    color: var(--kl-text);
+  }
+
+  .lb-metric-lbl {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: var(--kl-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  /* XP özel renk */
+  .lb-metric.xp .lb-metric-val { color: var(--kl-primary); }
+  .lb-metric.streak .lb-metric-val { color: #D9730D; }
+
+  /* Sen rozeti */
+  .you-badge {
+    background: var(--kl-primary);
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 900;
+    border-radius: 50px;
+    padding: 2px 8px;
+    flex-shrink: 0;
+  }
+
+  /* ── Senin satırın (sabit alt) ───────────────────────────────────────── */
+  .lb-sticky-you {
+    position: sticky;
+    bottom: 0;
+    background: #EEF1FD;
+    border-top: 2px solid var(--kl-primary);
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  /* ── Responsive ──────────────────────────────────────────────────────── */
+  @media (max-width: 767px) {
+    .podium-wrap { gap: 0.6rem; }
+    .podium-item { flex: 0 0 100px; }
+    .lb-row { padding: 0.75rem 1rem; gap: 0.6rem; }
+    .lb-metrics { gap: 0.6rem; }
+    .lb-metric:nth-child(2) { display: none; }
+    .grade-filter { gap: 0.3rem; }
+    .grade-btn { padding: 6px 11px; font-size: 0.77rem; }
+  }
+
+  @media (max-width: 420px) {
+    .podium-item { flex: 0 0 85px; }
+    .lb-metrics { display: none; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!--  BAŞLIK + FİLTRE                                                        -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="lb-header">
+  <div class="lb-header-text">
+    <h1><i class="bi bi-trophy-fill" style="color:var(--kl-warning);font-size:1.35rem;vertical-align:middle;margin-right:0.3rem;"></i>Sıralama Tablosu</h1>
+    <p>Diğer öğrencilerle yarışıyor, XP kazanıyorsun. Yüksel!</p>
+  </div>
+
+  <div class="grade-filter">
+    <a href="{{ url_for('leaderboard.index') }}"
+       class="grade-btn {{ 'active' if grade_filter == 'all' else '' }}">
+      Tümü
+    </a>
+    {% for g in [9, 10, 11, 12] %}
+    <a href="{{ url_for('leaderboard.index', grade=g) }}"
+       class="grade-btn {{ 'active' if grade_filter == g|string else '' }}">
+      {{ g }}. Sınıf
+    </a>
+    {% endfor %}
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!--  PODIUM (ilk 3)                                                         -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+{% if top3 | length == 3 %}
+{% set p1 = top3[0] %}
+{% set p2 = top3[1] %}
+{% set p3 = top3[2] %}
+
+{% set avatar_colors = [
+  "linear-gradient(135deg,#4361EE,#7209B7)",
+  "linear-gradient(135deg,#06D6A0,#0099B8)",
+  "linear-gradient(135deg,#FFB703,#D9730D)",
+  "linear-gradient(135deg,#EF233C,#B5101F)",
+  "linear-gradient(135deg,#7209B7,#3A0CA3)",
+] %}
+
+<div class="podium-wrap">
+
+  <!-- 2. sıra -->
+  <div class="podium-item rank-2">
+    <div class="podium-avatar" style="background:{{ avatar_colors[(p2.name | length) % 5] }};">
+      {{ (p2.name[:2]) | upper }}
+    </div>
+    <div class="podium-name">{{ p2.name }}</div>
+    <div class="podium-score"><i class="bi bi-star-fill" style="color:var(--kl-warning);"></i> {{ p2.score }}</div>
+    <div class="podium-base">2</div>
+  </div>
+
+  <!-- 1. sıra (ortada, yüksek) -->
+  <div class="podium-item rank-1">
+    <div class="podium-avatar" style="background:{{ avatar_colors[(p1.name | length) % 5] }};">
+      <div class="podium-crown">👑</div>
+      {{ (p1.name[:2]) | upper }}
+    </div>
+    <div class="podium-name">{{ p1.name }}</div>
+    <div class="podium-score"><i class="bi bi-star-fill" style="color:var(--kl-warning);"></i> {{ p1.score }}</div>
+    <div class="podium-base">1</div>
+  </div>
+
+  <!-- 3. sıra -->
+  <div class="podium-item rank-3">
+    <div class="podium-avatar" style="background:{{ avatar_colors[(p3.name | length) % 5] }};">
+      {{ (p3.name[:2]) | upper }}
+    </div>
+    <div class="podium-name">{{ p3.name }}</div>
+    <div class="podium-score"><i class="bi bi-star-fill" style="color:var(--kl-warning);"></i> {{ p3.score }}</div>
+    <div class="podium-base">3</div>
+  </div>
+
+</div>
+{% endif %}
+
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!--  SIRALAMA LİSTESİ                                                       -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+{% set avatar_colors = [
+  "linear-gradient(135deg,#4361EE,#7209B7)",
+  "linear-gradient(135deg,#06D6A0,#0099B8)",
+  "linear-gradient(135deg,#FFB703,#D9730D)",
+  "linear-gradient(135deg,#EF233C,#B5101F)",
+  "linear-gradient(135deg,#7209B7,#3A0CA3)",
+] %}
+
+<div class="lb-card">
+
+  {% for u in entries %}
+  <div class="lb-row {{ 'you' if u.you else '' }}">
+
+    <!-- Sıra -->
+    <div class="lb-rank {% if u.rank == 1 %}gold{% elif u.rank == 2 %}silver{% elif u.rank == 3 %}bronze{% endif %}">
+      {% if u.rank == 1 %}<i class="bi bi-trophy-fill"></i>
+      {% elif u.rank == 2 %}<i class="bi bi-trophy-fill" style="opacity:0.7;"></i>
+      {% elif u.rank == 3 %}<i class="bi bi-award-fill"></i>
+      {% else %}{{ u.rank }}
+      {% endif %}
+    </div>
+
+    <!-- Avatar -->
+    <div class="lb-avatar"
+         style="background:{{ avatar_colors[(u.name | length) % 5] }};">
+      {{ (u.name[:2]) | upper }}
+    </div>
+
+    <!-- İsim + Sınıf -->
+    <div class="lb-info">
+      <div class="lb-name">
+        {{ u.name }}
+        {% if u.you %}<span class="you-badge">Sen</span>{% endif %}
+      </div>
+      <div class="lb-grade">{{ u.grade }}. Sınıf</div>
+    </div>
+
+    <!-- Metrikler -->
+    <div class="lb-metrics">
+
+      <div class="lb-metric streak">
+        <span class="lb-metric-val">
+          <i class="bi bi-fire" style="font-size:0.8rem;"></i> {{ u.streak }}
+        </span>
+        <span class="lb-metric-lbl">Seri</span>
+      </div>
+
+      <div class="lb-metric">
+        <span class="lb-metric-val">{{ u.accuracy }}%</span>
+        <span class="lb-metric-lbl">Doğruluk</span>
+      </div>
+
+      <div class="lb-metric xp">
+        <span class="lb-metric-val">{{ u.score }}</span>
+        <span class="lb-metric-lbl">XP</span>
+      </div>
+
+    </div>
+
+  </div>
+  {% endfor %}
+
+  {% if not entries %}
+  <div style="padding:3rem;text-align:center;color:var(--kl-muted);">
+    <i class="bi bi-people" style="font-size:2.5rem;opacity:0.3;display:block;margin-bottom:0.75rem;"></i>
+    <div style="font-size:0.9rem;font-weight:700;">Bu sınıf için henüz veri yok.</div>
+  </div>
+  {% endif %}
+
+</div>
+
+{% endblock %}

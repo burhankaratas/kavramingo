@@ -1,0 +1,748 @@
+{% extends "app_base.html" %}
+{% block title %}Ayarlar — KavramLingo{% endblock %}
+
+{% block head %}
+<style>
+  /* ── Sayfa başlığı ───────────────────────────────────────────────────── */
+  .settings-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .settings-back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    border: 2px solid var(--kl-border);
+    background: #fff;
+    color: var(--kl-text);
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background 0.15s, border-color 0.15s;
+    flex-shrink: 0;
+  }
+
+  .settings-back:hover {
+    background: var(--kl-bg);
+    border-color: var(--kl-primary);
+    color: var(--kl-primary);
+  }
+
+  .settings-header-text h1 {
+    font-size: 1.55rem;
+    font-weight: 900;
+    color: var(--kl-text);
+    margin: 0 0 0.1rem;
+    letter-spacing: -0.3px;
+  }
+
+  .settings-header-text p {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--kl-muted);
+    margin: 0;
+  }
+
+  /* ── Shared card ─────────────────────────────────────────────────────── */
+  .kl-card {
+    background: #fff;
+    border-radius: 22px;
+    border: 2px solid var(--kl-border);
+    padding: 1.75rem;
+    box-shadow: 0 2px 16px rgba(67,97,238,0.06);
+    margin-bottom: 1.5rem;
+  }
+
+  .kl-card-title {
+    font-size: 0.78rem;
+    font-weight: 900;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--kl-muted);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* ── Form elemanları ─────────────────────────────────────────────────── */
+  .form-group { margin-bottom: 1.25rem; }
+
+  .form-group:last-child { margin-bottom: 0; }
+
+  .form-label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--kl-text);
+    margin-bottom: 0.45rem;
+    letter-spacing: 0.2px;
+  }
+
+  .form-label .label-hint {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--kl-muted);
+    margin-left: 0.4rem;
+  }
+
+  .form-control-kl {
+    width: 100%;
+    padding: 11px 14px;
+    border: 2px solid var(--kl-border);
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--kl-text);
+    background: #fff;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    outline: none;
+    -webkit-appearance: none;
+  }
+
+  .form-control-kl:focus {
+    border-color: var(--kl-primary);
+    box-shadow: 0 0 0 3px rgba(67,97,238,0.1);
+  }
+
+  .form-control-kl:disabled,
+  .form-control-kl[readonly] {
+    background: var(--kl-bg);
+    color: var(--kl-muted);
+    cursor: not-allowed;
+    border-color: var(--kl-border);
+  }
+
+  /* E-posta: kilitli görünüm */
+  .email-locked-wrap {
+    position: relative;
+  }
+
+  .email-locked-wrap .form-control-kl {
+    padding-right: 48px;
+  }
+
+  .email-locked-icon {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--kl-muted);
+    font-size: 0.9rem;
+  }
+
+  .email-locked-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding: 0.6rem 0.85rem;
+    background: #FFF9F0;
+    border: 1.5px solid #FFE8C0;
+    border-radius: 10px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #92400E;
+    line-height: 1.45;
+  }
+
+  .email-locked-note i { margin-top: 1px; flex-shrink: 0; }
+
+  /* Şifre input alanı: göster/gizle */
+  .password-wrap { position: relative; }
+
+  .password-wrap .form-control-kl { padding-right: 46px; }
+
+  .password-toggle {
+    position: absolute;
+    right: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--kl-muted);
+    cursor: pointer;
+    font-size: 0.95rem;
+    line-height: 1;
+    transition: color 0.15s;
+  }
+
+  .password-toggle:hover { color: var(--kl-primary); }
+
+  /* Güç göstergesi */
+  .strength-bar {
+    display: flex;
+    gap: 4px;
+    margin-top: 6px;
+  }
+
+  .strength-seg {
+    flex: 1;
+    height: 4px;
+    border-radius: 4px;
+    background: var(--kl-border);
+    transition: background 0.25s;
+  }
+
+  .strength-seg.weak   { background: var(--kl-danger); }
+  .strength-seg.medium { background: var(--kl-warning); }
+  .strength-seg.strong { background: var(--kl-success); }
+
+  .strength-label {
+    font-size: 0.73rem;
+    font-weight: 800;
+    margin-top: 4px;
+  }
+
+  .strength-label.weak   { color: var(--kl-danger); }
+  .strength-label.medium { color: var(--kl-warning); }
+  .strength-label.strong { color: var(--kl-success); }
+
+  /* Form bölücü */
+  .form-divider {
+    height: 1px;
+    background: var(--kl-bg);
+    margin: 1.5rem 0;
+    border: none;
+  }
+
+  /* Kaydet butonu */
+  .btn-save {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 12px 26px;
+    border: none;
+    border-radius: 13px;
+    background: var(--kl-primary);
+    color: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 0 var(--kl-primary-dark);
+    transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
+    text-decoration: none;
+  }
+
+  .btn-save:hover {
+    background: #4f6ef7;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 var(--kl-primary-dark);
+  }
+
+  .btn-save:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 var(--kl-primary-dark);
+  }
+
+  /* ── Tehlikeli Alan ──────────────────────────────────────────────────── */
+  .danger-card {
+    background: #fff;
+    border-radius: 22px;
+    border: 2px solid #FECDD3;
+    padding: 1.75rem;
+    box-shadow: 0 2px 16px rgba(239,35,60,0.05);
+  }
+
+  .danger-card .kl-card-title {
+    color: var(--kl-danger);
+  }
+
+  .danger-action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1rem 0;
+  }
+
+  .danger-action + .danger-action {
+    border-top: 1px solid #FFF1F3;
+  }
+
+  .danger-action-info h4 {
+    font-size: 0.95rem;
+    font-weight: 900;
+    color: var(--kl-text);
+    margin: 0 0 0.2rem;
+  }
+
+  .danger-action-info p {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--kl-muted);
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  .btn-danger-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 9px 18px;
+    border: 2px solid #FECDD3;
+    border-radius: 11px;
+    background: #fff;
+    color: var(--kl-danger);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 800;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .btn-danger-outline:hover {
+    background: #FFF1F3;
+    border-color: var(--kl-danger);
+    color: var(--kl-danger);
+  }
+
+  /* Modal: hesap silme onayı */
+  .delete-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(27,31,59,0.55);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(3px);
+  }
+
+  .delete-modal-overlay.open { display: flex; }
+
+  .delete-modal {
+    background: #fff;
+    border-radius: 24px;
+    padding: 2rem;
+    max-width: 420px;
+    width: calc(100% - 2rem);
+    box-shadow: 0 20px 60px rgba(27,31,59,0.2);
+    text-align: center;
+  }
+
+  .delete-modal-icon {
+    width: 64px; height: 64px;
+    background: #FFF1F3;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
+    margin: 0 auto 1.25rem;
+  }
+
+  .delete-modal h3 {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: var(--kl-text);
+    margin-bottom: 0.5rem;
+  }
+
+  .delete-modal p {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--kl-muted);
+    line-height: 1.55;
+    margin-bottom: 1.5rem;
+  }
+
+  .delete-modal-actions {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .btn-cancel-modal {
+    flex: 1;
+    padding: 11px;
+    border: 2px solid var(--kl-border);
+    border-radius: 12px;
+    background: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: var(--kl-text);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .btn-cancel-modal:hover { background: var(--kl-bg); }
+
+  .btn-confirm-delete {
+    flex: 1;
+    padding: 11px;
+    border: none;
+    border-radius: 12px;
+    background: var(--kl-danger);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .btn-confirm-delete:hover { background: #d41c34; }
+
+  /* ── Responsive ──────────────────────────────────────────────────────── */
+  @media (max-width: 767px) {
+    .danger-action { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+    .btn-danger-outline { width: 100%; justify-content: center; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!--  BAŞLIK                                                                 -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="settings-header">
+  <a href="{{ url_for('user.profile') }}" class="settings-back" title="Profile Dön">
+    <i class="bi bi-arrow-left"></i>
+  </a>
+  <div class="settings-header-text">
+    <h1>Hesap Ayarları</h1>
+    <p>Profil bilgilerini ve güvenlik ayarlarını buradan yönetebilirsin.</p>
+  </div>
+</div>
+
+<div class="row g-0" style="max-width:640px;">
+<div class="col-12">
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!--  HESAP BİLGİLERİ                                                        -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="kl-card">
+  <div class="kl-card-title">
+    <i class="bi bi-person-fill" style="color:var(--kl-primary);font-size:1rem;"></i>
+    Hesap Bilgileri
+  </div>
+
+  <form id="profileForm" method="POST" action="#">
+
+    <!-- Ad Soyad -->
+    <div class="form-group">
+      <label class="form-label" for="fullName">
+        Ad Soyad
+      </label>
+      <input
+        type="text"
+        id="fullName"
+        name="full_name"
+        class="form-control-kl"
+        value="{{ current_user.name }}"
+        placeholder="Adın ve soyadın"
+        autocomplete="name"
+        required
+      />
+    </div>
+
+    <!-- E-posta (kilitli) -->
+    <div class="form-group">
+      <label class="form-label" for="emailField">
+        E-posta Adresi
+        <span class="label-hint">(değiştirilemez)</span>
+      </label>
+      <div class="email-locked-wrap">
+        <input
+          type="email"
+          id="emailField"
+          class="form-control-kl"
+          value="{{ current_user.email }}"
+          readonly
+          tabindex="-1"
+        />
+        <i class="bi bi-lock-fill email-locked-icon"></i>
+      </div>
+      <div class="email-locked-note">
+        <i class="bi bi-info-circle-fill"></i>
+        E-posta adresi hesap kimliği olarak kullanıldığından değiştirilemez.
+        Değiştirmek için destek ekibiyle iletişime geç.
+      </div>
+    </div>
+
+    <!-- Sınıf (readonly, onboarding'de belirlendi) -->
+    <div class="form-group">
+      <label class="form-label" for="gradeField">
+        Sınıf
+        <span class="label-hint">(değiştirilemez)</span>
+      </label>
+      <div class="email-locked-wrap">
+        <input
+          type="text"
+          id="gradeField"
+          class="form-control-kl"
+          value="{{ current_user.grade | default(9) }}. Sınıf"
+          readonly
+          tabindex="-1"
+        />
+        <i class="bi bi-mortarboard-fill email-locked-icon"></i>
+      </div>
+    </div>
+
+    <button type="submit" class="btn-save">
+      <i class="bi bi-check2"></i> Bilgileri Kaydet
+    </button>
+
+  </form>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!--  ŞİFRE DEĞİŞTİR                                                         -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="kl-card">
+  <div class="kl-card-title">
+    <i class="bi bi-shield-lock-fill" style="color:var(--kl-accent);font-size:1rem;"></i>
+    Şifre Değiştir
+  </div>
+
+  <form id="passwordForm" method="POST" action="#" autocomplete="off">
+
+    <!-- Mevcut şifre -->
+    <div class="form-group">
+      <label class="form-label" for="currentPassword">Mevcut Şifre</label>
+      <div class="password-wrap">
+        <input
+          type="password"
+          id="currentPassword"
+          name="current_password"
+          class="form-control-kl"
+          placeholder="••••••••"
+          autocomplete="current-password"
+        />
+        <button type="button" class="password-toggle" data-target="currentPassword">
+          <i class="bi bi-eye"></i>
+        </button>
+      </div>
+    </div>
+
+    <hr class="form-divider" />
+
+    <!-- Yeni şifre -->
+    <div class="form-group">
+      <label class="form-label" for="newPassword">Yeni Şifre</label>
+      <div class="password-wrap">
+        <input
+          type="password"
+          id="newPassword"
+          name="new_password"
+          class="form-control-kl"
+          placeholder="En az 8 karakter"
+          autocomplete="new-password"
+          oninput="checkStrength(this.value)"
+        />
+        <button type="button" class="password-toggle" data-target="newPassword">
+          <i class="bi bi-eye"></i>
+        </button>
+      </div>
+      <!-- Güç çubuğu -->
+      <div class="strength-bar" id="strengthBar" style="display:none;">
+        <div class="strength-seg" id="s1"></div>
+        <div class="strength-seg" id="s2"></div>
+        <div class="strength-seg" id="s3"></div>
+        <div class="strength-seg" id="s4"></div>
+      </div>
+      <div class="strength-label" id="strengthLabel" style="display:none;"></div>
+    </div>
+
+    <!-- Yeni şifre tekrar -->
+    <div class="form-group">
+      <label class="form-label" for="confirmPassword">Yeni Şifre (Tekrar)</label>
+      <div class="password-wrap">
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirm_password"
+          class="form-control-kl"
+          placeholder="••••••••"
+          autocomplete="new-password"
+        />
+        <button type="button" class="password-toggle" data-target="confirmPassword">
+          <i class="bi bi-eye"></i>
+        </button>
+      </div>
+      <div id="matchHint" style="display:none;font-size:0.75rem;font-weight:800;margin-top:4px;"></div>
+    </div>
+
+    <button type="submit" class="btn-save">
+      <i class="bi bi-shield-check"></i> Şifreyi Güncelle
+    </button>
+
+  </form>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!--  TEHLİKELİ ALAN                                                         -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="danger-card">
+  <div class="kl-card-title">
+    <i class="bi bi-exclamation-triangle-fill" style="font-size:1rem;"></i>
+    Tehlikeli Alan
+  </div>
+
+  <!-- Hesabı sil -->
+  <div class="danger-action">
+    <div class="danger-action-info">
+      <h4>Hesabı Sil</h4>
+      <p>Hesabın ve tüm ilerleme verilerin kalıcı olarak silinir.<br>Bu işlem geri alınamaz.</p>
+    </div>
+    <button type="button" class="btn-danger-outline" id="deleteAccountBtn">
+      <i class="bi bi-trash3-fill"></i> Hesabı Sil
+    </button>
+  </div>
+
+</div>
+
+</div><!-- /col -->
+</div><!-- /row -->
+
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!--  HESAP SİLME ONAY MODALI                                                -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="delete-modal-overlay" id="deleteModal">
+  <div class="delete-modal">
+    <div class="delete-modal-icon">
+      <i class="bi bi-exclamation-triangle-fill" style="color:var(--kl-danger);"></i>
+    </div>
+    <h3>Hesabını silmek istediğine emin misin?</h3>
+    <p>
+      Tüm ilerleme verilerin, rozetlerin ve quiz geçmişin kalıcı olarak silinecek.
+      Bu işlem <strong>geri alınamaz.</strong>
+    </p>
+    <div class="delete-modal-actions">
+      <button type="button" class="btn-cancel-modal" id="cancelDeleteBtn">
+        Vazgeç
+      </button>
+      <form method="POST" action="#" style="flex:1;">
+        <button type="submit" class="btn-confirm-delete" style="width:100%;">
+          Evet, Sil
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  /* ── Şifre göster/gizle ──────────────────────────────────────────────── */
+  document.querySelectorAll('.password-toggle').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id    = this.dataset.target;
+      var input = document.getElementById(id);
+      var icon  = this.querySelector('i');
+      if (!input) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'bi bi-eye-slash';
+      } else {
+        input.type = 'password';
+        icon.className = 'bi bi-eye';
+      }
+    });
+  });
+
+  /* ── Şifre gücü ──────────────────────────────────────────────────────── */
+  function checkStrength(val) {
+    var bar   = document.getElementById('strengthBar');
+    var label = document.getElementById('strengthLabel');
+    var segs  = [
+      document.getElementById('s1'),
+      document.getElementById('s2'),
+      document.getElementById('s3'),
+      document.getElementById('s4'),
+    ];
+
+    if (!val) {
+      bar.style.display   = 'none';
+      label.style.display = 'none';
+      segs.forEach(function(s){ s.className = 'strength-seg'; });
+      return;
+    }
+
+    bar.style.display   = 'flex';
+    label.style.display = 'block';
+
+    var score = 0;
+    if (val.length >= 8)             score++;
+    if (/[A-Z]/.test(val))           score++;
+    if (/[0-9]/.test(val))           score++;
+    if (/[^A-Za-z0-9]/.test(val))   score++;
+
+    segs.forEach(function(s){ s.className = 'strength-seg'; });
+
+    if (score <= 1) {
+      segs[0].className = 'strength-seg weak';
+      label.className   = 'strength-label weak';
+      label.textContent = 'Zayıf';
+    } else if (score === 2) {
+      segs[0].className = 'strength-seg medium';
+      segs[1].className = 'strength-seg medium';
+      label.className   = 'strength-label medium';
+      label.textContent = 'Orta';
+    } else if (score === 3) {
+      segs[0].className = 'strength-seg strong';
+      segs[1].className = 'strength-seg strong';
+      segs[2].className = 'strength-seg strong';
+      label.className   = 'strength-label strong';
+      label.textContent = 'İyi';
+    } else {
+      segs.forEach(function(s){ s.className = 'strength-seg strong'; });
+      label.className   = 'strength-label strong';
+      label.textContent = 'Güçlü';
+    }
+  }
+
+  /* ── Şifre eşleşme kontrolü ──────────────────────────────────────────── */
+  document.getElementById('confirmPassword').addEventListener('input', function() {
+    var newPw  = document.getElementById('newPassword').value;
+    var hint   = document.getElementById('matchHint');
+    if (!this.value) { hint.style.display = 'none'; return; }
+    hint.style.display = 'block';
+    if (this.value === newPw) {
+      hint.style.color   = 'var(--kl-success)';
+      hint.textContent   = '✓ Şifreler eşleşiyor';
+    } else {
+      hint.style.color   = 'var(--kl-danger)';
+      hint.textContent   = '✗ Şifreler eşleşmiyor';
+    }
+  });
+
+  /* ── Hesap silme modal ───────────────────────────────────────────────── */
+  var deleteModal  = document.getElementById('deleteModal');
+  var deleteBtn    = document.getElementById('deleteAccountBtn');
+  var cancelBtn    = document.getElementById('cancelDeleteBtn');
+
+  if (deleteBtn) {
+    deleteBtn.addEventListener('click', function() {
+      deleteModal.classList.add('open');
+    });
+  }
+
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', function() {
+      deleteModal.classList.remove('open');
+    });
+  }
+
+  if (deleteModal) {
+    deleteModal.addEventListener('click', function(e) {
+      if (e.target === deleteModal) deleteModal.classList.remove('open');
+    });
+  }
+</script>
+{% endblock %}

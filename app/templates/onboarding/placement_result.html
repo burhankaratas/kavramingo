@@ -1,0 +1,321 @@
+{% extends "onboarding/onboarding_base.html" %}
+
+{% block title %}Test Sonucu — KavramLingo{% endblock %}
+
+{% block step_label %}Tamamlandı{% endblock %}
+
+{% block head %}
+<style>
+  /* ── Skor dairesi ───────────────────────────────────────────────────────── */
+  .score-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.75rem;
+  }
+
+  .score-ring {
+    position: relative;
+    width: 136px; height: 136px;
+    margin-bottom: 0.85rem;
+  }
+
+  .score-ring svg { transform: rotate(-90deg); }
+
+  .score-ring-bg   { fill: none; stroke: var(--kl-border); stroke-width: 10; }
+  .score-ring-fill {
+    fill: none; stroke-width: 10; stroke-linecap: round;
+    transition: stroke-dashoffset 0s; /* JS devralır */
+  }
+
+  .score-ring-inner {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+  }
+
+  .score-num {
+    font-size: 2.3rem; font-weight: 900; line-height: 1;
+  }
+
+  .score-denom {
+    font-size: 0.82rem; font-weight: 700; color: var(--kl-muted);
+  }
+
+  .score-label {
+    font-size: 0.95rem; font-weight: 700; color: var(--kl-muted);
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+
+  /* ── Öneri kartı ────────────────────────────────────────────────────────── */
+  .rec-card {
+    border-radius: 20px;
+    padding: 1.4rem 1.6rem;
+    margin-bottom: 1.75rem;
+    border: 2.5px solid;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .rec-card.low    { border-color: var(--kl-warning); background: #FFFBEE; }
+  .rec-card.medium { border-color: var(--kl-primary); background: #F0F2FF; }
+  .rec-card.high   { border-color: var(--kl-success); background: #F0FBF6; }
+
+  .rec-icon {
+    font-size: 1.9rem; flex-shrink: 0; margin-top: 2px;
+  }
+
+  .rec-card.low    .rec-icon { color: var(--kl-warning); }
+  .rec-card.medium .rec-icon { color: var(--kl-primary); }
+  .rec-card.high   .rec-icon { color: var(--kl-success); }
+
+  .rec-label {
+    font-size: 0.75rem; font-weight: 800; letter-spacing: 0.6px;
+    text-transform: uppercase; margin-bottom: 0.3rem;
+  }
+
+  .rec-card.low    .rec-label { color: var(--kl-warning); }
+  .rec-card.medium .rec-label { color: var(--kl-primary); }
+  .rec-card.high   .rec-label { color: var(--kl-success); }
+
+  .rec-title {
+    font-size: 1rem; font-weight: 800; color: var(--kl-text);
+    margin-bottom: 0.3rem; line-height: 1.4;
+  }
+
+  .rec-detail {
+    font-size: 0.875rem; font-weight: 600; color: var(--kl-muted);
+    line-height: 1.5;
+  }
+
+  /* ── CTA ikili buton ─────────────────────────────────────────────────────── */
+  .cta-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9rem;
+    margin-bottom: 2rem;
+  }
+
+  /* ── Cevap detay accordion ───────────────────────────────────────────────── */
+  .answers-toggle {
+    background: none;
+    border: 2px solid var(--kl-border);
+    border-radius: 14px;
+    padding: 12px 18px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--kl-primary);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    margin-bottom: 0;
+  }
+
+  .answers-toggle:hover {
+    background: #F0F2FF;
+    border-color: var(--kl-primary);
+  }
+
+  .answers-toggle[aria-expanded="true"] {
+    border-radius: 14px 14px 0 0;
+    background: #F0F2FF;
+    border-color: var(--kl-primary);
+    border-bottom: none;
+  }
+
+  .answers-body {
+    border: 2px solid var(--kl-primary);
+    border-top: none;
+    border-radius: 0 0 14px 14px;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .answer-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 0.9rem 1.25rem;
+    border-bottom: 1px solid var(--kl-bg);
+    font-size: 0.875rem;
+  }
+
+  .answer-row:last-child { border-bottom: none; }
+
+  .answer-icon {
+    flex-shrink: 0;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.82rem;
+    margin-top: 1px;
+  }
+
+  .answer-icon.ok   { background: var(--kl-success); color: #fff; }
+  .answer-icon.fail { background: var(--kl-danger);  color: #fff; }
+
+  .answer-q {
+    flex: 1;
+    font-weight: 700;
+    color: var(--kl-text);
+    line-height: 1.45;
+  }
+
+  .answer-correct {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--kl-success);
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+
+  @media (max-width: 480px) {
+    .cta-group { grid-template-columns: 1fr; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+  <!-- Sayfa başlığı -->
+  <div class="ob-page-title">
+    <h1>Test Sonucun</h1>
+    <p>Sistem sana en uygun başlangıç noktasını belirledi.</p>
+  </div>
+
+  <!-- Stepper -->
+  {% set ob_step = 3 %}
+  {% include "onboarding/_stepper.html" %}
+
+  <!-- Skor halkası -->
+  {% set pct = (ratio * 100) | int %}
+  {% set r = 52 %}
+  {% set circ = (2 * 3.14159 * r) | round(2) %}
+  {% set offset = (circ * (1 - ratio)) | round(2) %}
+
+  {% if rec_level == 'high' %}
+    {% set ring_color = '#06D6A0' %}
+    {% set emoji_icon = 'bi-emoji-laughing-fill' %}
+    {% set mood = 'Harika performans!' %}
+  {% elif rec_level == 'medium' %}
+    {% set ring_color = '#4361EE' %}
+    {% set emoji_icon = 'bi-emoji-smile-fill' %}
+    {% set mood = 'İyi gidiyorsun!' %}
+  {% else %}
+    {% set ring_color = '#FFB703' %}
+    {% set emoji_icon = 'bi-emoji-neutral-fill' %}
+    {% set mood = 'Gelişim alanın var.' %}
+  {% endif %}
+
+  <div class="score-wrap">
+    <div class="score-ring">
+      <svg width="136" height="136" viewBox="0 0 136 136">
+        <circle class="score-ring-bg" cx="68" cy="68" r="{{ r }}" />
+        <circle class="score-ring-fill"
+          cx="68" cy="68" r="{{ r }}"
+          stroke="{{ ring_color }}"
+          stroke-dasharray="{{ circ }}"
+          stroke-dashoffset="{{ circ }}"
+          id="scoreArc"
+          data-target="{{ offset }}"
+        />
+      </svg>
+      <div class="score-ring-inner">
+        <span class="score-num" style="color:{{ ring_color }};">{{ score }}</span>
+        <span class="score-denom">/ {{ total }}</span>
+      </div>
+    </div>
+    <div class="score-label">
+      <i class="bi {{ emoji_icon }}" style="color:{{ ring_color }};"></i>
+      {{ mood }}
+    </div>
+  </div>
+
+  <!-- Öneri kartı -->
+  <div class="rec-card {{ rec_level }}">
+    <div class="rec-icon">
+      {% if rec_level == 'high' %}   <i class="bi bi-lightning-charge-fill"></i>
+      {% elif rec_level == 'medium' %}<i class="bi bi-compass-fill"></i>
+      {% else %}                      <i class="bi bi-house-fill"></i>
+      {% endif %}
+    </div>
+    <div>
+      <div class="rec-label">Sistem Önerisi</div>
+      <div class="rec-title">{{ rec_text }}</div>
+      <div class="rec-detail">{{ rec_detail }}</div>
+    </div>
+  </div>
+
+  <!-- CTA butonları -->
+  <div class="cta-group">
+    <a href="{{ url_for('onboarding.start', choice='beginning') }}"
+       class="btn-kl btn-kl-outline">
+      <i class="bi bi-skip-backward-fill me-1"></i>Baştan Başla
+    </a>
+    <a href="{{ url_for('onboarding.start', choice='recommended') }}"
+       class="btn-kl btn-kl-primary">
+      <i class="bi bi-play-fill me-1"></i>Buradan Devam Et
+    </a>
+  </div>
+
+  <!-- Cevap detayları (accordion) -->
+  <button class="answers-toggle" type="button"
+          data-bs-toggle="collapse" data-bs-target="#answersCollapse"
+          aria-expanded="false" aria-controls="answersCollapse">
+    <span><i class="bi bi-list-check me-2"></i>Cevaplarımı Gör</span>
+    <i class="bi bi-chevron-down"></i>
+  </button>
+
+  <div class="collapse" id="answersCollapse">
+    <div class="answers-body">
+      {% for a in answers %}
+      <div class="answer-row">
+        <div class="answer-icon {{ 'ok' if a.is_correct else 'fail' }}">
+          <i class="bi {{ 'bi-check-lg' if a.is_correct else 'bi-x-lg' }}"></i>
+        </div>
+        <div class="answer-q">{{ a.question }}</div>
+        {% if not a.is_correct %}
+        <div class="answer-correct">
+          <i class="bi bi-check-circle-fill me-1"></i>{{ a.correct }}
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  /* SVG ring animasyonu */
+  document.addEventListener('DOMContentLoaded', function() {
+    var arc = document.getElementById('scoreArc');
+    if (!arc) return;
+    var target = parseFloat(arc.dataset.target);
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        arc.style.transition = 'stroke-dashoffset 1.1s cubic-bezier(.4,0,.2,1)';
+        arc.style.strokeDashoffset = target;
+      });
+    });
+  });
+
+  /* Accordion chevron döndürme */
+  var toggle = document.querySelector('.answers-toggle');
+  if (toggle) {
+    toggle.addEventListener('click', function() {
+      var icon = this.querySelector('.bi-chevron-down, .bi-chevron-up');
+      if (!icon) return;
+      var expanded = this.getAttribute('aria-expanded') === 'true';
+      icon.className = 'bi ' + (expanded ? 'bi-chevron-down' : 'bi-chevron-up');
+    });
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,36 @@
+{#
+  Onboarding Stepper — 3 adım göstergesi
+  Kullanım: {% set ob_step = 1 %} (veya 2, 3) üst şablonda tanımla, sonra include et.
+
+  Adımlar:
+    1 = Sınıf Seçimi
+    2 = Yerleştirme Testi
+    3 = Sonuç & Başlangıç
+#}
+<div class="ob-stepper">
+  {% set steps = [
+    (1, "Sınıf Seçimi",   "bi-person-badge"),
+    (2, "Kısa Test",       "bi-pencil-square"),
+    (3, "Sonuç",           "bi-bar-chart-fill"),
+  ] %}
+
+  {% for num, label, icon in steps %}
+    {% set is_done    = num < ob_step %}
+    {% set is_active  = num == ob_step %}
+
+    <div class="ob-step {% if is_done %}done{% elif is_active %}active{% endif %}">
+      <div class="ob-step-circle">
+        {% if is_done %}
+          <i class="bi bi-check-lg"></i>
+        {% else %}
+          <i class="bi {{ icon }}"></i>
+        {% endif %}
+      </div>
+      <span class="ob-step-label">{{ label }}</span>
+    </div>
+
+    {% if not loop.last %}
+      <div class="ob-step-line {% if is_done %}done{% endif %}"></div>
+    {% endif %}
+  {% endfor %}
+</div>

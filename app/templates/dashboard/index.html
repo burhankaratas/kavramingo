@@ -1,0 +1,867 @@
+{% extends "app_base.html" %}
+
+{% block title %}Ana Sayfa — KavramLingo{% endblock %}
+
+{% block head %}
+<style>
+  /* ── Shared card ─────────────────────────────────────────────────────────── */
+  .kl-card {
+    background: var(--kl-card);
+    border-radius: 22px;
+    border: 2px solid var(--kl-border);
+    padding: 1.75rem;
+    box-shadow: 0 2px 16px rgba(67,97,238,0.06);
+  }
+
+  .kl-card-title {
+    font-size: 0.78rem;
+    font-weight: 900;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--kl-muted);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* ── Hero: Karşılama + Seri ──────────────────────────────────────────────── */
+  .hero-card {
+    background: linear-gradient(135deg, #4361EE 0%, #3A0CA3 55%, #7209B7 100%);
+    border-radius: 24px;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 1.75rem;
+    border: none;
+    box-shadow: 0 8px 32px rgba(67,97,238,0.28);
+  }
+
+  /* Nokta deseni */
+  .hero-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1.5px, transparent 1.5px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  /* Sol: metin */
+  .hero-left {
+    flex: 1;
+    padding: 2.25rem 2rem 2.25rem 2.25rem;
+    color: #fff;
+  }
+
+  .hero-grade-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: rgba(255,255,255,0.15);
+    border: 1.5px solid rgba(255,255,255,0.25);
+    border-radius: 50px;
+    padding: 4px 12px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    margin-bottom: 0.85rem;
+    backdrop-filter: blur(8px);
+  }
+
+  .hero-greeting {
+    font-size: 1.9rem;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.3px;
+  }
+
+  .hero-sub {
+    font-size: 0.95rem;
+    font-weight: 600;
+    opacity: 0.82;
+    line-height: 1.5;
+    margin-bottom: 1.4rem;
+  }
+
+  .hero-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .hero-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(255,255,255,0.15);
+    border: 1.5px solid rgba(255,255,255,0.25);
+    border-radius: 50px;
+    padding: 6px 14px;
+    font-size: 0.88rem;
+    font-weight: 800;
+    backdrop-filter: blur(8px);
+    color: #fff;
+  }
+
+  /* Sağ: seri + progress */
+  .hero-right {
+    width: 220px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.25rem 2rem;
+    border-left: 1.5px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.05);
+    gap: 1.25rem;
+  }
+
+  .streak-display {
+    text-align: center;
+  }
+
+  .streak-fire {
+    font-size: 2.6rem;
+    line-height: 1;
+    display: block;
+    margin-bottom: 0.1rem;
+    filter: drop-shadow(0 2px 8px rgba(255,183,3,0.5));
+    animation: fireFlicker 2s ease-in-out infinite;
+  }
+
+  @keyframes fireFlicker {
+    0%, 100% { transform: scale(1) rotate(-1deg); }
+    50%       { transform: scale(1.07) rotate(1deg); }
+  }
+
+  .streak-num {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #FFD580;
+    line-height: 1;
+  }
+
+  .streak-lbl {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: rgba(255,255,255,0.7);
+    margin-top: 3px;
+  }
+
+  /* Günlük hedef mini (hero içinde) */
+  .hero-goal {
+    width: 100%;
+  }
+
+  .hero-goal-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 5px;
+    text-align: center;
+  }
+
+  .hero-goal-track {
+    height: 8px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .hero-goal-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #06D6A0, #05F5BB);
+    border-radius: 8px;
+    transition: width 0.6s ease;
+  }
+
+  .hero-goal-nums {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: rgba(255,255,255,0.7);
+    text-align: center;
+    margin-top: 4px;
+  }
+
+  /* Dekoratif daire */
+  .hero-deco {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    pointer-events: none;
+  }
+  .hero-deco-1 { width: 240px; height: 240px; top: -90px; right: 280px; }
+  .hero-deco-2 { width: 160px; height: 160px; bottom: -60px; left: 60px; }
+
+  /* ── Devam Et kartı ──────────────────────────────────────────────────────── */
+  .continue-card {
+    background: var(--kl-card);
+    border-radius: 22px;
+    border: 2.5px solid var(--kl-primary);
+    padding: 1.75rem;
+    box-shadow: 0 4px 24px rgba(67,97,238,0.12);
+    margin-bottom: 1.25rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .continue-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--kl-primary), var(--kl-accent));
+  }
+
+  .continue-unit-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: #EEF1FD;
+    color: var(--kl-primary);
+    border-radius: 50px;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    margin-bottom: 0.85rem;
+  }
+
+  .continue-unit-name {
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: var(--kl-text);
+    margin-bottom: 0.3rem;
+    line-height: 1.3;
+  }
+
+  .continue-topic {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--kl-muted);
+    margin-bottom: 1.2rem;
+  }
+
+  .continue-progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--kl-muted);
+    margin-bottom: 6px;
+  }
+
+  .continue-progress-label span:last-child { color: var(--kl-primary); }
+
+  .continue-track {
+    height: 10px;
+    background: var(--kl-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+
+  .continue-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--kl-primary), var(--kl-accent));
+    border-radius: 10px;
+    transition: width 0.6s ease;
+  }
+
+  .btn-kl-continue {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 14px;
+    background: var(--kl-primary);
+    color: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 5px 0 var(--kl-primary-dark);
+    transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
+  }
+
+  .btn-kl-continue:hover {
+    background: #4f6ef7;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 7px 0 var(--kl-primary-dark);
+  }
+
+  .btn-kl-continue:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 var(--kl-primary-dark);
+  }
+
+  .continue-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--kl-muted);
+    justify-content: center;
+  }
+
+  /* ── Konu listesi kartı ──────────────────────────────────────────────────── */
+  .topics-card { margin-bottom: 0; }
+
+  .topic-item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--kl-bg);
+  }
+
+  .topic-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .topic-item:first-child { padding-top: 0; }
+
+  .topic-status-icon {
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  .topic-status-icon.done     { background: #ECFDF5; color: var(--kl-success); }
+  .topic-status-icon.active   { background: #EEF1FD; color: var(--kl-primary); }
+  .topic-status-icon.upcoming { background: var(--kl-bg); color: var(--kl-muted); }
+  .topic-status-icon.locked   { background: var(--kl-bg); color: #CBD5E1; }
+
+  .topic-name {
+    flex: 1;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--kl-text);
+  }
+
+  .topic-name.locked { color: #CBD5E1; }
+
+  .topic-tag {
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 3px 9px;
+    border-radius: 50px;
+  }
+
+  .topic-tag.done     { background: #ECFDF5; color: var(--kl-success); }
+  .topic-tag.active   { background: #EEF1FD; color: var(--kl-primary); }
+  .topic-tag.upcoming { background: var(--kl-bg); color: var(--kl-muted); }
+  .topic-tag.locked   { background: var(--kl-bg); color: #CBD5E1; }
+
+  /* ── Sidebar: Günlük Hedef ────────────────────────────────────────────────── */
+  .goal-ring-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.1rem;
+  }
+
+  .goal-ring {
+    position: relative;
+    width: 110px; height: 110px;
+    margin-bottom: 0.5rem;
+  }
+
+  .goal-ring svg { transform: rotate(-90deg); }
+
+  .goal-ring-bg   { fill: none; stroke: var(--kl-border); stroke-width: 9; }
+  .goal-ring-fill {
+    fill: none; stroke-width: 9; stroke-linecap: round;
+    stroke: var(--kl-success);
+    transition: stroke-dashoffset 0s;
+  }
+
+  .goal-ring-inner {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+  }
+
+  .goal-ring-num  { font-size: 1.8rem; font-weight: 900; color: var(--kl-text); line-height:1; }
+  .goal-ring-denom{ font-size: 0.78rem; font-weight: 700; color: var(--kl-muted); }
+
+  .goal-message {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--kl-text);
+    text-align: center;
+  }
+
+  .goal-sub {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--kl-muted);
+    text-align: center;
+    margin-top: 2px;
+    margin-bottom: 1.1rem;
+  }
+
+  .goal-activities {
+    display: flex;
+    gap: 0.4rem;
+    justify-content: center;
+  }
+
+  .goal-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--kl-border);
+    background: var(--kl-bg);
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .goal-dot.filled {
+    background: var(--kl-success);
+    border-color: var(--kl-success);
+  }
+
+  /* ── Sidebar: Rozetler ───────────────────────────────────────────────────── */
+  .dash-badges-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.65rem;
+  }
+
+  .dash-badge-card {
+    background: var(--kl-bg);
+    border-radius: 14px;
+    border: 1.5px solid var(--kl-border);
+    padding: 0.75rem 0.5rem 0.7rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.35rem;
+    transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    position: relative;
+  }
+
+  .dash-badge-card.earned {
+    background: #fff;
+    border-color: transparent;
+    box-shadow: 0 3px 14px rgba(67,97,238,0.09);
+  }
+
+  .dash-badge-card.earned:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(67,97,238,0.14);
+  }
+
+  .dash-badge-card.locked { opacity: 0.8; }
+  .dash-badge-card.locked:hover { opacity: 1; }
+
+  .dash-badge-emoji {
+    width: 46px; height: 46px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.35rem;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .dash-badge-card.earned .dash-badge-emoji {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+
+  .dash-badge-card.locked .dash-badge-emoji {
+    background: var(--kl-border) !important;
+    filter: grayscale(0.5) opacity(0.65);
+  }
+
+  .dash-badge-check {
+    position: absolute;
+    top: -5px; right: -5px;
+    width: 18px; height: 18px;
+    background: var(--kl-success);
+    border: 2px solid #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.5rem;
+    color: #fff;
+  }
+
+  .dash-badge-lock {
+    position: absolute;
+    bottom: -5px; right: -5px;
+    width: 18px; height: 18px;
+    background: #fff;
+    border: 2px solid var(--kl-border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.5rem;
+    color: var(--kl-muted);
+  }
+
+  .dash-badge-name {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: var(--kl-muted);
+    line-height: 1.25;
+  }
+
+  .dash-badge-card.earned .dash-badge-name { color: var(--kl-text); }
+
+  /* Mini progress bar (kilitliler için) */
+  .dash-badge-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--kl-border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 2px;
+  }
+
+  .dash-badge-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s ease;
+  }
+
+  /* ── Responsive ──────────────────────────────────────────────────────────── */
+  @media (max-width: 767px) {
+    .hero-right { display: none; }
+    .hero-left  { padding: 1.75rem 1.5rem; }
+    .hero-greeting { font-size: 1.55rem; }
+    .continue-unit-name { font-size: 1.15rem; }
+    .dash-badges-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  @media (max-width: 400px) {
+    .hero-pills .hero-pill:nth-child(2) { display: none; }
+    .dash-badges-grid { gap: 0.4rem; }
+    .dash-badge-emoji { width: 38px; height: 38px; font-size: 1.1rem; border-radius: 11px; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!--  HERO: Karşılama + Seri                                                 -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="hero-card">
+  <div class="hero-deco hero-deco-1"></div>
+  <div class="hero-deco hero-deco-2"></div>
+
+  <div class="hero-inner">
+
+    <!-- Sol: isim + bilgiler -->
+    <div class="hero-left">
+      <div class="hero-grade-badge">
+        <i class="bi bi-mortarboard-fill"></i>
+        {{ current_user.grade | default(9) }}. Sınıf &nbsp;·&nbsp; Din Kültürü ve Ahlak Bilgisi
+      </div>
+
+      <h1 class="hero-greeting">
+        Merhaba, {{ current_user.name.split()[0] }}! 👋
+      </h1>
+
+      <p class="hero-sub">
+        {% set done = daily_done | default(3) %}
+        {% set goal = daily_goal | default(5) %}
+        {% if done >= goal %}
+          Bugünkü hedefinizi tamamladınız. Muhteşem!
+        {% elif done > 0 %}
+          Bugün {{ done }} aktivite tamamladın. {{ goal - done }} tane daha!
+        {% else %}
+          Yeni güne hazır mısın? Hadi başlayalım!
+        {% endif %}
+      </p>
+
+      <div class="hero-pills">
+        <div class="hero-pill">
+          <i class="bi bi-fire" style="color:#FFD580;"></i>
+          {{ streak | default(5) }} günlük seri
+        </div>
+        <div class="hero-pill">
+          <i class="bi bi-star-fill" style="color:#FFD580;"></i>
+          {{ current_user.total_score | default(1250) }} XP
+        </div>
+      </div>
+    </div>
+
+    <!-- Sağ: büyük seri sayısı + günlük progress -->
+    <div class="hero-right">
+      <div class="streak-display">
+        <span class="streak-fire">🔥</span>
+        <div class="streak-num">{{ streak | default(5) }}</div>
+        <div class="streak-lbl">Günlük Seri</div>
+      </div>
+
+      <div class="hero-goal">
+        {% set done = daily_done | default(3) %}
+        {% set goal = daily_goal | default(5) %}
+        <div class="hero-goal-label">Günlük Hedef</div>
+        <div class="hero-goal-track">
+          <div class="hero-goal-fill" style="width:{{ [(done / goal * 100) | int, 100] | min }}%;"></div>
+        </div>
+        <div class="hero-goal-nums">{{ done }} / {{ goal }} aktivite</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!--  İKİ KOLON: sol ana, sağ sidebar                                        -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="row g-4 align-items-start">
+
+  <!-- ── Sol: Devam Et + Konu Listesi ──────────────────────────────────── -->
+  <div class="col-12 col-lg-8">
+
+    <!-- Kütüphane kısayolu -->
+    <a href="{{ url_for('library.index') }}"
+       style="display:flex;align-items:center;gap:1rem;
+              background:#fff;border:2px solid var(--kl-border);
+              border-radius:18px;padding:1rem 1.4rem;
+              margin-bottom:1.25rem;text-decoration:none;
+              box-shadow:0 2px 12px rgba(67,97,238,0.05);
+              transition:border-color 0.15s,transform 0.15s,box-shadow 0.15s;"
+       onmouseover="this.style.borderColor='var(--kl-primary)';this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(67,97,238,0.12)';"
+       onmouseout="this.style.borderColor='var(--kl-border)';this.style.transform='';this.style.boxShadow='0 2px 12px rgba(67,97,238,0.05)';">
+      <div style="width:42px;height:42px;border-radius:13px;flex-shrink:0;
+                  background:linear-gradient(135deg,var(--kl-primary),var(--kl-accent));
+                  display:flex;align-items:center;justify-content:center;
+                  color:#fff;font-size:1.1rem;
+                  box-shadow:0 3px 10px rgba(67,97,238,0.3);">
+        <i class="bi bi-collection-fill"></i>
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:0.92rem;font-weight:900;color:var(--kl-text);margin-bottom:1px;">
+          Ünite Kütüphanesi
+        </div>
+        <div style="font-size:0.78rem;font-weight:700;color:var(--kl-muted);">
+          Tüm sınıfların 16 ünitesine göz at
+        </div>
+      </div>
+      <i class="bi bi-arrow-right" style="color:var(--kl-primary);font-size:1rem;flex-shrink:0;"></i>
+    </a>
+
+    <!-- Devam Et kartı -->
+    <div class="continue-card mb-4">
+      <div class="kl-card-title">
+        <i class="bi bi-play-circle-fill" style="color:var(--kl-primary);font-size:1rem;"></i>
+        Kaldığın Yerden Devam Et
+      </div>
+
+      <div class="continue-unit-badge">
+        <i class="bi bi-collection-fill"></i>
+        Ünite {{ current_unit.number | default(2) }}
+      </div>
+
+      <div class="continue-unit-name">{{ current_unit.name | default("Hz. Peygamber ve Sünnet") }}</div>
+
+      <div class="continue-topic">
+        <i class="bi bi-pin-map-fill" style="color:var(--kl-accent);"></i>
+        Aktif konu: <strong style="color:var(--kl-text);">{{ current_unit.current_topic | default("Miraç Olayı") }}</strong>
+      </div>
+
+      <div class="continue-progress-label">
+        <span>İlerleme</span>
+        <span>{{ current_unit.progress | default(60) }}% &nbsp;·&nbsp; {{ current_unit.done_topics | default(12) }}/{{ current_unit.total_topics | default(20) }} konu</span>
+      </div>
+      <div class="continue-track">
+        <div class="continue-fill" style="width:{{ current_unit.progress | default(60) }}%;"></div>
+      </div>
+
+      <a href="{{ url_for('quiz.index',
+                          grade=current_user.grade,
+                          unit_id=current_unit.unit_id,
+                          quiz_type=current_unit.quiz_type)
+                 if quiz_ready | default(false) else '#' }}"
+         class="btn-kl-continue"
+         {% if not quiz_ready | default(false) %}title="Henüz hazır değil"{% endif %}>
+        <i class="bi bi-play-fill"></i> Devam Et
+      </a>
+
+      <div class="continue-meta">
+        <i class="bi bi-clock"></i> Yaklaşık 8 dakika
+        &nbsp;·&nbsp;
+        <i class="bi bi-lightning-charge-fill" style="color:var(--kl-warning);"></i> +50 XP kazanacaksın
+      </div>
+    </div>
+
+    <!-- Aktif Ünitedeki Konular -->
+    <div class="kl-card topics-card">
+      <div class="kl-card-title">
+        <i class="bi bi-list-check" style="color:var(--kl-primary);font-size:1rem;"></i>
+        {{ current_unit.name | default("Hz. Peygamber ve Sünnet") }} — Konular
+      </div>
+
+      {% set topics = current_unit.topics if current_unit is defined and current_unit.topics is defined else [
+        {"name": "Hz. Peygamber'in Hayatı",     "status": "done"},
+        {"name": "Vahyin Geliş Süreci",          "status": "done"},
+        {"name": "Hicret ve Önemi",              "status": "done"},
+        {"name": "Miraç Olayı",                  "status": "active"},
+        {"name": "Mekke'nin Fethi",              "status": "upcoming"},
+        {"name": "Veda Hutbesi",                 "status": "upcoming"},
+        {"name": "Sünnetin Önemi ve Çeşitleri",  "status": "locked"},
+        {"name": "Hadis ve Sünnet İlişkisi",     "status": "locked"},
+      ] %}
+
+      {% for t in topics %}
+      <div class="topic-item">
+        <div class="topic-status-icon {{ t.status }}">
+          {% if t.status == 'done'     %}<i class="bi bi-check-lg"></i>
+          {% elif t.status == 'active' %}<i class="bi bi-arrow-right-circle-fill"></i>
+          {% elif t.status == 'upcoming' %}<i class="bi bi-circle"></i>
+          {% else %}                     <i class="bi bi-lock-fill"></i>
+          {% endif %}
+        </div>
+        <span class="topic-name {{ 'locked' if t.status == 'locked' else '' }}">{{ t.name }}</span>
+        <span class="topic-tag {{ t.status }}">
+          {% if t.status == 'done'     %}Tamamlandı
+          {% elif t.status == 'active' %}Aktif
+          {% elif t.status == 'upcoming' %}Sırada
+          {% else %}Kilitli
+          {% endif %}
+        </span>
+      </div>
+      {% endfor %}
+
+    </div>
+
+  </div>
+
+  <!-- ── Sağ: Sidebar ────────────────────────────────────────────────── -->
+  <div class="col-12 col-lg-4">
+
+    <!-- Günlük Hedef kartı -->
+    <div class="kl-card mb-4">
+      <div class="kl-card-title">
+        <i class="bi bi-bullseye" style="color:var(--kl-success);font-size:1rem;"></i>
+        Günlük Hedef
+      </div>
+
+      {% set done = daily_done | default(3) %}
+      {% set goal = daily_goal | default(5) %}
+      {% set ratio = (done / goal) if goal > 0 else 0 %}
+      {% set r = 44 %}
+      {% set circ = (2 * 3.14159 * r) | round(2) %}
+      {% set offset = (circ * (1 - ratio)) | round(2) %}
+
+      <div class="goal-ring-wrap">
+        <div class="goal-ring">
+          <svg width="110" height="110" viewBox="0 0 110 110">
+            <circle class="goal-ring-bg"   cx="55" cy="55" r="{{ r }}" />
+            <circle class="goal-ring-fill"
+              cx="55" cy="55" r="{{ r }}"
+              stroke-dasharray="{{ circ }}"
+              stroke-dashoffset="{{ circ }}"
+              id="goalArc"
+              data-target="{{ offset }}"
+            />
+          </svg>
+          <div class="goal-ring-inner">
+            <span class="goal-ring-num">{{ done }}</span>
+            <span class="goal-ring-denom">/ {{ goal }}</span>
+          </div>
+        </div>
+
+        {% if done >= goal %}
+          <div class="goal-message">🎉 Tebrikler!</div>
+          <div class="goal-sub">Günlük hedefinizi tamamladınız</div>
+        {% else %}
+          <div class="goal-message">{{ goal - done }} aktivite kaldı</div>
+          <div class="goal-sub">Bugünkü hedefe ulaşmak için devam et</div>
+        {% endif %}
+      </div>
+
+      <div class="goal-activities">
+        {% for i in range(goal) %}
+        <div class="goal-dot {{ 'filled' if i < done else '' }}"></div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Rozetler kartı -->
+    <div class="kl-card">
+      <div class="kl-card-title">
+        <i class="bi bi-award-fill" style="color:var(--kl-warning);font-size:1rem;"></i>
+        Rozetlerim
+        <span style="margin-left:auto;font-size:0.75rem;font-weight:800;color:var(--kl-muted);">
+          {{ earned_total | default(0) }} / {{ total_badges | default(18) }}
+        </span>
+      </div>
+
+      <div class="dash-badges-grid">
+        {% for b in badges %}
+        <div class="dash-badge-card {{ 'earned' if b.earned else 'locked' }}"
+             title="{{ b.name }}{% if b.earned and b.earned_at %} — {{ b.earned_at.strftime('%d.%m.%Y') }}{% endif %}">
+
+          <div class="dash-badge-emoji" style="background:{{ b.cat_color }}18;">
+            {{ b.emoji or '🏅' }}
+            {% if b.earned %}
+              <div class="dash-badge-check"><i class="bi bi-check-lg"></i></div>
+            {% else %}
+              <div class="dash-badge-lock"><i class="bi bi-lock-fill"></i></div>
+            {% endif %}
+          </div>
+
+          <span class="dash-badge-name">{{ b.name }}</span>
+
+          {% if not b.earned %}
+            <div class="dash-badge-bar">
+              <div class="dash-badge-bar-fill"
+                   style="width:{{ b.progress_pct }}%;background:{{ b.cat_color }};"></div>
+            </div>
+          {% endif %}
+
+        </div>
+        {% endfor %}
+      </div>
+
+      <a href="{{ url_for('user.badges') }}"
+         style="display:block;text-align:center;margin-top:1.1rem;
+                font-size:0.82rem;font-weight:800;color:var(--kl-primary);
+                text-decoration:none;">
+        Tüm rozetleri gör <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  /* Günlük hedef ring animasyonu */
+  document.addEventListener('DOMContentLoaded', function() {
+    var arc = document.getElementById('goalArc');
+    if (!arc) return;
+    var target = parseFloat(arc.dataset.target);
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        arc.style.transition = 'stroke-dashoffset 1s cubic-bezier(.4,0,.2,1)';
+        arc.style.strokeDashoffset = target;
+      });
+    });
+  });
+</script>
+{% endblock %}
