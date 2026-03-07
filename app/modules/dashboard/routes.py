@@ -150,7 +150,7 @@ def index():
                 "quiz_done":    unit_sessions,
                 "quiz_target":  UNIT_QUIZ_TARGET,
                 "progress":     progress_pct,
-                "quiz_type":    "multiple_choice",
+                "completed":    progress_pct >= 100,
             }
 
     cur2.close()
