@@ -1,0 +1,117 @@
+{% extends "quiz/_quiz_base.html" %}
+{% block title %}Boşluk Doldurma — KavramLingo{% endblock %}
+
+{% block quiz_head %}
+<style>
+  .fb-blank {
+    display: inline-block;
+    min-width: 120px;
+    border-bottom: 3px solid var(--kl-primary);
+    margin: 0 4px;
+    vertical-align: bottom;
+    font-weight: 900;
+    color: var(--kl-primary);
+  }
+
+  .fb-input-wrap { margin-top: 1rem; margin-bottom: 1.5rem; }
+
+  .fb-label {
+    font-size: 0.8rem;
+    font-weight: 900;
+    color: var(--kl-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .fb-input {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border-radius: 16px;
+    border: 2.5px solid var(--kl-border);
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--kl-text);
+    background: #fff;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .fb-input:focus {
+    outline: none;
+    border-color: var(--kl-primary);
+    box-shadow: 0 0 0 4px rgba(67,97,238,0.12);
+  }
+
+  .fb-input::placeholder { color: #CBD5E1; font-weight: 600; }
+
+  .fb-case-note {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--kl-muted);
+    margin-top: 0.4rem;
+  }
+
+  .btn-kl-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 14px;
+    background: var(--kl-primary);
+    color: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 5px 0 var(--kl-primary-dark);
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+  .btn-kl-submit:hover  { transform: translateY(-2px); box-shadow: 0 7px 0 var(--kl-primary-dark); }
+  .btn-kl-submit:active { transform: translateY(3px);  box-shadow: 0 2px 0 var(--kl-primary-dark); }
+</style>
+{% endblock %}
+
+{% block quiz_content %}
+{% set q_text = question.question | replace('___', '<span class="fb-blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>') %}
+<p class="quiz-question-text">{{ q_text | safe }}</p>
+
+<form method="POST" action="{{ url_for('quiz.answer') }}">
+  <div class="fb-input-wrap">
+    <label class="fb-label" for="fbAnswer">
+      <i class="bi bi-pencil-fill"></i> Cevabınızı yazın
+    </label>
+    <input
+      type="text"
+      id="fbAnswer"
+      name="answer"
+      class="fb-input"
+      placeholder="Cevabı buraya yazın…"
+      autocomplete="off"
+      autocorrect="off"
+      autocapitalize="off"
+      spellcheck="false"
+      autofocus
+      required
+    />
+    <div class="fb-case-note">Büyük/küçük harf farkı gözetilmez.</div>
+  </div>
+
+  <button type="submit" class="btn-kl-submit">
+    <i class="bi bi-check2-circle"></i>
+    {% if current_index == total %}Sonucu Gör{% else %}Sonraki Soru{% endif %}
+  </button>
+</form>
+{% endblock %}
+
+{% block quiz_scripts %}
+<script>
+  document.getElementById('fbAnswer').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); this.form.submit(); }
+  });
+</script>
+{% endblock %}

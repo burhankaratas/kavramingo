@@ -1,0 +1,412 @@
+{% extends "app_base.html" %}
+{% block title %}Rozetlerim — KavramLingo{% endblock %}
+
+{% block head %}
+<style>
+  /* ── Hero ─────────────────────────────────────────────────────────────── */
+  .badges-hero {
+    background: linear-gradient(135deg, #4361EE 0%, #3A0CA3 55%, #7209B7 100%);
+    border-radius: 24px;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 32px rgba(67,97,238,0.28);
+  }
+
+  .badges-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.08) 1.5px, transparent 1.5px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+
+  .badges-hero-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 2.25rem 2.5rem;
+  }
+
+  .badges-hero-icon {
+    width: 80px; height: 80px;
+    border-radius: 24px;
+    background: rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.2rem;
+    flex-shrink: 0;
+    backdrop-filter: blur(8px);
+  }
+
+  .badges-hero-info { flex: 1; color: #fff; }
+
+  .badges-hero-title {
+    font-size: 1.75rem;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 0.3rem;
+    letter-spacing: -0.3px;
+  }
+
+  .badges-hero-sub {
+    font-size: 0.92rem;
+    font-weight: 600;
+    opacity: 0.8;
+    margin-bottom: 1.25rem;
+  }
+
+  .badges-overall-bar {
+    background: rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    backdrop-filter: blur(8px);
+    border: 1.5px solid rgba(255,255,255,0.2);
+  }
+
+  .badges-overall-count {
+    font-size: 1.85rem;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .badges-overall-count span {
+    font-size: 1rem;
+    font-weight: 700;
+    opacity: 0.7;
+  }
+
+  .badges-overall-track {
+    flex: 1;
+    height: 10px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .badges-overall-fill {
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #06D6A0, #FFB703);
+    transition: width 0.8s ease;
+  }
+
+  .badges-overall-pct {
+    font-size: 1rem;
+    font-weight: 900;
+    color: #FFB703;
+    flex-shrink: 0;
+  }
+
+  /* ── Kategori bölümleri ──────────────────────────────────────────────── */
+  .cat-section {
+    margin-bottom: 2rem;
+  }
+
+  .cat-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--kl-border);
+  }
+
+  .cat-icon-wrap {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .cat-label {
+    font-size: 1.05rem;
+    font-weight: 900;
+    color: var(--kl-text);
+    flex: 1;
+  }
+
+  .cat-progress-pill {
+    font-size: 0.8rem;
+    font-weight: 800;
+    padding: 4px 12px;
+    border-radius: 50px;
+    border: 2px solid;
+  }
+
+  /* ── Rozet grid ──────────────────────────────────────────────────────── */
+  .badges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  /* ── Rozet kart ──────────────────────────────────────────────────────── */
+  .badge-card {
+    background: #fff;
+    border-radius: 18px;
+    border: 2px solid var(--kl-border);
+    padding: 1.25rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.6rem;
+    transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+    position: relative;
+  }
+
+  .badge-card.earned {
+    border-color: transparent;
+    box-shadow: 0 4px 20px rgba(67,97,238,0.1);
+  }
+
+  .badge-card.earned:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(67,97,238,0.16);
+  }
+
+  .badge-card.locked {
+    opacity: 0.75;
+  }
+
+  .badge-card.locked:hover {
+    opacity: 1;
+    border-color: var(--kl-border);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+
+  /* Rozet emoji ikonu */
+  .badge-emoji {
+    width: 64px; height: 64px;
+    border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.9rem;
+    position: relative;
+    transition: transform 0.2s;
+  }
+
+  .badge-card.earned .badge-emoji {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  }
+
+  .badge-card.locked .badge-emoji {
+    background: var(--kl-bg) !important;
+    filter: grayscale(0.6) opacity(0.6);
+  }
+
+  .badge-lock-icon {
+    position: absolute;
+    bottom: -5px; right: -5px;
+    width: 20px; height: 20px;
+    background: #fff;
+    border: 2px solid var(--kl-border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.55rem;
+    color: var(--kl-muted);
+  }
+
+  .badge-earned-check {
+    position: absolute;
+    top: -5px; right: -5px;
+    width: 22px; height: 22px;
+    background: var(--kl-success);
+    border: 2px solid #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem;
+    color: #fff;
+  }
+
+  .badge-name {
+    font-size: 0.88rem;
+    font-weight: 900;
+    color: var(--kl-text);
+    line-height: 1.3;
+  }
+
+  .badge-desc {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--kl-muted);
+    line-height: 1.4;
+  }
+
+  .badge-earned-date {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--kl-success);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  /* İlerleme çubuğu (kilitli rozetler) */
+  .badge-progress {
+    width: 100%;
+    margin-top: 0.25rem;
+  }
+
+  .badge-progress-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--kl-muted);
+    margin-bottom: 4px;
+  }
+
+  .badge-progress-track {
+    height: 6px;
+    background: var(--kl-bg);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .badge-progress-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.6s ease;
+  }
+
+  /* ── Responsive ──────────────────────────────────────────────────────── */
+  @media (max-width: 767px) {
+    .badges-hero-inner { flex-direction: column; align-items: flex-start; gap: 1.25rem; padding: 1.75rem 1.5rem; }
+    .badges-hero-title { font-size: 1.4rem; }
+    .badges-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 480px) {
+    .badges-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+    .badge-emoji { width: 52px; height: 52px; font-size: 1.55rem; border-radius: 16px; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!--  HERO                                                                   -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<div class="badges-hero">
+  <div class="badges-hero-inner">
+
+    <div class="badges-hero-icon">🏆</div>
+
+    <div class="badges-hero-info">
+      <div class="badges-hero-title">Rozetlerim</div>
+      <div class="badges-hero-sub">Başarılarını koleksiyon olarak takip et</div>
+
+      {% set overall_pct = (earned_total / total_badges * 100) | int if total_badges > 0 else 0 %}
+      <div class="badges-overall-bar">
+        <div class="badges-overall-count">
+          {{ earned_total }} <span>/ {{ total_badges }}</span>
+        </div>
+        <div class="badges-overall-track">
+          <div class="badges-overall-fill" style="width:{{ overall_pct }}%;"></div>
+        </div>
+        <div class="badges-overall-pct">%{{ overall_pct }}</div>
+      </div>
+    </div>
+
+    <!-- Profil'e dön -->
+    <a href="{{ url_for('user.profile') }}"
+       style="display:flex;align-items:center;gap:0.5rem;background:rgba(255,255,255,0.15);
+              border:1.5px solid rgba(255,255,255,0.3);border-radius:12px;padding:9px 18px;
+              font-size:0.88rem;font-weight:800;color:#fff;text-decoration:none;
+              backdrop-filter:blur(8px);align-self:flex-start;flex-shrink:0;
+              transition:background 0.15s;"
+       onmouseover="this.style.background='rgba(255,255,255,0.25)'"
+       onmouseout="this.style.background='rgba(255,255,255,0.15)'">
+      <i class="bi bi-person-fill"></i> Profil
+    </a>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!--  KATEGORİ BÖLÜMLERİ                                                     -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+{% for cat in categories %}
+<div class="cat-section">
+
+  <!-- Kategori başlığı -->
+  <div class="cat-header">
+    <div class="cat-icon-wrap" style="background:{{ cat.color }};">
+      <i class="bi {{ cat.icon }}"></i>
+    </div>
+    <span class="cat-label">{{ cat.label }}</span>
+    <span class="cat-progress-pill"
+          style="color:{{ cat.color }};border-color:{{ cat.color }}20;background:{{ cat.color }}12;">
+      {{ cat.earned_count }} / {{ cat.total_count }}
+    </span>
+  </div>
+
+  <!-- Rozet kartları -->
+  <div class="badges-grid">
+    {% for b in cat.badges %}
+    <div class="badge-card {{ 'earned' if b.earned else 'locked' }}">
+
+      <!-- Emoji ikonu -->
+      <div class="badge-emoji"
+           style="background:{{ cat.color }}18;">
+        {{ b.emoji or '🏅' }}
+
+        {% if b.earned %}
+          <div class="badge-earned-check"><i class="bi bi-check-lg"></i></div>
+        {% else %}
+          <div class="badge-lock-icon"><i class="bi bi-lock-fill"></i></div>
+        {% endif %}
+      </div>
+
+      <div class="badge-name">{{ b.name }}</div>
+      <div class="badge-desc">{{ b.description }}</div>
+
+      {% if b.earned %}
+        {% if b.earned_at %}
+          <div class="badge-earned-date">
+            <i class="bi bi-calendar-check-fill"></i>
+            {{ b.earned_at.strftime('%d %b %Y') if b.earned_at else '' }}
+          </div>
+        {% endif %}
+      {% else %}
+        <!-- İlerleme çubuğu -->
+        <div class="badge-progress">
+          <div class="badge-progress-header">
+            <span>
+              {% if b.condition_type == 'streak' %}Seri
+              {% elif b.condition_type == 'quiz_count' %}Quiz
+              {% elif b.condition_type == 'score' %}Puan
+              {% else %}Ünite
+              {% endif %}
+            </span>
+            <span>{{ b.current_val }} / {{ b.condition_value }}</span>
+          </div>
+          <div class="badge-progress-track">
+            <div class="badge-progress-fill"
+                 style="width:{{ b.progress_pct }}%;background:{{ cat.color }};"></div>
+          </div>
+        </div>
+      {% endif %}
+
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endfor %}
+
+{% endblock %}

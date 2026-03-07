@@ -1,8 +1,69 @@
 """
 Uygulama başlangıcında veritabanı tablolarını oluşturur.
 Her tablo CREATE TABLE IF NOT EXISTS ile yazılmıştır — mevcut veriye dokunmaz.
+badges tablosuna category/emoji/color kolonları eklenir ve 18 rozet seed edilir.
 """
 from app.extensions import mysql
+
+# ── 18 Rozet Kataloğu ─────────────────────────────────────────────────────────
+# (name, description, condition_type, condition_value, emoji, category, color)
+BADGES_CATALOG = [
+    # Başlangıç — #4361EE
+    ("İlk Adım",       "İlk quizini tamamladın!",       "quiz_count",    1,  "🌱", "baslangic",   "#4361EE"),
+    ("Azimli",         "5 quiz tamamladın.",             "quiz_count",    5,  "💪", "baslangic",   "#4361EE"),
+    ("Kararlı",        "10 quiz tamamladın.",            "quiz_count",    10, "🎯", "baslangic",   "#4361EE"),
+    # Seri — #D9730D
+    ("3 Gün Serisi",   "3 gün üst üste çalıştın.",      "streak",        3,  "🔥", "seri",        "#D9730D"),
+    ("7 Gün Serisi",   "7 gün üst üste çalıştın.",      "streak",        7,  "⚡", "seri",        "#D9730D"),
+    ("14 Gün Serisi",  "14 gün üst üste çalıştın.",     "streak",        14, "🌟", "seri",        "#D9730D"),
+    ("30 Gün Serisi",  "30 gün üst üste çalıştın.",     "streak",        30, "🏅", "seri",        "#D9730D"),
+    # Quiz Ustası — #7209B7
+    ("Meraklı",        "25 quiz tamamladın.",            "quiz_count",    25, "🤓", "quiz",        "#7209B7"),
+    ("Azimkar",        "50 quiz tamamladın.",            "quiz_count",    50, "📚", "quiz",        "#7209B7"),
+    ("Quiz Ustası",    "100 quiz tamamladın.",           "quiz_count",    100,"🧠", "quiz",        "#7209B7"),
+    ("Efsane",         "200 quiz tamamladın.",           "quiz_count",    200,"👑", "quiz",        "#7209B7"),
+    # Mükemmellik — #059669
+    ("Gümüş",          "500 puan kazandın.",             "score",         500,"🥈", "mukemmellik", "#059669"),
+    ("Altın",          "1000 puan kazandın.",            "score",        1000,"🥇", "mukemmellik", "#059669"),
+    ("Platin",         "5000 puan kazandın.",            "score",        5000,"💎", "mukemmellik", "#059669"),
+    ("Elmas",          "10000 puan kazandın.",           "score",       10000,"💠", "mukemmellik", "#059669"),
+    # Ünite — #0099B8
+    ("İlk Ünite",      "İlk üniteni tamamladın.",        "unit_complete", 1,  "📖", "unite",       "#0099B8"),
+    ("Gezgin",         "8 ünite tamamladın.",            "unit_complete", 8,  "🧭", "unite",       "#0099B8"),
+    ("Mezun",          "16 ünite tamamladın.",           "unit_complete", 16, "🎓", "unite",       "#0099B8"),
+]
+
+
+def _column_exists(cur, table: str, column: str) -> bool:
+    """INFORMATION_SCHEMA üzerinden kolon varlığını kontrol eder."""
+    cur.execute("""
+        SELECT COUNT(*) AS cnt
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE()
+          AND TABLE_NAME   = %s
+          AND COLUMN_NAME  = %s
+    """, (table, column))
+    return cur.fetchone()["cnt"] > 0
+
+
+def _seed_badges(cur):
+    """18 rozeti DB'ye yazar. Varsa category/emoji/color günceller, yoksa ekler."""
+    for (name, desc, ctype, cval, emoji, category, color) in BADGES_CATALOG:
+        cur.execute("SELECT id FROM badges WHERE name = %s", (name,))
+        row = cur.fetchone()
+        if row:
+            cur.execute("""
+                UPDATE badges
+                SET description=%s, condition_type=%s, condition_value=%s,
+                    emoji=%s, category=%s, color=%s
+                WHERE id=%s
+            """, (desc, ctype, cval, emoji, category, color, row["id"]))
+        else:
+            cur.execute("""
+                INSERT INTO badges
+                    (name, description, condition_type, condition_value, emoji, category, color)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+            """, (name, desc, ctype, cval, emoji, category, color))
 
 
 def init_db(app):
@@ -17,7 +78,7 @@ def init_db(app):
                 name          VARCHAR(100)  NOT NULL,
                 email         VARCHAR(150)  NOT NULL UNIQUE,
                 password_hash VARCHAR(255)  NOT NULL,
-                grade         INT           DEFAULT NULL COMMENT '5,6,7 veya 8',
+                grade         INT           DEFAULT NULL COMMENT '9,10,11 veya 12',
                 total_score   INT           NOT NULL DEFAULT 0,
                 created_at    DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci;
@@ -94,6 +155,23 @@ def init_db(app):
                 icon            VARCHAR(100) DEFAULT NULL
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci;
         """)
+
+        # Yeni kolonları güvenle ekle / charset'i güncelle
+        # emoji 4-byte karakter içerdiğinden CHARACTER SET utf8mb4 zorunlu
+        _BADGE_COLS = [
+            ("category", "VARCHAR(50)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL"),
+            ("emoji",    "VARCHAR(20)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL"),
+            ("color",    "VARCHAR(20)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL"),
+        ]
+        for col, defn in _BADGE_COLS:
+            if _column_exists(cur, "badges", col):
+                # Mevcut kolonu utf8mb4'e zorla (önceki yanlış charset olabilir)
+                cur.execute(f"ALTER TABLE badges MODIFY COLUMN `{col}` {defn}")
+            else:
+                cur.execute(f"ALTER TABLE badges ADD COLUMN `{col}` {defn}")
+
+        # 18 rozet kataloğunu seed et / güncelle
+        _seed_badges(cur)
 
         # ── user_badges ────────────────────────────────────────────────────────
         cur.execute("""

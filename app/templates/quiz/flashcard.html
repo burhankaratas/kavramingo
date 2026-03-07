@@ -1,0 +1,170 @@
+{% extends "quiz/_quiz_base.html" %}
+{% block title %}Flashcard — KavramLingo{% endblock %}
+
+{% block quiz_head %}
+<style>
+  .fc-scene {
+    perspective: 1000px;
+    width: 100%;
+    height: 220px;
+    margin-bottom: 1.75rem;
+    cursor: pointer;
+  }
+
+  .fc-card {
+    width: 100%; height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(.4,0,.2,1);
+  }
+
+  .fc-card.flipped { transform: rotateY(180deg); }
+
+  .fc-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    text-align: center;
+    border: 2.5px solid var(--kl-border);
+  }
+
+  .fc-front {
+    background: linear-gradient(135deg, var(--kl-primary) 0%, var(--kl-accent) 100%);
+    border-color: transparent;
+  }
+
+  .fc-front-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: rgba(255,255,255,0.65);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.75rem;
+  }
+
+  .fc-term {
+    font-size: 1.55rem;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.3;
+  }
+
+  .fc-flip-hint {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .fc-back {
+    background: #fff;
+    transform: rotateY(180deg);
+  }
+
+  .fc-back-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--kl-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.75rem;
+  }
+
+  .fc-definition {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--kl-text);
+    line-height: 1.55;
+  }
+
+  .fc-verdict-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .btn-fc {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 14px;
+    border-radius: 14px;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+
+  .btn-fc-no  { background: #FFF1F3; color: var(--kl-danger);  box-shadow: 0 4px 0 #F4A4B1; }
+  .btn-fc-yes { background: #ECFDF5; color: var(--kl-success); box-shadow: 0 4px 0 #A7F3D0; }
+  .btn-fc-no:hover,  .btn-fc-yes:hover  { transform: translateY(-2px); }
+  .btn-fc-no:active, .btn-fc-yes:active { transform: translateY(2px); }
+
+  .fc-verdict-hint {
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--kl-muted);
+    margin-top: 0.6rem;
+  }
+</style>
+{% endblock %}
+
+{% block quiz_content %}
+<div class="fc-scene" id="fcScene" onclick="flipCard()">
+  <div class="fc-card" id="fcCard">
+    <div class="fc-face fc-front">
+      <div class="fc-front-label"><i class="bi bi-book-half"></i> Kavram</div>
+      <div class="fc-term">{{ question.term }}</div>
+      <div class="fc-flip-hint"><i class="bi bi-arrow-repeat"></i> Tanımı görmek için tıkla</div>
+    </div>
+    <div class="fc-face fc-back">
+      <div class="fc-back-label"><i class="bi bi-chat-quote-fill"></i> Tanım</div>
+      <div class="fc-definition">{{ question.definition }}</div>
+    </div>
+  </div>
+</div>
+
+<form method="POST" action="{{ url_for('quiz.answer') }}">
+  <div class="fc-verdict-row">
+    <button type="submit" name="verdict" value="no"  class="btn-fc btn-fc-no">
+      <i class="bi bi-x-circle-fill"></i> Bilmedim
+    </button>
+    <button type="submit" name="verdict" value="yes" class="btn-fc btn-fc-yes">
+      <i class="bi bi-check-circle-fill"></i> Bildim
+    </button>
+  </div>
+</form>
+
+<div class="fc-verdict-hint">Kartı çevirin, sonra kararınızı verin.</div>
+
+{% if question.explanation %}
+<div class="quiz-hint" style="margin-top:1rem;">
+  <i class="bi bi-info-circle-fill" style="margin-top:2px;color:#4361EE;"></i>
+  <span>{{ question.explanation }}</span>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block quiz_scripts %}
+<script>
+  function flipCard() {
+    document.getElementById('fcCard').classList.toggle('flipped');
+    var hint = document.querySelector('.fc-flip-hint');
+    if (hint) hint.style.display = 'none';
+  }
+</script>
+{% endblock %}

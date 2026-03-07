@@ -1,0 +1,680 @@
+{
+  "grade": 10,
+  "units": [
+
+    {
+      "unit_id": 5,
+      "grade": 10,
+      "name": "Kaza, Kader ve İnsan Özgürlüğü",
+      "description": "Kader inancı, özgür irade ve determinizm tartışmaları",
+      "questions": [
+
+        {
+          "id": "10_5_mc_1",
+          "type": "multiple_choice",
+          "question": "Kader ne anlama gelir?",
+          "options": [
+            "Allah'ın her şeyi önceden bilip takdir etmesi",
+            "İnsanın kendi geleceğini belirlemesi",
+            "Peygamberlerin insanlara yol göstermesi",
+            "Kur'an'da yer alan hükümlerin tamamı"
+          ],
+          "correct_index": 0,
+          "explanation": "Kader, Allah'ın ezelde tüm varlıklar için belirlediği ilahi planı ifade eder; her şeyin O'nun bilgisi ve iradesi dahilinde olduğunu anlatır."
+        },
+        {
+          "id": "10_5_mc_2",
+          "type": "multiple_choice",
+          "question": "Kaza kavramı ne demektir?",
+          "options": [
+            "Allah'ın insanlara verdiği özgür irade",
+            "Allah'ın takdirinin zaman içinde gerçekleşmesi",
+            "Kulun kendi fiillerini yaratması",
+            "Peygamberin emirlerini yerine getirmek"
+          ],
+          "correct_index": 1,
+          "explanation": "Kaza, ezelde takdir edilen şeyin zamanı geldiğinde fiilen gerçekleşmesidir."
+        },
+        {
+          "id": "10_5_mc_3",
+          "type": "multiple_choice",
+          "question": "İslam'a göre insanın fiillerinde sorumlu tutulmasının temel sebebi nedir?",
+          "options": [
+            "Allah'ın insanı zorladığı için",
+            "İnsanın cüzi irade sahibi olması",
+            "Peygamberin izin vermesi",
+            "Toplumun baskısı"
+          ],
+          "correct_index": 1,
+          "explanation": "İnsan, cüzi iradeye (sınırlı seçim özgürlüğüne) sahiptir; bu nedenle kendi tercihlerinden sorumlu tutulur."
+        },
+        {
+          "id": "10_5_mc_4",
+          "type": "multiple_choice",
+          "question": "Aşağıdakilerden hangisi kader inancının yanlış yorumlarından biridir?",
+          "options": [
+            "Kadere inanmak insanı sorumluluktan kurtarır",
+            "Kadere inanmak insana güç ve sabır verir",
+            "Kader, Allah'ın sonsuz ilmini gösterir",
+            "İnsan cüzi irade ile sorumlu tutulur"
+          ],
+          "correct_index": 0,
+          "explanation": "Kaderi bahane ederek sorumluluktan kaçmak yanlış bir yorumdur. İslam, insanın eylemlerinden sorumlu olduğunu açıkça belirtir."
+        },
+        {
+          "id": "10_5_mc_5",
+          "type": "multiple_choice",
+          "question": "Cüzi irade ne demektir?",
+          "options": [
+            "Allah'ın sonsuz iradesi",
+            "İnsanın sınırlı seçim özgürlüğü",
+            "Peygamberin vahiy alma yetisi",
+            "Meleklerin görevleri"
+          ],
+          "correct_index": 1,
+          "explanation": "Cüzi irade, insanın kendi seçimlerini yapabilme kapasitesini ifade eder; bu irade küçük ve sınırlıdır ama sorumluluk için yeterlidir."
+        },
+
+        {
+          "id": "10_5_fc_1",
+          "type": "flashcard",
+          "term": "Kader",
+          "definition": "Allah'ın ezelde her şeyi bilmesi ve takdir etmesi; ilahi plan.",
+          "hint": "Ezeli ilahi plan"
+        },
+        {
+          "id": "10_5_fc_2",
+          "type": "flashcard",
+          "term": "Kaza",
+          "definition": "Allah'ın takdirinin zamanı gelince gerçekleşmesi; kaderin hayata geçmesi.",
+          "hint": "Takdirin gerçekleşmesi"
+        },
+        {
+          "id": "10_5_fc_3",
+          "type": "flashcard",
+          "term": "Cüzi İrade",
+          "definition": "İnsanın sınırlı seçim özgürlüğü; kişiyi ahlaki sorumluluğa muhatap kılar.",
+          "hint": "İnsanın sınırlı özgürlüğü"
+        },
+        {
+          "id": "10_5_fc_4",
+          "type": "flashcard",
+          "term": "Külli İrade",
+          "definition": "Allah'ın sınırsız iradesi; evrendeki her şey O'nun iradesiyle olur.",
+          "hint": "Allah'ın sınırsız iradesi"
+        },
+        {
+          "id": "10_5_fc_5",
+          "type": "flashcard",
+          "term": "Tevekkül",
+          "definition": "Gerekli çabayı gösterdikten sonra sonucu Allah'a bırakmak.",
+          "hint": "Çalış, Allah'a güven"
+        },
+
+        {
+          "id": "10_5_mt_1",
+          "type": "matching",
+          "instruction": "Kavramları doğru tanımlarıyla eşleştir.",
+          "pairs": [
+            {"term": "Kader",      "definition": "Allah'ın ezeli ilmi ve takdiri"},
+            {"term": "Kaza",       "definition": "Takdirin gerçekleşmesi"},
+            {"term": "Cüzi irade", "definition": "İnsanın sınırlı seçim özgürlüğü"},
+            {"term": "Tevekkül",   "definition": "Çalışıp sonucu Allah'a bırakmak"}
+          ]
+        },
+        {
+          "id": "10_5_mt_2",
+          "type": "matching",
+          "instruction": "Kader ile ilgili doğru/yanlış yorumları eşleştir.",
+          "pairs": [
+            {"term": "Doğru yorum",   "definition": "Kadere inanmak sabır ve güç verir"},
+            {"term": "Yanlış yorum",  "definition": "Kader sorumluluğu ortadan kaldırır"},
+            {"term": "Tevekkül",      "definition": "Çabadan vazgeçmek değil, sonucu Allah'a bırakmak"},
+            {"term": "Cüzi irade",    "definition": "İnsan sorumluluğunun temelidir"}
+          ]
+        },
+
+        {
+          "id": "10_5_fb_1",
+          "type": "fill_blank",
+          "sentence": "Allah'ın ezelde her şeyi bilip takdir etmesine _____ denir.",
+          "answer": "kader",
+          "hint": "K harfi ile başlar",
+          "explanation": "Kader, iman esaslarından biri olan Allah'ın sonsuz ilim ve iradesini ifade eder."
+        },
+        {
+          "id": "10_5_fb_2",
+          "type": "fill_blank",
+          "sentence": "İnsanın sınırlı seçim özgürlüğüne _____ irade denir.",
+          "answer": "cüzi",
+          "hint": "C harfi ile başlar",
+          "explanation": "Cüzi irade, insanın tercihlerinden sorumlu tutulmasını sağlar."
+        },
+        {
+          "id": "10_5_fb_3",
+          "type": "fill_blank",
+          "sentence": "Gerekli gayreti gösterdikten sonra sonucu Allah'a bırakmaya _____ denir.",
+          "answer": "tevekkül",
+          "hint": "T harfi ile başlar",
+          "explanation": "Tevekkül, tembellerin bahane değil; çalışanların huzurudur."
+        },
+        {
+          "id": "10_5_fb_4",
+          "type": "fill_blank",
+          "sentence": "Kaderin zaman içinde gerçekleşmesine _____ denir.",
+          "answer": "kaza",
+          "hint": "K harfi ile başlar",
+          "explanation": "Kaza ve kader birbirini tamamlayan kavramlardır."
+        }
+
+      ]
+    },
+
+    {
+      "unit_id": 6,
+      "grade": 10,
+      "name": "Hz. Muhammed ve Aile Hayatı",
+      "description": "Hz. Peygamber'in aile hayatı, ahlakı, merhameti ve örnek kişiliği",
+      "questions": [
+
+        {
+          "id": "10_6_mc_1",
+          "type": "multiple_choice",
+          "question": "Hz. Muhammed'in ilk eşi kimdir?",
+          "options": [
+            "Hz. Aişe",
+            "Hz. Hatice",
+            "Hz. Hafsa",
+            "Hz. Zeynep"
+          ],
+          "correct_index": 1,
+          "explanation": "Hz. Hatice, Hz. Muhammed'in ilk ve uzun yıllar tek eşidir; peygamberliğinin ilk yıllarında en büyük destekçisi olmuştur."
+        },
+        {
+          "id": "10_6_mc_2",
+          "type": "multiple_choice",
+          "question": "Hz. Muhammed'in kaç çocuğu olmuştur?",
+          "options": [
+            "2",
+            "4",
+            "6",
+            "7"
+          ],
+          "correct_index": 2,
+          "explanation": "Hz. Muhammed'in Hz. Hatice'den 6 çocuğu olmuştur: Kasım, Zeynep, Rukıyye, Ümmü Gülsüm, Fatıma ve Abdullah. Hz. Mariye'den ise İbrahim dünyaya gelmiştir."
+        },
+        {
+          "id": "10_6_mc_3",
+          "type": "multiple_choice",
+          "question": "Hz. Muhammed peygamberliğini ilan etmeden önce toplumda hangi lakapla tanınıyordu?",
+          "options": [
+            "El-Emin (Güvenilir)",
+            "El-Fakih (Bilge)",
+            "El-Kerim (Cömert)",
+            "El-Adil (Adaletli)"
+          ],
+          "correct_index": 0,
+          "explanation": "Hz. Muhammed, peygamberlik öncesinde de dürüstlüğü ve güvenilirliği ile tanınmış; 'El-Emin' (Güvenilir) lakabını almıştır."
+        },
+        {
+          "id": "10_6_mc_4",
+          "type": "multiple_choice",
+          "question": "Veda Hutbesi'nde Hz. Muhammed aşağıdakilerden hangisini vurgulamıştır?",
+          "options": [
+            "Cihadın önemini",
+            "İnsan eşitliği ve haklarını",
+            "Kur'an'ın ezberlenmesini",
+            "Mescit yapımını"
+          ],
+          "correct_index": 1,
+          "explanation": "Veda Hutbesi'nde ırk, renk ve dil farkı gözetmeksizin tüm insanların eşit olduğu, can, mal ve namus dokunulmazlığı gibi temel insan hakları ilan edilmiştir."
+        },
+        {
+          "id": "10_6_mc_5",
+          "type": "multiple_choice",
+          "question": "Hz. Muhammed'in hayatta kalan tek çocuğu kimdir?",
+          "options": [
+            "Zeynep",
+            "Rukıyye",
+            "Fatıma",
+            "Ümmü Gülsüm"
+          ],
+          "correct_index": 2,
+          "explanation": "Hz. Fatıma, Hz. Muhammed'in vefatından sonra da hayatta kalan tek çocuğudur."
+        },
+
+        {
+          "id": "10_6_fc_1",
+          "type": "flashcard",
+          "term": "El-Emin",
+          "definition": "Hz. Muhammed'e verilen 'güvenilir' anlamındaki lakap; peygamberlikten önce kazanılmıştır.",
+          "hint": "Güvenilir anlamında lakap"
+        },
+        {
+          "id": "10_6_fc_2",
+          "type": "flashcard",
+          "term": "Veda Hutbesi",
+          "definition": "Hz. Muhammed'in 632 yılında Arafat'ta verdiği ve insan haklarını, eşitliği ilan ettiği son hutbesi.",
+          "hint": "Son hutbe, 632"
+        },
+        {
+          "id": "10_6_fc_3",
+          "type": "flashcard",
+          "term": "Hz. Hatice",
+          "definition": "Hz. Muhammed'in ilk eşi; peygamberliğin ilk yıllarında en büyük destekçisi ve ilk Müslüman.",
+          "hint": "İlk eş, ilk Müslüman"
+        },
+        {
+          "id": "10_6_fc_4",
+          "type": "flashcard",
+          "term": "Sünnet",
+          "definition": "Hz. Muhammed'in söz, eylem ve onaylarının bütünü; İslam'ın ikinci temel kaynağı.",
+          "hint": "Hadis ile yakın ilişkili"
+        },
+        {
+          "id": "10_6_fc_5",
+          "type": "flashcard",
+          "term": "Hz. Fatıma",
+          "definition": "Hz. Muhammed'in sevgili kızı; Hz. Ali ile evlidir, Hz. Hasan ve Hüseyin'in annesidir.",
+          "hint": "Peygamber'in kızı"
+        },
+
+        {
+          "id": "10_6_mt_1",
+          "type": "matching",
+          "instruction": "Hz. Muhammed ile ilgili bilgileri eşleştir.",
+          "pairs": [
+            {"term": "El-Emin",       "definition": "Güvenilir lakabı"},
+            {"term": "Hz. Hatice",    "definition": "İlk eş ve ilk Müslüman"},
+            {"term": "Hz. Fatıma",    "definition": "Hayatta kalan tek çocuğu"},
+            {"term": "Veda Hutbesi",  "definition": "İnsan haklarını ilan ettiği son hutbe"}
+          ]
+        },
+        {
+          "id": "10_6_mt_2",
+          "type": "matching",
+          "instruction": "Hz. Muhammed'in aile fertlerini tanımlarıyla eşleştir.",
+          "pairs": [
+            {"term": "Hz. Hatice",    "definition": "İlk eş"},
+            {"term": "Hz. Aişe",      "definition": "Hadis aktaran eş"},
+            {"term": "Hz. Fatıma",    "definition": "Kızı"},
+            {"term": "Hz. Ali",       "definition": "Damadı ve amcasının oğlu"}
+          ]
+        },
+
+        {
+          "id": "10_6_fb_1",
+          "type": "fill_blank",
+          "sentence": "Hz. Muhammed'in ilk eşi _____'dir.",
+          "answer": "Hz. Hatice",
+          "hint": "H harfi ile başlar",
+          "explanation": "Hz. Hatice, peygamberliğin ilan edildiği ilk günlerde Hz. Muhammed'e inanan ilk kişidir."
+        },
+        {
+          "id": "10_6_fb_2",
+          "type": "fill_blank",
+          "sentence": "Hz. Muhammed peygamberlik öncesinde _____ lakabıyla tanınıyordu.",
+          "answer": "El-Emin",
+          "hint": "Güvenilir anlamında",
+          "explanation": "El-Emin lakabı, Hz. Muhammed'in dürüstlük ve güvenilirliğini yansıtır."
+        },
+        {
+          "id": "10_6_fb_3",
+          "type": "fill_blank",
+          "sentence": "Hz. Muhammed'in 632 yılında Arafat'ta verdiği son hutbeye _____ denir.",
+          "answer": "Veda Hutbesi",
+          "hint": "V harfi ile başlar",
+          "explanation": "Veda Hutbesi, evrensel insan haklarını ilan eden tarihi bir konuşmadır."
+        },
+        {
+          "id": "10_6_fb_4",
+          "type": "fill_blank",
+          "sentence": "Hz. Muhammed'in söz, eylem ve onaylarının bütününe _____ denir.",
+          "answer": "sünnet",
+          "hint": "S harfi ile başlar",
+          "explanation": "Sünnet, Kur'an'dan sonra İslam'ın en temel kaynağıdır."
+        }
+
+      ]
+    },
+
+    {
+      "unit_id": 7,
+      "grade": 10,
+      "name": "İslam'da Ahlak Anlayışı",
+      "description": "İslami ahlak ilkeleri, erdemler, güzel ahlak ve kötü huylardan kaçınma",
+      "questions": [
+
+        {
+          "id": "10_7_mc_1",
+          "type": "multiple_choice",
+          "question": "İslam ahlakının temel kaynakları aşağıdakilerden hangisidir?",
+          "options": [
+            "Felsefe ve akıl",
+            "Kur'an ve Sünnet",
+            "Örf ve adet",
+            "Kanun ve yönetmelikler"
+          ],
+          "correct_index": 1,
+          "explanation": "İslam ahlakının temel kaynakları Kur'an-ı Kerim ve Hz. Muhammed'in sünnetidir."
+        },
+        {
+          "id": "10_7_mc_2",
+          "type": "multiple_choice",
+          "question": "Güzel ahlakı özetleyen Kur'an ifadesi hangisidir?",
+          "options": [
+            "Salat",
+            "Hüsnü hulk",
+            "Zekat",
+            "Cihad"
+          ],
+          "correct_index": 1,
+          "explanation": "Hüsnü hulk, 'güzel huy' demektir ve Hz. Muhammed'in 'Ben ancak güzel ahlakı tamamlamak için gönderildim' hadisiyle bağlantılıdır."
+        },
+        {
+          "id": "10_7_mc_3",
+          "type": "multiple_choice",
+          "question": "Kibir ne demektir?",
+          "options": [
+            "Alçakgönüllü olmak",
+            "Kendini üstün görmek, büyüklenmek",
+            "Başkalarına yardım etmek",
+            "Doğruyu söylemek"
+          ],
+          "correct_index": 1,
+          "explanation": "Kibir, kendini başkalarından üstün görme ve büyüklenme halidir; İslam'da kötü huy olarak sayılır."
+        },
+        {
+          "id": "10_7_mc_4",
+          "type": "multiple_choice",
+          "question": "Aşağıdakilerden hangisi İslam ahlakında 'erdem' sayılır?",
+          "options": [
+            "Hased (kıskançlık)",
+            "Kibir (büyüklenme)",
+            "Hilm (yumuşak huyluluk)",
+            "Riya (gösteriş)"
+          ],
+          "correct_index": 2,
+          "explanation": "Hilm; sabırlı, yumuşak huylu ve hoşgörülü olmak demektir. Hz. Muhammed'in öne çıkan ahlaki özelliklerinden biridir."
+        },
+        {
+          "id": "10_7_mc_5",
+          "type": "multiple_choice",
+          "question": "Riya ne anlama gelir?",
+          "options": [
+            "Samimi ibadet etmek",
+            "Gösteriş için ibadet yapmak",
+            "Allah'ı zikretmek",
+            "Yoksullara yardım etmek"
+          ],
+          "correct_index": 1,
+          "explanation": "Riya; ibadet ve iyilikleri Allah rızası için değil, insanlara göstermek amacıyla yapmaktır. İslam'da büyük bir ahlaki hata sayılır."
+        },
+
+        {
+          "id": "10_7_fc_1",
+          "type": "flashcard",
+          "term": "Hüsnü Hulk",
+          "definition": "Güzel ahlak; dürüstlük, sabır, alçakgönüllülük gibi erdemlerin bütünü.",
+          "hint": "Güzel huy"
+        },
+        {
+          "id": "10_7_fc_2",
+          "type": "flashcard",
+          "term": "Kibir",
+          "definition": "Kendini başkalarından üstün görme, büyüklenme; İslam'da kötü huy.",
+          "hint": "Büyüklenmek"
+        },
+        {
+          "id": "10_7_fc_3",
+          "type": "flashcard",
+          "term": "Riya",
+          "definition": "İbadeti ya da iyiliği Allah rızası yerine insanlara gösteriş amacıyla yapmak.",
+          "hint": "Gösteriş ibadeti"
+        },
+        {
+          "id": "10_7_fc_4",
+          "type": "flashcard",
+          "term": "Hilm",
+          "definition": "Yumuşak huyluluk, sabır ve hoşgörü; İslam'da temel erdemlerden biri.",
+          "hint": "Yumuşak huyluluk"
+        },
+        {
+          "id": "10_7_fc_5",
+          "type": "flashcard",
+          "term": "Hased",
+          "definition": "Başkasının nimetinin yok olmasını isteyerek duyulan kıskançlık; İslam'da kötü huy.",
+          "hint": "Kıskançlık"
+        },
+
+        {
+          "id": "10_7_mt_1",
+          "type": "matching",
+          "instruction": "İslam ahlak kavramlarını tanımlarıyla eşleştir.",
+          "pairs": [
+            {"term": "Hüsnü hulk", "definition": "Güzel ahlak"},
+            {"term": "Kibir",     "definition": "Büyüklenme, kendini üstün görme"},
+            {"term": "Riya",      "definition": "Gösteriş için ibadet"},
+            {"term": "Hilm",      "definition": "Yumuşak huyluluk"},
+            {"term": "Hased",     "definition": "Kıskançlık"}
+          ]
+        },
+        {
+          "id": "10_7_mt_2",
+          "type": "matching",
+          "instruction": "Erdem mi, kötü huy mu? Eşleştir.",
+          "pairs": [
+            {"term": "Sabır",         "definition": "Erdem"},
+            {"term": "Alçakgönüllülük","definition": "Erdem"},
+            {"term": "Kibir",         "definition": "Kötü huy"},
+            {"term": "Riya",          "definition": "Kötü huy"},
+            {"term": "Hased",         "definition": "Kötü huy"}
+          ]
+        },
+
+        {
+          "id": "10_7_fb_1",
+          "type": "fill_blank",
+          "sentence": "Güzel ahlakı ifade eden Arapça kavram _____ olarak adlandırılır.",
+          "answer": "hüsnü hulk",
+          "hint": "H harfi ile başlar",
+          "explanation": "Hüsnü hulk, Hz. Muhammed'in peygamberlik amacının özüdür."
+        },
+        {
+          "id": "10_7_fb_2",
+          "type": "fill_blank",
+          "sentence": "Kendini başkalarından üstün görme huyuna _____ denir.",
+          "answer": "kibir",
+          "hint": "K harfi ile başlar",
+          "explanation": "Kibir, İslam'da Allah'a yakışmayan ve insanın düşmesi gereken bir huy olarak tanımlanır."
+        },
+        {
+          "id": "10_7_fb_3",
+          "type": "fill_blank",
+          "sentence": "İbadeti gösteriş amacıyla yapmaya _____ denir.",
+          "answer": "riya",
+          "hint": "R harfi ile başlar",
+          "explanation": "Riya, ibadetin samimiyetini yok eden ve sevabını ortadan kaldıran bir huydur."
+        },
+        {
+          "id": "10_7_fb_4",
+          "type": "fill_blank",
+          "sentence": "Başkasının nimetinin yok olmasını isteyerek duyulan kıskançlığa _____ denir.",
+          "answer": "hased",
+          "hint": "H harfi ile başlar",
+          "explanation": "Hased, kişinin kendi mutluluğunu değil, başkasının mutsuzluğunu istediği için özellikle zararlı görülür."
+        }
+
+      ]
+    },
+
+    {
+      "unit_id": 8,
+      "grade": 10,
+      "name": "Din ve Laiklik",
+      "description": "Laiklik kavramı, din-devlet ilişkisi ve Türkiye'de din özgürlüğü",
+      "questions": [
+
+        {
+          "id": "10_8_mc_1",
+          "type": "multiple_choice",
+          "question": "Laiklik ne anlama gelir?",
+          "options": [
+            "Dine karşı olmak",
+            "Din ve devlet işlerinin birbirinden ayrılması",
+            "Sadece bir dini benimsemek",
+            "İbadeti yasaklamak"
+          ],
+          "correct_index": 1,
+          "explanation": "Laiklik, devlet yönetiminin dini kurallara değil laik (dünyevi) kurallara dayandırılması; din ve devlet işlerinin birbirinden ayrılmasıdır."
+        },
+        {
+          "id": "10_8_mc_2",
+          "type": "multiple_choice",
+          "question": "Türkiye'de din hizmetlerini yürüten resmi kurum hangisidir?",
+          "options": [
+            "Milli Eğitim Bakanlığı",
+            "Diyanet İşleri Başkanlığı",
+            "Sağlık Bakanlığı",
+            "Kültür Bakanlığı"
+          ],
+          "correct_index": 1,
+          "explanation": "Diyanet İşleri Başkanlığı, ibadet hizmetlerini, dini eğitimi ve Kur'an kurslarını yönetir."
+        },
+        {
+          "id": "10_8_mc_3",
+          "type": "multiple_choice",
+          "question": "Türkiye Cumhuriyeti Anayasası'na göre din özgürlüğü aşağıdakilerden hangisini kapsar?",
+          "options": [
+            "Yalnızca İslam dinini seçme hakkı",
+            "İnanma, inanmama ve ibadeti serbestçe yapma hakkı",
+            "Dini kurallarla devlet yönetimi",
+            "Yabancı din adamlarını ülkeye getirme"
+          ],
+          "correct_index": 1,
+          "explanation": "Anayasa; inanma, inanmama, dini seçme ve serbestçe ibadet etme gibi hakları din özgürlüğü kapsamında güvence altına alır."
+        },
+        {
+          "id": "10_8_mc_4",
+          "type": "multiple_choice",
+          "question": "Aşağıdakilerden hangisi laikliğin temel ilkelerinden biri değildir?",
+          "options": [
+            "Devletin belli bir dini benimsememesi",
+            "Tüm dinlere eşit mesafede durulması",
+            "Dinin devlet tarafından belirlenmesi",
+            "Din özgürlüğünün güvence altında olması"
+          ],
+          "correct_index": 2,
+          "explanation": "Laik bir devlet dini belirlemez; aksine bireylerin kendi dinlerini seçmelerine serbestçe izin verir."
+        },
+        {
+          "id": "10_8_mc_5",
+          "type": "multiple_choice",
+          "question": "Din eğitimi Türk milli eğitim sisteminde aşağıdaki hangi ders kapsamında verilmektedir?",
+          "options": [
+            "Sosyal Bilgiler",
+            "Tarih",
+            "Din Kültürü ve Ahlak Bilgisi",
+            "Felsefe"
+          ],
+          "correct_index": 2,
+          "explanation": "Din Kültürü ve Ahlak Bilgisi dersi, Türk milli eğitim müfredatında zorunlu ders olarak yer almaktadır."
+        },
+
+        {
+          "id": "10_8_fc_1",
+          "type": "flashcard",
+          "term": "Laiklik",
+          "definition": "Din ve devlet işlerinin birbirinden ayrılması; devletin herhangi bir dini benimsememesi ilkesi.",
+          "hint": "Din-devlet ayrılığı"
+        },
+        {
+          "id": "10_8_fc_2",
+          "type": "flashcard",
+          "term": "Din Özgürlüğü",
+          "definition": "Bireyin inanma, inanmama ve serbestçe ibadet etme hakkı; Türkiye Anayasası'nda güvence altındadır.",
+          "hint": "Temel hak"
+        },
+        {
+          "id": "10_8_fc_3",
+          "type": "flashcard",
+          "term": "Diyanet İşleri Başkanlığı",
+          "definition": "Türkiye'de ibadet hizmetleri, dini rehberlik ve Kur'an kurslarını yürüten resmi devlet kurumu.",
+          "hint": "Türkiye'de resmi din kurumu"
+        },
+        {
+          "id": "10_8_fc_4",
+          "type": "flashcard",
+          "term": "Vicdan Özgürlüğü",
+          "definition": "Bireyin düşüncelerini, inançlarını ve değer yargılarını özgürce benimseme hakkı.",
+          "hint": "İç dünya özgürlüğü"
+        },
+        {
+          "id": "10_8_fc_5",
+          "type": "flashcard",
+          "term": "Çoğulculuk",
+          "definition": "Farklı din, inanç ve görüşlerin bir arada özgürce var olabilmesi ilkesi.",
+          "hint": "Farklılıkların bir arada olması"
+        },
+
+        {
+          "id": "10_8_mt_1",
+          "type": "matching",
+          "instruction": "Kavramları tanımlarıyla eşleştir.",
+          "pairs": [
+            {"term": "Laiklik",             "definition": "Din-devlet işlerinin ayrılması"},
+            {"term": "Din özgürlüğü",       "definition": "İnanma ve ibadet hakkı"},
+            {"term": "Diyanet İşleri Başk.","definition": "Din hizmetleri resmi kurumu"},
+            {"term": "Vicdan özgürlüğü",    "definition": "İç dünya özgürlüğü"}
+          ]
+        },
+        {
+          "id": "10_8_mt_2",
+          "type": "matching",
+          "instruction": "Doğru ifadeyi bul ve eşleştir.",
+          "pairs": [
+            {"term": "Laik devlet",   "definition": "Belirli bir dini benimsemez"},
+            {"term": "Din özgürlüğü", "definition": "Anayasa güvencesindedir"},
+            {"term": "Diyanet",       "definition": "Türkiye'deki resmi din kurumu"},
+            {"term": "Çoğulculuk",    "definition": "Farklı inançların bir arada yaşaması"}
+          ]
+        },
+
+        {
+          "id": "10_8_fb_1",
+          "type": "fill_blank",
+          "sentence": "Din ve devlet işlerinin birbirinden ayrılması ilkesine _____ denir.",
+          "answer": "laiklik",
+          "hint": "L harfi ile başlar",
+          "explanation": "Laiklik, Türkiye Cumhuriyeti'nin temel anayasal ilkelerinden biridir."
+        },
+        {
+          "id": "10_8_fb_2",
+          "type": "fill_blank",
+          "sentence": "Türkiye'de din hizmetlerini yürüten resmi kurum _____ Başkanlığı'dır.",
+          "answer": "Diyanet İşleri",
+          "hint": "D harfi ile başlar",
+          "explanation": "Diyanet İşleri Başkanlığı, ibadet mekânlarının yönetimini ve din eğitimini üstlenir."
+        },
+        {
+          "id": "10_8_fb_3",
+          "type": "fill_blank",
+          "sentence": "Bireyin inanma ve serbestçe ibadet etme hakkına _____ denir.",
+          "answer": "din özgürlüğü",
+          "hint": "D harfi ile başlar",
+          "explanation": "Din özgürlüğü, hem Türkiye Anayasası'nda hem de uluslararası insan hakları belgelerinde güvence altındadır."
+        },
+        {
+          "id": "10_8_fb_4",
+          "type": "fill_blank",
+          "sentence": "Farklı din ve inançların bir arada özgürce var olabilmesi ilkesine _____ denir.",
+          "answer": "çoğulculuk",
+          "hint": "Ç harfi ile başlar",
+          "explanation": "Çoğulculuk, demokratik ve laik toplumların temel değerlerinden biridir."
+        }
+
+      ]
+    }
+
+  ]
+}

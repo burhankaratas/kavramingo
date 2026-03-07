@@ -1,0 +1,150 @@
+{
+  "9": [
+    {
+      "id": "9_1",
+      "topic": "Kur'an ve Temel Kavramlar",
+      "question": "Kur'an-ı Kerim'de sure sayısı kaçtır?",
+      "choices": ["100", "114", "120", "99"],
+      "correct": "114"
+    },
+    {
+      "id": "9_2",
+      "topic": "İman Esasları",
+      "question": "İslam'ın iman esaslarından biri olan 'ahirete iman' hangi kavramla ifade edilir?",
+      "choices": ["Kader", "Haşr", "Nübüvvet", "Tevhid"],
+      "correct": "Haşr"
+    },
+    {
+      "id": "9_3",
+      "topic": "Hz. Peygamber",
+      "question": "Hz. Muhammed'in (s.a.v.) Mekke'den Medine'ye göç etmesine ne ad verilir?",
+      "choices": ["Fetih", "Hicret", "Miraç", "Biat"],
+      "correct": "Hicret"
+    },
+    {
+      "id": "9_4",
+      "topic": "İbadetler",
+      "question": "İslam'ın beş şartından biri olan 'oruç' Arapçada hangi kelimeyle karşılık bulur?",
+      "choices": ["Salat", "Zekat", "Savm", "Hac"],
+      "correct": "Savm"
+    },
+    {
+      "id": "9_5",
+      "topic": "Ahlak Kavramları",
+      "question": "Allah'a karşı duyulan saygı ve korku karışımı duyguyu ifade eden kavram hangisidir?",
+      "choices": ["Tevbe", "Takva", "Sabır", "Tevekkül"],
+      "correct": "Takva"
+    }
+  ],
+  "10": [
+    {
+      "id": "10_1",
+      "topic": "Kader ve Kaza",
+      "question": "Allah'ın her şeyi önceden bilip takdir etmesini ifade eden kavram hangisidir?",
+      "choices": ["Kaza", "Kader", "Tevhid", "Sıfat"],
+      "correct": "Kader"
+    },
+    {
+      "id": "10_2",
+      "topic": "Siyer",
+      "question": "Mekke'nin Müslümanlar tarafından fethine 'Mekke'nin Fethi' denir. Bu olay hangi yılda gerçekleşmiştir (Miladi)?",
+      "choices": ["620", "630", "625", "615"],
+      "correct": "630"
+    },
+    {
+      "id": "10_3",
+      "topic": "İslam Ahlakı",
+      "question": "Kişinin nefsiyle mücadele ederek kötü alışkanlıklardan uzak durmasına ne denir?",
+      "choices": ["Cihad-ı Ekber", "Sabır", "Şükür", "Zühd"],
+      "correct": "Cihad-ı Ekber"
+    },
+    {
+      "id": "10_4",
+      "topic": "Kur'an İlimleri",
+      "question": "Kur'an'ın doğru okunuş kurallarını inceleyen ilim dalının adı nedir?",
+      "choices": ["Fıkıh", "Kelam", "Tecvid", "Tefsir"],
+      "correct": "Tecvid"
+    },
+    {
+      "id": "10_5",
+      "topic": "Vahiy",
+      "question": "Hz. Peygamber'e vahyin inmeye başladığı mağaranın adı nedir?",
+      "choices": ["Hira", "Sevr", "Uhud", "Nur"],
+      "correct": "Hira"
+    }
+  ],
+  "11": [
+    {
+      "id": "11_1",
+      "topic": "Kelam",
+      "question": "Allah'ın birliğini ve ortağının bulunmadığını kabul eden inanç ilkesine ne ad verilir?",
+      "choices": ["Nübüvvet", "Tevhid", "Adalet", "Mead"],
+      "correct": "Tevhid"
+    },
+    {
+      "id": "11_2",
+      "topic": "Fıkıh",
+      "question": "İslam hukukunda 'yapılması kesin olarak emredilen' amellerin hükmü nedir?",
+      "choices": ["Mubah", "Mendub", "Farz", "Haram"],
+      "correct": "Farz"
+    },
+    {
+      "id": "11_3",
+      "topic": "Tasavvuf",
+      "question": "İnsanın Allah'a yakınlaşmak amacıyla nefis terbiyesini esas alan İslami disiplin nedir?",
+      "choices": ["Kelam", "Hadis", "Tasavvuf", "Siyer"],
+      "correct": "Tasavvuf"
+    },
+    {
+      "id": "11_4",
+      "topic": "İslam Tarihi",
+      "question": "İlk dört halife dönemine ne ad verilir?",
+      "choices": ["Emeviler Dönemi", "Asr-ı Saadet", "Hulefa-i Raşidin Dönemi", "Abbasiler Dönemi"],
+      "correct": "Hulefa-i Raşidin Dönemi"
+    },
+    {
+      "id": "11_5",
+      "topic": "Ahlak Felsefesi",
+      "question": "İslam ahlakında 'Allah'a tam olarak güvenip dayanmak' anlamına gelen kavram hangisidir?",
+      "choices": ["Sabır", "Tevekkül", "Kanaat", "İhlas"],
+      "correct": "Tevekkül"
+    }
+  ],
+  "12": [
+    {
+      "id": "12_1",
+      "topic": "Günümüz Dünyasında Din",
+      "question": "Din ile bilimin çatışmadığını, birbirini tamamladığını savunan görüşe ne denir?",
+      "choices": ["Materyalizm", "Deizm", "Uzlaşmacılık (Konkordizm)", "Ateizm"],
+      "correct": "Uzlaşmacılık (Konkordizm)"
+    },
+    {
+      "id": "12_2",
+      "topic": "Dinlerarası Diyalog",
+      "question": "İslam'ın kutsal kitap indirilen peygamberlere sahip dinlere verdiği isim nedir?",
+      "choices": ["Kâfirler", "Münafıklar", "Ehl-i Kitap", "Müşrikler"],
+      "correct": "Ehl-i Kitap"
+    },
+    {
+      "id": "12_3",
+      "topic": "İslam Düşüncesi",
+      "question": "İslam felsefesinde 'varlık' ve 'var olma' meselesini inceleyen alt dal hangisidir?",
+      "choices": ["Ahlak", "Ontoloji (Varlık Felsefesi)", "Epistemoloji", "Estetik"],
+      "correct": "Ontoloji (Varlık Felsefesi)"
+    },
+    {
+      "id": "12_4",
+      "topic": "Çağdaş Meseleler",
+      "question": "Bireyin, dini kurumlardan veya dini topluluktan bağımsız kendi inanç sistemini oluşturmasına ne ad verilir?",
+      "choices": ["Laiklik", "Bireysel Dindarlık", "Sekülerizm", "Agnostisizm"],
+      "correct": "Bireysel Dindarlık"
+    },
+    {
+      "id": "12_5",
+      "topic": "Ahlak ve Değerler",
+      "question": "İslam ahlakında 'yalnızca Allah rızası için iyi iş yapmak, gösteriş yapmamak' kavramı hangisidir?",
+      "choices": ["Takva", "İhlas", "Verâ", "Sabır"],
+      "correct": "İhlas"
+    }
+  ]
+}

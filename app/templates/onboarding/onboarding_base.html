@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}KavramLingo{% endblock %}</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <style>
+    /* ── Renk paleti ─────────────────────────────────────────────────────────── */
+    :root {
+      --kl-primary:      #4361EE;
+      --kl-primary-dark: #3A0CA3;
+      --kl-accent:       #7209B7;
+      --kl-success:      #06D6A0;
+      --kl-warning:      #FFB703;
+      --kl-danger:       #EF233C;
+      --kl-bg:           #F0F2FF;
+      --kl-text:         #1B1F3B;
+      --kl-muted:        #6B7280;
+      --kl-border:       #E2E8F0;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      font-family: 'Nunito', sans-serif;
+      background: var(--kl-bg);
+      color: var(--kl-text);
+    }
+
+    /* ── Sayfa iskelet: header + main ──────────────────────────────────────── */
+    .ob-layout {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ────────────────────────────────────────────────────────────── */
+    .ob-header {
+      background: #fff;
+      border-bottom: 2px solid var(--kl-border);
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .ob-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      text-decoration: none;
+      font-weight: 900;
+      font-size: 1.3rem;
+      color: var(--kl-primary);
+      letter-spacing: -0.3px;
+    }
+
+    .ob-logo .logo-icon {
+      background: linear-gradient(135deg, var(--kl-primary) 0%, var(--kl-accent) 100%);
+      color: #fff;
+      border-radius: 10px;
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    /* Header merkez: ilerleme çubuğu (sadece test sayfasında kullanılır) */
+    .ob-header-progress {
+      flex: 1;
+      max-width: 400px;
+      margin: 0 2rem;
+    }
+
+    .ob-header-progress-track {
+      height: 8px;
+      background: var(--kl-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .ob-header-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--kl-primary) 0%, var(--kl-accent) 100%);
+      border-radius: 8px;
+      transition: width 0.45s ease;
+    }
+
+    .ob-header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--kl-muted);
+      min-width: 90px;
+      justify-content: flex-end;
+    }
+
+    .ob-header-right .step-badge {
+      background: var(--kl-bg);
+      border: 2px solid var(--kl-border);
+      border-radius: 50px;
+      padding: 4px 14px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--kl-primary);
+    }
+
+    /* ── Ana içerik ─────────────────────────────────────────────────────────── */
+    .ob-main {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 3rem 1.25rem 4rem;
+    }
+
+    .ob-content {
+      width: 100%;
+      max-width: 560px;
+    }
+
+    /* ── Stepper ────────────────────────────────────────────────────────────── */
+    .ob-stepper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .ob-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .ob-step-circle {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.05rem;
+      border: 3px solid var(--kl-border);
+      background: #fff;
+      color: var(--kl-muted);
+      transition: all 0.3s;
+    }
+
+    .ob-step.active .ob-step-circle {
+      border-color: var(--kl-primary);
+      background: var(--kl-primary);
+      color: #fff;
+      box-shadow: 0 0 0 5px rgba(67,97,238,0.15);
+    }
+
+    .ob-step.done .ob-step-circle {
+      border-color: var(--kl-success);
+      background: var(--kl-success);
+      color: #fff;
+    }
+
+    .ob-step-label {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--kl-muted);
+      white-space: nowrap;
+      letter-spacing: 0.1px;
+    }
+
+    .ob-step.active .ob-step-label { color: var(--kl-primary); }
+    .ob-step.done  .ob-step-label  { color: var(--kl-success); }
+
+    .ob-step-line {
+      flex: 1;
+      min-width: 52px;
+      height: 3px;
+      background: var(--kl-border);
+      margin: 0 6px;
+      margin-bottom: 24px;
+      border-radius: 3px;
+      transition: background 0.3s;
+    }
+
+    .ob-step-line.done { background: var(--kl-success); }
+
+    /* ── Sayfa başlık bloğu ─────────────────────────────────────────────────── */
+    .ob-page-title {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .ob-page-title h1 {
+      font-size: 1.85rem;
+      font-weight: 900;
+      color: var(--kl-text);
+      letter-spacing: -0.4px;
+      margin-bottom: 0.4rem;
+    }
+
+    .ob-page-title p {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--kl-muted);
+      line-height: 1.55;
+    }
+
+    /* ── Flash mesajları ────────────────────────────────────────────────────── */
+    .ob-alerts {
+      margin-bottom: 1.25rem;
+    }
+
+    .ob-alerts .alert {
+      border: none;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 12px 16px;
+    }
+
+    /* ── Duolingo stili buton ────────────────────────────────────────────────── */
+    .btn-kl {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 16px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
+      text-align: center;
+      text-decoration: none;
+      letter-spacing: 0.1px;
+    }
+
+    .btn-kl-primary {
+      background: var(--kl-primary);
+      color: #fff;
+      box-shadow: 0 5px 0 var(--kl-primary-dark);
+    }
+
+    .btn-kl-primary:hover {
+      background: #4f6ef7;
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 7px 0 var(--kl-primary-dark);
+    }
+
+    .btn-kl-primary:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 var(--kl-primary-dark);
+    }
+
+    .btn-kl-outline {
+      background: #fff;
+      color: var(--kl-primary);
+      border: 2.5px solid var(--kl-primary);
+      box-shadow: 0 5px 0 rgba(67,97,238,0.2);
+    }
+
+    .btn-kl-outline:hover {
+      background: #F0F2FF;
+      color: var(--kl-primary);
+      transform: translateY(-2px);
+      box-shadow: 0 7px 0 rgba(67,97,238,0.2);
+    }
+
+    .btn-kl-outline:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 rgba(67,97,238,0.15);
+    }
+
+    .btn-kl:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    /* ── Kart ───────────────────────────────────────────────────────────────── */
+    .ob-card {
+      background: #fff;
+      border-radius: 22px;
+      border: 2.5px solid var(--kl-border);
+      padding: 2rem 2.25rem;
+      box-shadow: 0 4px 28px rgba(67,97,238,0.07);
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── Mobil ──────────────────────────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .ob-header { padding: 0 1rem; }
+      .ob-header-progress { margin: 0 1rem; }
+      .ob-main { padding: 2rem 1rem 3rem; }
+      .ob-page-title h1 { font-size: 1.55rem; }
+      .ob-card { padding: 1.5rem 1.25rem; }
+    }
+  </style>
+
+  {% block head %}{% endblock %}
+</head>
+<body>
+
+<div class="ob-layout">
+
+  <!-- ── Header ───────────────────────────────────────────────────────────── -->
+  <header class="ob-header">
+
+    <a href="{{ url_for('dashboard.index') }}" class="ob-logo">
+      <span class="logo-icon"><i class="bi bi-book-half"></i></span>
+      KavramLingo
+    </a>
+
+    <!-- Ortadaki ilerleme çubuğu (sadece placement-test sayfasında gösterilir) -->
+    {% block header_progress %}{% endblock %}
+
+    <div class="ob-header-right">
+      {% block header_right %}
+        <span class="step-badge">
+          {% block step_label %}Kurulum{% endblock %}
+        </span>
+      {% endblock %}
+    </div>
+
+  </header>
+
+  <!-- ── İçerik ────────────────────────────────────────────────────────────── -->
+  <main class="ob-main">
+    <div class="ob-content">
+
+      <!-- Flash mesajları -->
+      <div class="ob-alerts">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+          {% endfor %}
+        {% endwith %}
+      </div>
+
+      {% block content %}{% endblock %}
+
+    </div>
+  </main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

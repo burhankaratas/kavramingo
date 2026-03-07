@@ -1,0 +1,683 @@
+{
+  "grade": 9,
+  "units": [
+
+    {
+      "unit_id": 1,
+      "grade": 9,
+      "name": "Bilgi ve İnanç",
+      "description": "İslam inancının temelleri, iman esasları ve tevhid kavramı",
+      "questions": [
+
+        {
+          "id": "9_1_mc_1",
+          "type": "multiple_choice",
+          "question": "Tevhid ne demektir?",
+          "options": [
+            "Allah'ın bir ve tek olduğuna inanmak",
+            "Peygamberlere inanmak",
+            "Ahiret gününe inanmak",
+            "Kur'an'ın Allah kelamı olduğunu kabul etmek"
+          ],
+          "correct_index": 0,
+          "explanation": "Tevhid, Allah'ın zat, sıfat ve fiillerinde bir ve tek olduğuna inanmak demektir. İslam inancının temel ilkesidir."
+        },
+        {
+          "id": "9_1_mc_2",
+          "type": "multiple_choice",
+          "question": "Aşağıdakilerden hangisi Allah'ın subuti sıfatlarından biri değildir?",
+          "options": [
+            "Vücut",
+            "Semi'",
+            "Basar",
+            "Kelam"
+          ],
+          "correct_index": 0,
+          "explanation": "Vücut, Allah'ın varlığını ifade eden zati sıfatlardan biridir. Semi' (işitmek), Basar (görmek) ve Kelam (söylemek) ise subuti sıfatlardandır."
+        },
+        {
+          "id": "9_1_mc_3",
+          "type": "multiple_choice",
+          "question": "İslam'ın iman esasları kaç tanedir?",
+          "options": [
+            "4",
+            "5",
+            "6",
+            "7"
+          ],
+          "correct_index": 2,
+          "explanation": "İman esasları 6 tanedir: Allah'a, meleklere, kitaplara, peygamberlere, ahiret gününe ve kadere iman."
+        },
+        {
+          "id": "9_1_mc_4",
+          "type": "multiple_choice",
+          "question": "Şirk ne anlama gelir?",
+          "options": [
+            "Allah'a ibadet etmek",
+            "Allah'a ortak koşmak",
+            "Allah'ı noksan sıfatlardan tenzih etmek",
+            "Peygambere itaat etmek"
+          ],
+          "correct_index": 1,
+          "explanation": "Şirk, Allah'a herhangi bir varlığı ortak koşmak, ona denk ya da eş tutmak demektir. İslam'da en büyük günah kabul edilir."
+        },
+        {
+          "id": "9_1_mc_5",
+          "type": "multiple_choice",
+          "question": "Allah'ın 'Semi'' sıfatı ne anlama gelir?",
+          "options": [
+            "Görmek",
+            "Konuşmak",
+            "İşitmek",
+            "Bilmek"
+          ],
+          "correct_index": 2,
+          "explanation": "Semi', Allah'ın her şeyi işittiğini ifade eden subuti sıfatlardan biridir."
+        },
+
+        {
+          "id": "9_1_fc_1",
+          "type": "flashcard",
+          "term": "Tevhid",
+          "definition": "Allah'ın zat, sıfat ve fiillerinde bir ve tek olduğuna inanmak.",
+          "hint": "İslam'ın temel ilkesi"
+        },
+        {
+          "id": "9_1_fc_2",
+          "type": "flashcard",
+          "term": "Şirk",
+          "definition": "Allah'a herhangi bir varlığı ortak koşmak; İslam'da en büyük günah sayılır.",
+          "hint": "Tevhid'in zıttı"
+        },
+        {
+          "id": "9_1_fc_3",
+          "type": "flashcard",
+          "term": "Subuti Sıfatlar",
+          "definition": "Allah'ta bulunması zorunlu olan ve O'na özgü yetkinlikleri ifade eden sıfatlar (Hayat, İlim, Semi', Basar, İrade, Kudret, Kelam, Tekvin).",
+          "hint": "8 tanedir"
+        },
+        {
+          "id": "9_1_fc_4",
+          "type": "flashcard",
+          "term": "Zati Sıfatlar",
+          "definition": "Yalnızca Allah'a ait olan ve başka hiçbir varlıkta bulunmayan sıfatlar (Vücut, Kıdem, Beka, Vahdaniyet, Muhalefetün lil-havadis, Kıyam binefsih).",
+          "hint": "6 tanedir"
+        },
+        {
+          "id": "9_1_fc_5",
+          "type": "flashcard",
+          "term": "Ahiret",
+          "definition": "Dünya hayatının sona ermesinden sonra başlayan, sonsuz olan öteki hayat.",
+          "hint": "İman esaslarından biri"
+        },
+
+        {
+          "id": "9_1_mt_1",
+          "type": "matching",
+          "instruction": "Allah'ın sıfatlarını anlamlarıyla eşleştir.",
+          "pairs": [
+            {"term": "Semi'",   "definition": "Her şeyi işitir"},
+            {"term": "Basir",   "definition": "Her şeyi görür"},
+            {"term": "Alim",    "definition": "Her şeyi bilir"},
+            {"term": "Kadir",   "definition": "Her şeye gücü yeter"},
+            {"term": "Hayy",    "definition": "Diri, canlıdır"}
+          ]
+        },
+        {
+          "id": "9_1_mt_2",
+          "type": "matching",
+          "instruction": "İman esaslarını doğru kategorilerle eşleştir.",
+          "pairs": [
+            {"term": "Allah'a iman",        "definition": "Tevhid inancının temelidir"},
+            {"term": "Meleklere iman",       "definition": "Nur'dan yaratılmış varlıklara inanmak"},
+            {"term": "Kitaplara iman",       "definition": "İlahi vahye dayalı kutsal metinlere inanmak"},
+            {"term": "Kadere iman",          "definition": "Her şeyin Allah'ın bilgisi dahilinde olduğuna inanmak"}
+          ]
+        },
+
+        {
+          "id": "9_1_fb_1",
+          "type": "fill_blank",
+          "sentence": "Allah'ın bir ve tek olduğuna inanmaya _____ denir.",
+          "answer": "tevhid",
+          "hint": "T harfi ile başlar",
+          "explanation": "Tevhid, İslam inancının temel kavramıdır."
+        },
+        {
+          "id": "9_1_fb_2",
+          "type": "fill_blank",
+          "sentence": "Allah'a ortak koşmak anlamına gelen büyük günaha _____ denir.",
+          "answer": "şirk",
+          "hint": "Ş harfi ile başlar",
+          "explanation": "Şirk, Kur'an'da affedilmeyecek en büyük günah olarak belirtilmiştir."
+        },
+        {
+          "id": "9_1_fb_3",
+          "type": "fill_blank",
+          "sentence": "İslam'daki iman esaslarının sayısı _____'dir.",
+          "answer": "altı",
+          "hint": "Rakam değil yazıyla",
+          "explanation": "Altı iman esası: Allah, melekler, kitaplar, peygamberler, ahiret, kader."
+        },
+        {
+          "id": "9_1_fb_4",
+          "type": "fill_blank",
+          "sentence": "Allah'ın Semi' sıfatı O'nun her şeyi _____ anlamına gelir.",
+          "answer": "işitmesi",
+          "hint": "Duymak fiiliyle ilgili",
+          "explanation": "Semi', Arapça'da 'işitmek' anlamına gelir."
+        }
+
+      ]
+    },
+
+    {
+      "unit_id": 2,
+      "grade": 9,
+      "name": "Kur'an-ı Kerim",
+      "description": "Kur'an'ın nüzulü, özellikleri, tefsir ve meal kavramları",
+      "questions": [
+
+        {
+          "id": "9_2_mc_1",
+          "type": "multiple_choice",
+          "question": "Kur'an-ı Kerim kaç yılda tamamlanmıştır?",
+          "options": [
+            "10 yılda",
+            "20 yılda",
+            "23 yılda",
+            "30 yılda"
+          ],
+          "correct_index": 2,
+          "explanation": "Kur'an-ı Kerim, Hz. Muhammed'e yaklaşık 23 yıl boyunca ayet ayet indirilmiştir."
+        },
+        {
+          "id": "9_2_mc_2",
+          "type": "multiple_choice",
+          "question": "Kur'an'ın ilk inen ayeti aşağıdakilerden hangisidir?",
+          "options": [
+            "Fatiha Suresi'nin ilk ayeti",
+            "Alak Suresi'nin ilk beş ayeti",
+            "Bakara Suresi'nin ilk ayeti",
+            "İhlas Suresi"
+          ],
+          "correct_index": 1,
+          "explanation": "Kur'an'ın ilk inen ayetleri 'Oku! Yaratan Rabbinin adıyla...' diye başlayan Alak Suresi'nin ilk beş ayetidir."
+        },
+        {
+          "id": "9_2_mc_3",
+          "type": "multiple_choice",
+          "question": "Kur'an'ın anlaşılması için yapılan kapsamlı açıklamalara ne ad verilir?",
+          "options": [
+            "Meal",
+            "Hadis",
+            "Tefsir",
+            "Fıkıh"
+          ],
+          "correct_index": 2,
+          "explanation": "Tefsir; Kur'an ayetlerinin dil, tarih ve bağlam açısından ayrıntılı biçimde açıklanmasıdır."
+        },
+        {
+          "id": "9_2_mc_4",
+          "type": "multiple_choice",
+          "question": "Kur'an kaç sureden oluşur?",
+          "options": [
+            "99",
+            "110",
+            "114",
+            "120"
+          ],
+          "correct_index": 2,
+          "explanation": "Kur'an-ı Kerim 114 sureden oluşmaktadır."
+        },
+        {
+          "id": "9_2_mc_5",
+          "type": "multiple_choice",
+          "question": "Kur'an'ın Türkçe'ye çevirisine ne denir?",
+          "options": [
+            "Tefsir",
+            "Meal",
+            "Hadis",
+            "Sünnet"
+          ],
+          "correct_index": 1,
+          "explanation": "Meal, Kur'an'ın bir başka dile anlamsal çevirisidir. Tefsirden farkı daha kısa ve özet nitelikte olmasıdır."
+        },
+
+        {
+          "id": "9_2_fc_1",
+          "type": "flashcard",
+          "term": "Tefsir",
+          "definition": "Kur'an ayetlerini dil, tarih ve bağlam açısından ayrıntılı biçimde açıklama ilmi.",
+          "hint": "Kur'an'ı anlamak için yapılan kapsamlı açıklama"
+        },
+        {
+          "id": "9_2_fc_2",
+          "type": "flashcard",
+          "term": "Meal",
+          "definition": "Kur'an'ın herhangi bir dile anlam bazlı çevirisi.",
+          "hint": "Tefsirin kısa hali"
+        },
+        {
+          "id": "9_2_fc_3",
+          "type": "flashcard",
+          "term": "Nüzul",
+          "definition": "Kur'an'ın Hz. Muhammed'e Cebrail aracılığıyla indirilmesi süreci.",
+          "hint": "İnmek, inmesi"
+        },
+        {
+          "id": "9_2_fc_4",
+          "type": "flashcard",
+          "term": "Sure",
+          "definition": "Kur'an'daki bölümlerin her birine verilen ad; Kur'an 114 sureden oluşur.",
+          "hint": "Kur'an'ın bölümleri"
+        },
+        {
+          "id": "9_2_fc_5",
+          "type": "flashcard",
+          "term": "Ayet",
+          "definition": "Kur'an'daki sureleri oluşturan her bir cümle ya da cümle grubuna verilen ad.",
+          "hint": "Surenin parçaları"
+        },
+
+        {
+          "id": "9_2_mt_1",
+          "type": "matching",
+          "instruction": "Kavramları doğru tanımlarıyla eşleştir.",
+          "pairs": [
+            {"term": "Tefsir",   "definition": "Kur'an'ın ayrıntılı açıklaması"},
+            {"term": "Meal",     "definition": "Kur'an'ın başka dile çevirisi"},
+            {"term": "Sure",     "definition": "Kur'an'ın bölümleri"},
+            {"term": "Ayet",     "definition": "Sure içindeki cümle birimleri"},
+            {"term": "Nüzul",    "definition": "Kur'an'ın indirilme süreci"}
+          ]
+        },
+        {
+          "id": "9_2_mt_2",
+          "type": "matching",
+          "instruction": "Kur'an ile ilgili bilgileri eşleştir.",
+          "pairs": [
+            {"term": "İlk inen sure",    "definition": "Alak Suresi"},
+            {"term": "Son inen sure",    "definition": "Nasr Suresi"},
+            {"term": "En uzun sure",     "definition": "Bakara Suresi"},
+            {"term": "İniş süresi",      "definition": "Yaklaşık 23 yıl"}
+          ]
+        },
+
+        {
+          "id": "9_2_fb_1",
+          "type": "fill_blank",
+          "sentence": "Kur'an, Hz. Muhammed'e yaklaşık _____ yıl boyunca indirilmiştir.",
+          "answer": "23",
+          "hint": "Yirmi üç",
+          "explanation": "Kur'an'ın nüzul süreci 610-632 yılları arasında yaklaşık 23 yıl sürmüştür."
+        },
+        {
+          "id": "9_2_fb_2",
+          "type": "fill_blank",
+          "sentence": "Kur'an-ı Kerim _____ sureden oluşur.",
+          "answer": "114",
+          "hint": "Yüz on dört",
+          "explanation": "Kur'an'da toplam 114 sure bulunmaktadır."
+        },
+        {
+          "id": "9_2_fb_3",
+          "type": "fill_blank",
+          "sentence": "Kur'an'ın Türkçe anlamsal çevirisine _____ denir.",
+          "answer": "meal",
+          "hint": "M harfi ile başlar",
+          "explanation": "Meal, Kur'an'ın anlamsal olarak başka bir dile çevrilmesidir."
+        },
+        {
+          "id": "9_2_fb_4",
+          "type": "fill_blank",
+          "sentence": "Kur'an ayetlerini dil ve tarihsel bağlamda açıklayan ilme _____ denir.",
+          "answer": "tefsir",
+          "hint": "T harfi ile başlar",
+          "explanation": "Tefsir ilmi, Kur'an'ın doğru anlaşılmasını sağlar."
+        }
+
+      ]
+    },
+
+    {
+      "unit_id": 3,
+      "grade": 9,
+      "name": "Hz. Muhammed'i Tanıyalım",
+      "description": "Hz. Peygamber'in hayatı, hicreti, karakteri ve İslam'a katkıları",
+      "questions": [
+
+        {
+          "id": "9_3_mc_1",
+          "type": "multiple_choice",
+          "question": "Hz. Muhammed hangi şehirde doğmuştur?",
+          "options": [
+            "Medine",
+            "Mekke",
+            "Taif",
+            "Kudüs"
+          ],
+          "correct_index": 1,
+          "explanation": "Hz. Muhammed (s.a.v.) 571 yılında Mekke'de doğmuştur."
+        },
+        {
+          "id": "9_3_mc_2",
+          "type": "multiple_choice",
+          "question": "Hz. Muhammed'in Mekke'den Medine'ye göç etmesine ne ad verilir?",
+          "options": [
+            "Fetih",
+            "Hicret",
+            "Miraç",
+            "Bedir"
+          ],
+          "correct_index": 1,
+          "explanation": "Hicret, Hz. Muhammed'in 622 yılında Mekke'den Medine'ye göç etmesidir. Bu olay İslam takviminin başlangıcı sayılır."
+        },
+        {
+          "id": "9_3_mc_3",
+          "type": "multiple_choice",
+          "question": "Hz. Muhammed kaç yaşında peygamberliği aldı?",
+          "options": [
+            "35",
+            "40",
+            "45",
+            "50"
+          ],
+          "correct_index": 1,
+          "explanation": "Hz. Muhammed, 40 yaşında Hira Mağarası'nda ilk vahyi almış ve peygamberliği başlamıştır."
+        },
+        {
+          "id": "9_3_mc_4",
+          "type": "multiple_choice",
+          "question": "Hz. Muhammed hangi kabileden gelmektedir?",
+          "options": [
+            "Evs",
+            "Hazrec",
+            "Kureyş",
+            "Temim"
+          ],
+          "correct_index": 2,
+          "explanation": "Hz. Muhammed, Arap yarımadasının en köklü kabilesi olan Kureyş kabilesinin Haşimoğulları kolundandır."
+        },
+        {
+          "id": "9_3_mc_5",
+          "type": "multiple_choice",
+          "question": "Miraç olayı hangi gecede yaşanmıştır?",
+          "options": [
+            "Kadir Gecesi",
+            "Regaip Gecesi",
+            "Miraç Kandili gecesi",
+            "Beraat Gecesi"
+          ],
+          "correct_index": 2,
+          "explanation": "Miraç olayı, Recep ayının 27. gecesi yaşanmış ve bu gece Miraç Kandili olarak anılmaktadır."
+        },
+
+        {
+          "id": "9_3_fc_1",
+          "type": "flashcard",
+          "term": "Hicret",
+          "definition": "Hz. Muhammed'in 622 yılında Mekke'den Medine'ye göç etmesi; İslam takviminin başlangıcı.",
+          "hint": "H harfi ile başlar"
+        },
+        {
+          "id": "9_3_fc_2",
+          "type": "flashcard",
+          "term": "Miraç",
+          "definition": "Hz. Muhammed'in Allah'ın daveti üzerine bir gecede göklere yükselmesi ve ilahi tecellilere mazhar olması.",
+          "hint": "Yükselme, çıkma"
+        },
+        {
+          "id": "9_3_fc_3",
+          "type": "flashcard",
+          "term": "Vahiy",
+          "definition": "Allah'ın peygamberlerine ilettiği ilahi mesaj; Kur'an, Cebrail aracılığıyla Hz. Muhammed'e indirilmiştir.",
+          "hint": "İlahi mesaj"
+        },
+        {
+          "id": "9_3_fc_4",
+          "type": "flashcard",
+          "term": "Hira Mağarası",
+          "definition": "Hz. Muhammed'in ilk vahyi aldığı Mekke yakınlarındaki mağara.",
+          "hint": "İlk vahyin yeri"
+        },
+        {
+          "id": "9_3_fc_5",
+          "type": "flashcard",
+          "term": "Mekke'nin Fethi",
+          "definition": "630 yılında Hz. Muhammed komutasındaki İslam ordusunun Mekke'yi kan dökmeksizin fethetmesi.",
+          "hint": "630 yılı"
+        },
+
+        {
+          "id": "9_3_mt_1",
+          "type": "matching",
+          "instruction": "Hz. Muhammed'in hayatındaki önemli olayları tarihlerle eşleştir.",
+          "pairs": [
+            {"term": "Doğum",           "definition": "571 yılı"},
+            {"term": "İlk vahiy",       "definition": "610 yılı"},
+            {"term": "Hicret",          "definition": "622 yılı"},
+            {"term": "Mekke'nin Fethi", "definition": "630 yılı"},
+            {"term": "Veda Hutbesi",    "definition": "632 yılı"}
+          ]
+        },
+        {
+          "id": "9_3_mt_2",
+          "type": "matching",
+          "instruction": "Kavramları açıklamalarıyla eşleştir.",
+          "pairs": [
+            {"term": "Hicret",  "definition": "Mekke'den Medine'ye göç"},
+            {"term": "Miraç",   "definition": "Göklere yükseliş"},
+            {"term": "Vahiy",   "definition": "İlahi mesaj"},
+            {"term": "Hira",    "definition": "İlk vahyin alındığı mağara"}
+          ]
+        },
+
+        {
+          "id": "9_3_fb_1",
+          "type": "fill_blank",
+          "sentence": "Hz. Muhammed, _____ yaşında peygamberlik görevini almıştır.",
+          "answer": "40",
+          "hint": "Kırk",
+          "explanation": "Hz. Muhammed 40 yaşında Hira Mağarası'nda ilk vahyi almıştır."
+        },
+        {
+          "id": "9_3_fb_2",
+          "type": "fill_blank",
+          "sentence": "Hz. Muhammed'in Mekke'den Medine'ye göçüne _____ denir.",
+          "answer": "hicret",
+          "hint": "H harfi ile başlar",
+          "explanation": "Hicret, 622 yılında gerçekleşmiş ve İslam takviminin başlangıcı kabul edilmiştir."
+        },
+        {
+          "id": "9_3_fb_3",
+          "type": "fill_blank",
+          "sentence": "Hz. Muhammed, _____ kabilesinin Haşimoğulları kolundan gelmektedir.",
+          "answer": "Kureyş",
+          "hint": "K harfi ile başlar",
+          "explanation": "Kureyş, Mekke'nin en köklü ve saygın kabilesiydi."
+        },
+        {
+          "id": "9_3_fb_4",
+          "type": "fill_blank",
+          "sentence": "Hz. Muhammed'in ilk vahyi aldığı yer _____ Mağarası'dır.",
+          "answer": "Hira",
+          "hint": "H harfi ile başlar",
+          "explanation": "Hira Mağarası, Mekke yakınlarında Nur Dağı'nda bulunmaktadır."
+        }
+
+      ]
+    },
+
+    {
+      "unit_id": 4,
+      "grade": 9,
+      "name": "İbadet",
+      "description": "İslam'ın beş şartı, ibadet kavramı ve günlük ibadet hayatı",
+      "questions": [
+
+        {
+          "id": "9_4_mc_1",
+          "type": "multiple_choice",
+          "question": "İslam'ın beş şartından biri değildir?",
+          "options": [
+            "Namaz kılmak",
+            "Oruç tutmak",
+            "Tefsir okumak",
+            "Hac yapmak"
+          ],
+          "correct_index": 2,
+          "explanation": "İslam'ın beş şartı: Kelime-i şehadet, namaz, oruç, zekat ve hac'tır. Tefsir okumak İslam'ın şartları arasında değildir."
+        },
+        {
+          "id": "9_4_mc_2",
+          "type": "multiple_choice",
+          "question": "Günde kaç vakit namaz kılınır?",
+          "options": [
+            "3",
+            "4",
+            "5",
+            "6"
+          ],
+          "correct_index": 2,
+          "explanation": "Müslümanlar günde 5 vakit (sabah, öğle, ikindi, akşam, yatsı) namaz kılarlar."
+        },
+        {
+          "id": "9_4_mc_3",
+          "type": "multiple_choice",
+          "question": "Ramazan ayında tutulan oruç kaç gün sürer?",
+          "options": [
+            "28 gün",
+            "29 ya da 30 gün",
+            "30 gün",
+            "31 gün"
+          ],
+          "correct_index": 1,
+          "explanation": "Ramazan orucu, hicri takvime göre Ramazan ayı boyunca tutulur; ay 29 veya 30 gün olabilir."
+        },
+        {
+          "id": "9_4_mc_4",
+          "type": "multiple_choice",
+          "question": "Zekatın farz olabilmesi için geçmesi gereken süreye ne ad verilir?",
+          "options": [
+            "Nisap",
+            "Havl",
+            "Fitre",
+            "Sadaka"
+          ],
+          "correct_index": 1,
+          "explanation": "Havl; zekata tabi malın üzerinden bir hicri yılın (kameri yıl) geçmesi şartıdır."
+        },
+        {
+          "id": "9_4_mc_5",
+          "type": "multiple_choice",
+          "question": "Haccın farz olduğu ay aşağıdakilerden hangisidir?",
+          "options": [
+            "Ramazan",
+            "Muharrem",
+            "Zilhicce",
+            "Şaban"
+          ],
+          "correct_index": 2,
+          "explanation": "Hac ibadeti, hicri takvimin son ayı olan Zilhicce ayında Mekke'de ifa edilir."
+        },
+
+        {
+          "id": "9_4_fc_1",
+          "type": "flashcard",
+          "term": "Namaz",
+          "definition": "Günde beş vakit Allah'a yönelik olarak belirli hareketler ve dualarla yapılan ibadet.",
+          "hint": "İslam'ın beş şartından biri"
+        },
+        {
+          "id": "9_4_fc_2",
+          "type": "flashcard",
+          "term": "Zekat",
+          "definition": "Nisap miktarına ulaşan ve üzerinden bir yıl geçen malın belirli bir oranını ihtiyaç sahiplerine vermek.",
+          "hint": "Mal ile yapılan ibadet"
+        },
+        {
+          "id": "9_4_fc_3",
+          "type": "flashcard",
+          "term": "Hac",
+          "definition": "Gücü yeten Müslümanların ömürde bir kez Mekke'yi ziyaret ederek yerine getirdiği ibadet.",
+          "hint": "Zilhicce ayında yapılır"
+        },
+        {
+          "id": "9_4_fc_4",
+          "type": "flashcard",
+          "term": "Oruç",
+          "definition": "Ramazan ayında imsak vaktinden iftar vaktine kadar yemek, içmek ve diğer orucu bozan şeylerden kaçınmak.",
+          "hint": "Ramazan'da tutulur"
+        },
+        {
+          "id": "9_4_fc_5",
+          "type": "flashcard",
+          "term": "Kelime-i Şehadet",
+          "definition": "Allah'tan başka ilah olmadığına ve Hz. Muhammed'in O'nun kulu ve elçisi olduğuna şahitlik etmek.",
+          "hint": "İslam'ın ilk şartı"
+        },
+
+        {
+          "id": "9_4_mt_1",
+          "type": "matching",
+          "instruction": "İslam'ın beş şartını açıklamalarıyla eşleştir.",
+          "pairs": [
+            {"term": "Kelime-i Şehadet", "definition": "Allah'ın birliğine ve Hz. Muhammed'in peygamberliğine tanıklık"},
+            {"term": "Namaz",            "definition": "Günde 5 vakit kılınan ibadet"},
+            {"term": "Oruç",             "definition": "Ramazan ayında tutulan ibadet"},
+            {"term": "Zekat",            "definition": "Belirli miktarda malı yoksullara vermek"},
+            {"term": "Hac",              "definition": "Mekke'ye giderek yapılan ibadet"}
+          ]
+        },
+        {
+          "id": "9_4_mt_2",
+          "type": "matching",
+          "instruction": "Namaz vakitlerini günün dilimlerine göre eşleştir.",
+          "pairs": [
+            {"term": "Sabah namazı",  "definition": "Tan yerinin ağarmasından güneş doğumuna kadar"},
+            {"term": "Öğle namazı",  "definition": "Güneşin tepeden batıya kaymasından sonra"},
+            {"term": "İkindi namazı","definition": "Öğleden sonra, akşama yakın"},
+            {"term": "Akşam namazı", "definition": "Güneşin batmasından sonra"},
+            {"term": "Yatsı namazı", "definition": "Akşam kızıllığı kaybolduktan sonra"}
+          ]
+        },
+
+        {
+          "id": "9_4_fb_1",
+          "type": "fill_blank",
+          "sentence": "İslam'ın beş şartından biri olan _____, yılda bir kez Mekke'de ifa edilir.",
+          "answer": "hac",
+          "hint": "H harfi ile başlar",
+          "explanation": "Hac, imkân bulan Müslümanların ömründe bir kez Mekke'ye giderek yapması gereken ibadettir."
+        },
+        {
+          "id": "9_4_fb_2",
+          "type": "fill_blank",
+          "sentence": "Müslümanlar günde _____ vakit namaz kılarlar.",
+          "answer": "beş",
+          "hint": "Rakam değil yazıyla",
+          "explanation": "Beş vakit namaz: sabah, öğle, ikindi, akşam ve yatsıdır."
+        },
+        {
+          "id": "9_4_fb_3",
+          "type": "fill_blank",
+          "sentence": "Ramazan ayında tutulan ibadete _____ denir.",
+          "answer": "oruç",
+          "hint": "O harfi ile başlar",
+          "explanation": "Oruç, İslam'ın beş şartından biridir ve Ramazan ayında tutulur."
+        },
+        {
+          "id": "9_4_fb_4",
+          "type": "fill_blank",
+          "sentence": "Belirli bir miktara ulaşan malın bir kısmını yoksullara vermek olan ibadet _____ olarak adlandırılır.",
+          "answer": "zekat",
+          "hint": "Z harfi ile başlar",
+          "explanation": "Zekat, toplumda ekonomik dengeyi sağlamayı da amaçlayan bir ibadettir."
+        }
+
+      ]
+    }
+
+  ]
+}

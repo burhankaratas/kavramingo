@@ -1,0 +1,678 @@
+{
+  "grade": 12,
+  "units": [
+
+    {
+      "unit_id": 13,
+      "grade": 12,
+      "name": "Bir Mesaj Olarak Din",
+      "description": "Dinin tanımı, işlevi, kaynağı ve insanlık tarihindeki yeri",
+      "questions": [
+
+        {
+          "id": "12_13_mc_1",
+          "type": "multiple_choice",
+          "question": "Din, en geniş anlamıyla nasıl tanımlanabilir?",
+          "options": [
+            "Devlet tarafından belirlenen kurallar bütünü",
+            "İnsan ile Tanrı arasındaki ilişkiyi düzenleyen inanç ve pratikler sistemi",
+            "Yalnızca ibadet biçimlerini içeren ritüeller",
+            "Bilimsel araştırma yöntemi"
+          ],
+          "correct_index": 1,
+          "explanation": "Din; inanç, ibadet, ahlak ve toplumsal ilkeleriyle insanın Allah ile ve diğer insanlarla ilişkisini düzenleyen kapsamlı bir sistem olarak tanımlanır."
+        },
+        {
+          "id": "12_13_mc_2",
+          "type": "multiple_choice",
+          "question": "Vahiy yoluyla gelen dinlere ne ad verilir?",
+          "options": [
+            "Semavi (İlahi) dinler",
+            "Tabii (doğa) dinleri",
+            "Milli dinler",
+            "Politeist dinler"
+          ],
+          "correct_index": 0,
+          "explanation": "Semavi (İlahi) dinler; Yahudilik, Hristiyanlık ve İslam gibi Allah'ın peygamberler aracılığıyla insanlara gönderdiği mesajlara dayanan dinlerdir."
+        },
+        {
+          "id": "12_13_mc_3",
+          "type": "multiple_choice",
+          "question": "İslam'a göre din insanlığa ne mesaj verir?",
+          "options": [
+            "Dünyadan tamamen kaçınılmalıdır",
+            "Sadece öteki dünya için çalışılmalıdır",
+            "Hem dünya hem de ahiret dengeli biçimde gözetilmelidir",
+            "Maddi refah her şeyden önce gelir"
+          ],
+          "correct_index": 2,
+          "explanation": "İslam; dünya hayatının da önemli olduğunu, dünya ve ahiretin dengeli biçimde gözetilmesi gerektiğini vurgular."
+        },
+        {
+          "id": "12_13_mc_4",
+          "type": "multiple_choice",
+          "question": "Hz. Adem'den Hz. Muhammed'e kadar gönderilen peygamberlerin ortak mesajı nedir?",
+          "options": [
+            "Belirli bir kavmin üstünlüğü",
+            "Tevhid ve ahlaki yaşam",
+            "Zenginlik ve güç",
+            "Savaş ve fetih"
+          ],
+          "correct_index": 1,
+          "explanation": "Tüm peygamberlerin ortak mesajı Allah'ın birliği (tevhid) ve erdemli-ahlaki bir hayat sürdürmektir."
+        },
+        {
+          "id": "12_13_mc_5",
+          "type": "multiple_choice",
+          "question": "İslam'a göre son peygamber ve son ilahi mesaj kimdir/nedir?",
+          "options": [
+            "Hz. İsa ve İncil",
+            "Hz. Musa ve Tevrat",
+            "Hz. Muhammed ve Kur'an",
+            "Hz. İbrahim ve Suhuf"
+          ],
+          "correct_index": 2,
+          "explanation": "İslam inancına göre Hz. Muhammed son peygamber, Kur'an-ı Kerim ise kıyamete kadar geçerliliğini koruyacak son ilahi mesajdır."
+        },
+
+        {
+          "id": "12_13_fc_1",
+          "type": "flashcard",
+          "term": "Semavi Din",
+          "definition": "Allah tarafından peygamberler aracılığıyla insanlara gönderilen din; Yahudilik, Hristiyanlık ve İslam.",
+          "hint": "İlahi kaynaklı din"
+        },
+        {
+          "id": "12_13_fc_2",
+          "type": "flashcard",
+          "term": "Vahiy",
+          "definition": "Allah'ın peygamberlerine doğrudan ya da Cebrail aracılığıyla ilettiği ilahi mesaj.",
+          "hint": "İlahi iletişim"
+        },
+        {
+          "id": "12_13_fc_3",
+          "type": "flashcard",
+          "term": "Monoteizm",
+          "definition": "Tek bir tanrıya inanç; İslam, Yahudilik ve Hristiyanlık monoteist dinlerdir.",
+          "hint": "Tek Tanrı inancı"
+        },
+        {
+          "id": "12_13_fc_4",
+          "type": "flashcard",
+          "term": "Nübüvvet",
+          "definition": "Peygamberlik; Allah'ın seçtiği kişilere verdiği mesajı insanlara ulaştırma görevi.",
+          "hint": "Peygamberlik görevi"
+        },
+        {
+          "id": "12_13_fc_5",
+          "type": "flashcard",
+          "term": "Hatem'ün-Nebiyyin",
+          "definition": "'Peygamberlerin mührü'; Kur'an'da Hz. Muhammed'e verilen unvan, son peygamber olduğunu ifade eder.",
+          "hint": "Son peygamberin unvanı"
+        },
+
+        {
+          "id": "12_13_mt_1",
+          "type": "matching",
+          "instruction": "Semavi dinleri kutsal kitaplarıyla eşleştir.",
+          "pairs": [
+            {"term": "İslam",        "definition": "Kur'an-ı Kerim"},
+            {"term": "Hristiyanlık", "definition": "İncil"},
+            {"term": "Yahudilik",    "definition": "Tevrat"},
+            {"term": "Hz. İbrahim",  "definition": "Suhuf"}
+          ]
+        },
+        {
+          "id": "12_13_mt_2",
+          "type": "matching",
+          "instruction": "Kavramları tanımlarıyla eşleştir.",
+          "pairs": [
+            {"term": "Semavi din",    "definition": "Vahye dayalı ilahi din"},
+            {"term": "Tevhid",        "definition": "Allah'ın birliği inancı"},
+            {"term": "Nübüvvet",      "definition": "Peygamberlik görevi"},
+            {"term": "Vahiy",         "definition": "İlahi mesaj iletimi"}
+          ]
+        },
+
+        {
+          "id": "12_13_fb_1",
+          "type": "fill_blank",
+          "sentence": "Vahiy yoluyla gelen dinlere _____ dinler denir.",
+          "answer": "semavi",
+          "hint": "S harfi ile başlar",
+          "explanation": "Semavi dinler: İslam, Hristiyanlık ve Yahudilik olarak sayılabilir."
+        },
+        {
+          "id": "12_13_fb_2",
+          "type": "fill_blank",
+          "sentence": "İslam'a göre son peygamber _____ 'dir.",
+          "answer": "Hz. Muhammed",
+          "hint": "H harfi ile başlar",
+          "explanation": "Hz. Muhammed, Kur'an'da 'Hatemü'n-Nebiyyin' (peygamberlerin mührü) olarak anılır."
+        },
+        {
+          "id": "12_13_fb_3",
+          "type": "fill_blank",
+          "sentence": "Tüm peygamberlerin ortak mesajı Allah'ın birliği, yani _____ inancıdır.",
+          "answer": "tevhid",
+          "hint": "T harfi ile başlar",
+          "explanation": "Tevhid, tüm semavi dinlerin ortak paydası olan tek tanrı inancını ifade eder."
+        },
+        {
+          "id": "12_13_fb_4",
+          "type": "fill_blank",
+          "sentence": "Allah'ın peygamberlerine ilettiği ilahi mesaja _____ denir.",
+          "answer": "vahiy",
+          "hint": "V harfi ile başlar",
+          "explanation": "Vahiy, peygamberlik kurumunun ve semavi dinlerin temelini oluşturur."
+        }
+
+      ]
+    },
+
+    {
+      "unit_id": 14,
+      "grade": 12,
+      "name": "Güncel Dini Meseleler",
+      "description": "Deizm, ateizm, din istismarı, yeni dini hareketler ve eleştirel düşünce",
+      "questions": [
+
+        {
+          "id": "12_14_mc_1",
+          "type": "multiple_choice",
+          "question": "Deizm ne anlama gelir?",
+          "options": [
+            "Allah'ın varlığını tamamen reddetmek",
+            "Allah'ın evreni yaratıp ardından işleyişine karışmadığını savunmak",
+            "Birden fazla Tanrı'ya inanmak",
+            "Kur'an'ın ilahi kaynaklı olduğunu kabul etmek"
+          ],
+          "correct_index": 1,
+          "explanation": "Deizm; Allah'ın var olduğunu ancak evreni yarattıktan sonra onu kendi haline bıraktığını, vahiy ve mucize gibi kavramları reddeden bir görüştür."
+        },
+        {
+          "id": "12_14_mc_2",
+          "type": "multiple_choice",
+          "question": "Ateizm ne anlama gelir?",
+          "options": [
+            "Tanrı'nın var olduğunu kabul etmek ama ibadet etmemek",
+            "Tanrı'nın varlığını kesin olarak reddetmek",
+            "Birden fazla Tanrı'ya inanmak",
+            "Tanrı hakkında bilgisiz kalmayı tercih etmek"
+          ],
+          "correct_index": 1,
+          "explanation": "Ateizm, herhangi bir tanrı ya da ilahi varlığın var olmadığını savunan görüştür."
+        },
+        {
+          "id": "12_14_mc_3",
+          "type": "multiple_choice",
+          "question": "Din istismarı hangi durumu ifade eder?",
+          "options": [
+            "Dini kurallara tam uymak",
+            "Dinin çıkar veya güç elde etmek için araçsallaştırılması",
+            "İbadeti düzenli yapmak",
+            "Kur'an okumayı öğrenmek"
+          ],
+          "correct_index": 1,
+          "explanation": "Din istismarı; dini duygu ve inançların bireysel çıkar, siyasi güç ya da manipülasyon amacıyla kötüye kullanılmasıdır."
+        },
+        {
+          "id": "12_14_mc_4",
+          "type": "multiple_choice",
+          "question": "Agnostisizm ne anlama gelir?",
+          "options": [
+            "Tanrı'nın var olduğunu kesin olarak bilmek",
+            "Tanrı'nın varlığı ya da yokluğu hakkında kesin bir bilgiye ulaşılamayacağını savunmak",
+            "Birden fazla Tanrı'ya inanmak",
+            "İslam'ın bütün hükümlerine uymak"
+          ],
+          "correct_index": 1,
+          "explanation": "Agnostisizm, Tanrı'nın varlığı ya da yokluğunun insan aklıyla bilinemeyeceğini öne süren felsefi bir tutumdur."
+        },
+        {
+          "id": "12_14_mc_5",
+          "type": "multiple_choice",
+          "question": "İslam'a göre dini sorulara yaklaşırken öncelikli olarak kullanılması gereken yöntem hangisidir?",
+          "options": [
+            "Körü körüne taklit",
+            "Akıl, vahiy ve vicdan'ı bir arada kullanmak",
+            "Sadece geleneklere uymak",
+            "Dini tartışmalardan tamamen kaçınmak"
+          ],
+          "correct_index": 1,
+          "explanation": "İslam, akıl ile vahyi çatışır görmez; aksine dini meselelerde akıl, vahiy ve vicdanın bir arada kullanılmasını teşvik eder."
+        },
+
+        {
+          "id": "12_14_fc_1",
+          "type": "flashcard",
+          "term": "Deizm",
+          "definition": "Allah'ın evreni yaratıp ardından işleyişine karışmadığını savunan; vahiy ve mucizeyi reddeden görüş.",
+          "hint": "Yaratıcı var ama müdahil değil"
+        },
+        {
+          "id": "12_14_fc_2",
+          "type": "flashcard",
+          "term": "Ateizm",
+          "definition": "Herhangi bir tanrı ya da ilahi varlığın var olmadığını savunan felsefi tutum.",
+          "hint": "Tanrı yok"
+        },
+        {
+          "id": "12_14_fc_3",
+          "type": "flashcard",
+          "term": "Agnostisizm",
+          "definition": "Tanrı'nın varlığı ya da yokluğu hakkında kesin bilgiye ulaşılamayacağını savunan görüş.",
+          "hint": "Bilemiyorum"
+        },
+        {
+          "id": "12_14_fc_4",
+          "type": "flashcard",
+          "term": "Din İstismarı",
+          "definition": "Dini duygu ve inançların bireysel çıkar, siyasi güç veya manipülasyon amacıyla kötüye kullanılması.",
+          "hint": "Dini araçsallaştırmak"
+        },
+        {
+          "id": "12_14_fc_5",
+          "type": "flashcard",
+          "term": "Eleştirel Düşünce",
+          "definition": "Bilgi ve inançları sorgulamak, kanıtlara dayalı değerlendirmek; İslam'ın teşvik ettiği akıl yürütme biçimi.",
+          "hint": "Sorgulayarak öğrenmek"
+        },
+
+        {
+          "id": "12_14_mt_1",
+          "type": "matching",
+          "instruction": "İnançsal tutumları tanımlarıyla eşleştir.",
+          "pairs": [
+            {"term": "Ateizm",       "definition": "Tanrı yoktur"},
+            {"term": "Deizm",        "definition": "Tanrı yarattı, karışmaz"},
+            {"term": "Agnostisizm",  "definition": "Bilinmez"},
+            {"term": "Monoteizm",    "definition": "Tek Tanrı vardır"}
+          ]
+        },
+        {
+          "id": "12_14_mt_2",
+          "type": "matching",
+          "instruction": "Güncel kavramları açıklamalarıyla eşleştir.",
+          "pairs": [
+            {"term": "Din istismarı",    "definition": "Dini çıkar için araçsallaştırmak"},
+            {"term": "Eleştirel düşünce","definition": "Kanıta dayalı sorgulama"},
+            {"term": "Vahiy",           "definition": "İlahi mesaj"},
+            {"term": "Akıl",            "definition": "İslam'da önemli bilgi kaynağı"}
+          ]
+        },
+
+        {
+          "id": "12_14_fb_1",
+          "type": "fill_blank",
+          "sentence": "Tanrı'nın varlığını tamamen reddeden felsefi tutuma _____ denir.",
+          "answer": "ateizm",
+          "hint": "A harfi ile başlar",
+          "explanation": "Ateizm, tarihsel ve güncel bir felsefi pozisyon olup din ile doğrudan çelişir."
+        },
+        {
+          "id": "12_14_fb_2",
+          "type": "fill_blank",
+          "sentence": "Allah'ın evreni yaratıp işleyişine karışmadığını savunan görüşe _____ denir.",
+          "answer": "deizm",
+          "hint": "D harfi ile başlar",
+          "explanation": "Deizm, vahiy ve mucizeyi reddeder; İslam inancıyla bağdaşmaz."
+        },
+        {
+          "id": "12_14_fb_3",
+          "type": "fill_blank",
+          "sentence": "Tanrı'nın varlığı hakkında kesin bir yargıya varılamayacağını savunan görüşe _____ denir.",
+          "answer": "agnostisizm",
+          "hint": "A harfi ile başlar",
+          "explanation": "Agnostisizm, bilginin sınırlılığını vurgular; ateizmden farklı olarak Tanrı'yı kesin reddetmez."
+        },
+        {
+          "id": "12_14_fb_4",
+          "type": "fill_blank",
+          "sentence": "Dini duyguların çıkar amacıyla kötüye kullanılmasına _____ denir.",
+          "answer": "din istismarı",
+          "hint": "D harfi ile başlar",
+          "explanation": "Din istismarı, tarih boyunca toplumsal zararlara neden olmuş bir olgudur."
+        }
+
+      ]
+    },
+
+    {
+      "unit_id": 15,
+      "grade": 12,
+      "name": "Diyanet İşleri Başkanlığı",
+      "description": "Diyanet'in kuruluşu, görevleri, yapısı ve Türkiye'deki din hizmetleri",
+      "questions": [
+
+        {
+          "id": "12_15_mc_1",
+          "type": "multiple_choice",
+          "question": "Diyanet İşleri Başkanlığı hangi yıl kurulmuştur?",
+          "options": [
+            "1920",
+            "1924",
+            "1950",
+            "1961"
+          ],
+          "correct_index": 1,
+          "explanation": "Diyanet İşleri Başkanlığı, Hilafetin kaldırılmasının ardından 1924 yılında kurulmuştur."
+        },
+        {
+          "id": "12_15_mc_2",
+          "type": "multiple_choice",
+          "question": "Diyanet İşleri Başkanlığı'nın temel görevi nedir?",
+          "options": [
+            "Hukuk işlerini yürütmek",
+            "İslam dini ibadet ve ahlak esaslarıyla ilgili görevleri yerine getirmek",
+            "Askeri eğitim vermek",
+            "Vergi toplamak"
+          ],
+          "correct_index": 1,
+          "explanation": "Diyanet İşleri Başkanlığı; camilerin idaresi, din görevlilerinin atanması, dini rehberlik ve din eğitimi gibi görevleri üstlenir."
+        },
+        {
+          "id": "12_15_mc_3",
+          "type": "multiple_choice",
+          "question": "Diyanet İşleri Başkanlığı hangi bakanlığa bağlıdır?",
+          "options": [
+            "Milli Eğitim Bakanlığı",
+            "Herhangi bir bakanlığa değil, doğrudan Cumhurbaşkanlığı'na",
+            "İçişleri Bakanlığı",
+            "Kültür Bakanlığı"
+          ],
+          "correct_index": 1,
+          "explanation": "Diyanet İşleri Başkanlığı, 2018 yılında gerçekleştirilen yapısal düzenlemeden itibaren doğrudan Cumhurbaşkanlığı'na bağlıdır."
+        },
+        {
+          "id": "12_15_mc_4",
+          "type": "multiple_choice",
+          "question": "Diyanet İşleri Başkanlığı'nın Cuma günleri tüm Türkiye'deki camilerde okunmak üzere hazırladığı metnin adı nedir?",
+          "options": [
+            "Fetva",
+            "Hutbe",
+            "Tefsir",
+            "Hadis"
+          ],
+          "correct_index": 1,
+          "explanation": "Diyanet, her Cuma için merkezi olarak bir hutbe metni hazırlar; bu metin tüm camilerde imam-hatipler tarafından okunur."
+        },
+        {
+          "id": "12_15_mc_5",
+          "type": "multiple_choice",
+          "question": "Diyanet İşleri Başkanlığı'nın yurt dışı Müslümanlara yönelik yürüttüğü hizmet birimi hangisidir?",
+          "options": [
+            "Kültür Merkezleri",
+            "DİTİB (Diyanet İşleri Türk İslam Birliği)",
+            "TİKA",
+            "Maarif Vakfı"
+          ],
+          "correct_index": 1,
+          "explanation": "DİTİB, Diyanet'in özellikle Avrupa'daki Türk ve Müslüman topluluklara din hizmeti sunmak amacıyla kurduğu çatı organizasyonudur."
+        },
+
+        {
+          "id": "12_15_fc_1",
+          "type": "flashcard",
+          "term": "Diyanet İşleri Başkanlığı",
+          "definition": "1924'te kurulan; Türkiye'de cami hizmetleri, din eğitimi ve dini rehberliği yürüten devlet kurumu.",
+          "hint": "1924, resmi din kurumu"
+        },
+        {
+          "id": "12_15_fc_2",
+          "type": "flashcard",
+          "term": "Hutbe",
+          "definition": "Cuma ve bayram namazlarında minberde okunan dini konuşma; Diyanet tarafından merkezi olarak hazırlanır.",
+          "hint": "Cuma'da okunan konuşma"
+        },
+        {
+          "id": "12_15_fc_3",
+          "type": "flashcard",
+          "term": "DİTİB",
+          "definition": "Diyanet İşleri Türk İslam Birliği; Avrupa'daki Türk-Müslüman topluluklara yönelik hizmet birimi.",
+          "hint": "Yurt dışı din hizmeti"
+        },
+        {
+          "id": "12_15_fc_4",
+          "type": "flashcard",
+          "term": "İmam-Hatip",
+          "definition": "Camilerde namaz kıldıran ve hutbe okuyan Diyanet bünyesindeki din görevlisi.",
+          "hint": "Cami görevlisi"
+        },
+        {
+          "id": "12_15_fc_5",
+          "type": "flashcard",
+          "term": "Fetva",
+          "definition": "Dini konularda yetkili bir alimin verdiği hukuki görüş; Diyanet de fetva hizmeti sunar.",
+          "hint": "Dini görüş"
+        },
+
+        {
+          "id": "12_15_mt_1",
+          "type": "matching",
+          "instruction": "Diyanet ile ilgili bilgileri eşleştir.",
+          "pairs": [
+            {"term": "Kuruluş yılı",     "definition": "1924"},
+            {"term": "Cuma konuşması",   "definition": "Hutbe"},
+            {"term": "Yurt dışı birimi", "definition": "DİTİB"},
+            {"term": "Cami görevlisi",   "definition": "İmam-Hatip"}
+          ]
+        },
+        {
+          "id": "12_15_mt_2",
+          "type": "matching",
+          "instruction": "Kavramları tanımlarıyla eşleştir.",
+          "pairs": [
+            {"term": "Hutbe",   "definition": "Cuma'da okunan dini konuşma"},
+            {"term": "Fetva",   "definition": "Dini konuda uzman görüşü"},
+            {"term": "DİTİB",   "definition": "Avrupa'daki Türk din hizmeti"},
+            {"term": "Diyanet", "definition": "Türkiye resmi din kurumu"}
+          ]
+        },
+
+        {
+          "id": "12_15_fb_1",
+          "type": "fill_blank",
+          "sentence": "Diyanet İşleri Başkanlığı _____ yılında kurulmuştur.",
+          "answer": "1924",
+          "hint": "Hilafetin kaldırıldığı yıl",
+          "explanation": "Diyanet, 3 Mart 1924'te kurulan Şeyhülislamlık makamının kaldırılmasının ardından hizmetine başlamıştır."
+        },
+        {
+          "id": "12_15_fb_2",
+          "type": "fill_blank",
+          "sentence": "Cuma namazlarında okunan dini konuşmaya _____ denir.",
+          "answer": "hutbe",
+          "hint": "H harfi ile başlar",
+          "explanation": "Diyanet, tüm camilerde aynı anda okunmak üzere merkezi bir hutbe metni hazırlar."
+        },
+        {
+          "id": "12_15_fb_3",
+          "type": "fill_blank",
+          "sentence": "Diyanet'in Avrupa'daki Türk ve Müslüman topluluklara hizmet eden birimi _____ olarak adlandırılır.",
+          "answer": "DİTİB",
+          "hint": "D harfi ile başlar",
+          "explanation": "DİTİB, Almanya başta olmak üzere pek çok Avrupa ülkesinde faaliyet göstermektedir."
+        },
+        {
+          "id": "12_15_fb_4",
+          "type": "fill_blank",
+          "sentence": "Dini konularda yetkili alimlerin verdiği hukuki görüşe _____ denir.",
+          "answer": "fetva",
+          "hint": "F harfi ile başlar",
+          "explanation": "Fetva, bireysel dini sorulara yanıt vermek amacıyla verilir; Diyanet de bu hizmeti sunar."
+        }
+
+      ]
+    },
+
+    {
+      "unit_id": 16,
+      "grade": 12,
+      "name": "Din Görevlisinin Önemi",
+      "description": "İslam'da din görevlisinin rolü, sorumlulukları ve toplumsal önemi",
+      "questions": [
+
+        {
+          "id": "12_16_mc_1",
+          "type": "multiple_choice",
+          "question": "Din görevlisinin toplumsal rolü nedir?",
+          "options": [
+            "Sadece namaz kıldırmak",
+            "Dini rehberlik, eğitim ve toplumsal hizmet",
+            "Vergi toplamak",
+            "Siyasi karar almak"
+          ],
+          "correct_index": 1,
+          "explanation": "Din görevlisi; ibadet yönetiminin yanı sıra dini rehberlik, eğitim, aile sorunlarında danışmanlık ve toplumsal hizmetler gibi geniş bir role sahiptir."
+        },
+        {
+          "id": "12_16_mc_2",
+          "type": "multiple_choice",
+          "question": "İmam-Hatip liselerinin temel amacı nedir?",
+          "options": [
+            "Askeri eğitim vermek",
+            "Din görevlisi ve din eğitimcisi yetiştirmek",
+            "Hukuk eğitimi vermek",
+            "Ticaret eğitimi vermek"
+          ],
+          "correct_index": 1,
+          "explanation": "İmam-Hatip liseleri, nitelikli din görevlisi ve din eğitimcisi yetiştirmek amacıyla kurulmuş Türk milli eğitiminin bir parçasıdır."
+        },
+        {
+          "id": "12_16_mc_3",
+          "type": "multiple_choice",
+          "question": "Camilerde Cuma namazı kıldıran ve hutbe okuyan görevliye ne denir?",
+          "options": [
+            "Müezzin",
+            "İmam",
+            "Hafız",
+            "Vaiz"
+          ],
+          "correct_index": 1,
+          "explanation": "İmam; camilerde namaz kıldıran ve Cuma günleri hutbe okuyan din görevlisidir."
+        },
+        {
+          "id": "12_16_mc_4",
+          "type": "multiple_choice",
+          "question": "Müezzinin görevi nedir?",
+          "options": [
+            "Hutbe okumak",
+            "Ezan okuyarak namaz vakitlerini duyurmak",
+            "Kur'an kursu vermek",
+            "Fetva hazırlamak"
+          ],
+          "correct_index": 1,
+          "explanation": "Müezzin, namaz vakitlerinde ezan okuyarak Müslümanları namaza davet eden din görevlisidir."
+        },
+        {
+          "id": "12_16_mc_5",
+          "type": "multiple_choice",
+          "question": "Vaizin görevi nedir?",
+          "options": [
+            "Ezan okumak",
+            "Namaz kıldırmak",
+            "Dini konularda halka konferans ve sohbet vermek",
+            "Cami inşaatını yönetmek"
+          ],
+          "correct_index": 2,
+          "explanation": "Vaiz; dini konularda camilerde ve çeşitli ortamlarda halkı bilgilendiren, öğütler veren din görevlisidir."
+        },
+
+        {
+          "id": "12_16_fc_1",
+          "type": "flashcard",
+          "term": "İmam",
+          "definition": "Camilerde namaz kıldıran ve Cuma günleri hutbe okuyan din görevlisi.",
+          "hint": "Namaz önderliği"
+        },
+        {
+          "id": "12_16_fc_2",
+          "type": "flashcard",
+          "term": "Müezzin",
+          "definition": "Namaz vakitlerinde ezan okuyarak Müslümanları ibadete davet eden din görevlisi.",
+          "hint": "Ezan okuyan"
+        },
+        {
+          "id": "12_16_fc_3",
+          "type": "flashcard",
+          "term": "Vaiz",
+          "definition": "Dini konularda halkı bilgilendiren, camilerde ve etkinliklerde konuşmalar yapan din görevlisi.",
+          "hint": "Konuşmacı din görevlisi"
+        },
+        {
+          "id": "12_16_fc_4",
+          "type": "flashcard",
+          "term": "Hafız",
+          "definition": "Kur'an-ı Kerim'in tamamını ezberlemiş kişi.",
+          "hint": "Kur'an'ı ezberlemiş"
+        },
+        {
+          "id": "12_16_fc_5",
+          "type": "flashcard",
+          "term": "İmam-Hatip Lisesi",
+          "definition": "Nitelikli din görevlisi ve din eğitimcisi yetiştiren Türk milli eğitimindeki orta öğretim kurumu.",
+          "hint": "Din görevlisi okulu"
+        },
+
+        {
+          "id": "12_16_mt_1",
+          "type": "matching",
+          "instruction": "Din görevlilerini görevleriyle eşleştir.",
+          "pairs": [
+            {"term": "İmam",    "definition": "Namaz kıldırmak ve hutbe okumak"},
+            {"term": "Müezzin", "definition": "Ezan okumak"},
+            {"term": "Vaiz",    "definition": "Dini konuşma ve sohbet vermek"},
+            {"term": "Hafız",   "definition": "Kur'an'ı ezberlemek"}
+          ]
+        },
+        {
+          "id": "12_16_mt_2",
+          "type": "matching",
+          "instruction": "Kavramları tanımlarıyla eşleştir.",
+          "pairs": [
+            {"term": "Ezan",           "definition": "Namaza davet çağrısı"},
+            {"term": "Hutbe",          "definition": "Cuma'da imam konuşması"},
+            {"term": "İmam-Hatip",     "definition": "Din görevlisi okulu"},
+            {"term": "Din görevlisi",  "definition": "Toplumsal dini rehber"}
+          ]
+        },
+
+        {
+          "id": "12_16_fb_1",
+          "type": "fill_blank",
+          "sentence": "Camilerde namaz kıldıran ve hutbe okuyan din görevlisine _____ denir.",
+          "answer": "imam",
+          "hint": "İ harfi ile başlar",
+          "explanation": "İmam, cemaatin ibadetine önderlik eden ve dini rehberlik yapan temel din görevlisidir."
+        },
+        {
+          "id": "12_16_fb_2",
+          "type": "fill_blank",
+          "sentence": "Namaz vakitlerinde ezan okuyarak cemaati ibadete davet eden görevliye _____ denir.",
+          "answer": "müezzin",
+          "hint": "M harfi ile başlar",
+          "explanation": "Müezzinlik, İslam geleneğinde önemli bir din hizmetidir."
+        },
+        {
+          "id": "12_16_fb_3",
+          "type": "fill_blank",
+          "sentence": "Kur'an-ı Kerim'in tamamını ezberleyen kişiye _____ denir.",
+          "answer": "hafız",
+          "hint": "H harfi ile başlar",
+          "explanation": "Hafız unvanı, Kur'an'ı tam olarak ezberleyip okuyabilen kişiye verilir."
+        },
+        {
+          "id": "12_16_fb_4",
+          "type": "fill_blank",
+          "sentence": "Din görevlisi yetiştiren ortaöğretim kurumları _____ liseleri olarak adlandırılır.",
+          "answer": "İmam-Hatip",
+          "hint": "İ harfi ile başlar",
+          "explanation": "İmam-Hatip liseleri, Türkiye'de din eğitimi veren ve din görevlisi yetiştiren milli eğitim kurumlarıdır."
+        }
+
+      ]
+    }
+
+  ]
+}

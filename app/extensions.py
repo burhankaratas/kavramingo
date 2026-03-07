@@ -1,8 +1,10 @@
 from flask_mysqldb import MySQL
 from flask_login import LoginManager
+from flask_mail import Mail
 
 mysql = MySQL()
 login_manager = LoginManager()
+mail = Mail()
 
 login_manager.login_view = "auth.login"
 login_manager.login_message = "Bu sayfaya erişmek için giriş yapmalısınız."

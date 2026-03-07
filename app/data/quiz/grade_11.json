@@ -1,0 +1,680 @@
+{
+  "grade": 11,
+  "units": [
+
+    {
+      "unit_id": 9,
+      "grade": 11,
+      "name": "Din, Kültür ve Medeniyet",
+      "description": "İslam medeniyetinin tarihi, sanat, mimari ve bilime katkıları",
+      "questions": [
+
+        {
+          "id": "11_9_mc_1",
+          "type": "multiple_choice",
+          "question": "İslam medeniyetinin altın çağı hangi dönemde yaşanmıştır?",
+          "options": [
+            "7-8. yüzyıllar",
+            "8-13. yüzyıllar",
+            "14-16. yüzyıllar",
+            "17-19. yüzyıllar"
+          ],
+          "correct_index": 1,
+          "explanation": "İslam medeniyetinin altın çağı, Abbasi Halifeliği döneminde yaklaşık 8 ile 13. yüzyıllar arasında yaşanmıştır; bilim, sanat ve felsefe büyük ilerleme kaydetmiştir."
+        },
+        {
+          "id": "11_9_mc_2",
+          "type": "multiple_choice",
+          "question": "Abbasi döneminde Bağdat'ta kurulan ve çeşitli dillerden eserlerin Arapçaya çevrildiği merkez hangisidir?",
+          "options": [
+            "Beytü'l-Hikme",
+            "Daru'l-İslam",
+            "Külliye",
+            "Medrese"
+          ],
+          "correct_index": 0,
+          "explanation": "Beytü'l-Hikme (Bilgelik Evi), Abbasi döneminde Bağdat'ta kurulan ve Yunan, Hint, Fars eserlerinin Arapçaya çevrildiği büyük bir bilim ve tercüme merkezidir."
+        },
+        {
+          "id": "11_9_mc_3",
+          "type": "multiple_choice",
+          "question": "İslam mimarisinin simgesi haline gelen yapı unsuru aşağıdakilerden hangisidir?",
+          "options": [
+            "Sütun başlığı",
+            "Minare",
+            "Kulübe",
+            "Tonoz"
+          ],
+          "correct_index": 1,
+          "explanation": "Minare, ezan okunmak üzere camilere eklenen ve İslam mimarisinin en belirgin simgelerinden biri olan yapı unsurudur."
+        },
+        {
+          "id": "11_9_mc_4",
+          "type": "multiple_choice",
+          "question": "'El-Kanun fi't-Tıb' adlı tıp ansiklopedisinin yazarı kimdir?",
+          "options": [
+            "El-Biruni",
+            "İbn Rüşd",
+            "İbn Sina",
+            "El-Farabi"
+          ],
+          "correct_index": 2,
+          "explanation": "İbn Sina (Avicenna), yazdığı 'El-Kanun fi't-Tıb' adlı eserle Ortaçağ Avrupası'nda da ders kitabı olarak okutulan büyük bir tıp ansiklopedisi bırakmıştır."
+        },
+        {
+          "id": "11_9_mc_5",
+          "type": "multiple_choice",
+          "question": "İslam sanatında insan ve hayvan figürü yerine sıklıkla kullanılan bezeme biçimi hangisidir?",
+          "options": [
+            "Fresk",
+            "Heykel",
+            "Arabesk / Tezhip",
+            "Mozaik"
+          ],
+          "correct_index": 2,
+          "explanation": "Arabesk ve tezhip, bitkisel ve geometrik motiflerden oluşan İslam bezeme sanatlarının temelini oluşturur; figüratif sanattan uzaklaşma bu tarza yol açmıştır."
+        },
+
+        {
+          "id": "11_9_fc_1",
+          "type": "flashcard",
+          "term": "Beytü'l-Hikme",
+          "definition": "Abbasi döneminde Bağdat'ta kurulan büyük tercüme ve bilim merkezi (Bilgelik Evi).",
+          "hint": "Bağdat'ta bilim evi"
+        },
+        {
+          "id": "11_9_fc_2",
+          "type": "flashcard",
+          "term": "İbn Sina",
+          "definition": "İslam dünyasının en önemli hekimi ve filozofu; 'El-Kanun fi't-Tıb' adlı eseriyle ünlü.",
+          "hint": "Orta Çağ'ın büyük hekimi"
+        },
+        {
+          "id": "11_9_fc_3",
+          "type": "flashcard",
+          "term": "Tezhip",
+          "definition": "Altın varak ve renkli boyalarla yapılan İslam kitap bezeme sanatı.",
+          "hint": "Altın bezemeli İslam sanatı"
+        },
+        {
+          "id": "11_9_fc_4",
+          "type": "flashcard",
+          "term": "Medrese",
+          "definition": "Ortaçağ İslam dünyasında yüksek öğretim kurumu; dini ve pozitif bilimlerin birlikte öğretildiği yer.",
+          "hint": "İslam'da yükseköğretim"
+        },
+        {
+          "id": "11_9_fc_5",
+          "type": "flashcard",
+          "term": "El-Biruni",
+          "definition": "Coğrafya, astronomi ve matematik alanında önemli eserler veren İslam bilgini.",
+          "hint": "Coğrafyacı İslam bilgini"
+        },
+
+        {
+          "id": "11_9_mt_1",
+          "type": "matching",
+          "instruction": "İslam bilginlerini alanlarıyla eşleştir.",
+          "pairs": [
+            {"term": "İbn Sina",    "definition": "Tıp ve felsefe"},
+            {"term": "El-Biruni",  "definition": "Coğrafya ve astronomi"},
+            {"term": "El-Farabi",  "definition": "Felsefe ve müzik"},
+            {"term": "İbn Rüşd",   "definition": "Felsefe ve tıp"},
+            {"term": "El-Harezmi", "definition": "Matematik ve cebir"}
+          ]
+        },
+        {
+          "id": "11_9_mt_2",
+          "type": "matching",
+          "instruction": "İslam medeniyeti kavramlarını tanımlarıyla eşleştir.",
+          "pairs": [
+            {"term": "Beytü'l-Hikme", "definition": "Bağdat'ta tercüme merkezi"},
+            {"term": "Medrese",       "definition": "İslam'da yükseköğretim kurumu"},
+            {"term": "Tezhip",        "definition": "Altınlı kitap bezeme sanatı"},
+            {"term": "Minare",        "definition": "İslam mimarisinin simgesi"}
+          ]
+        },
+
+        {
+          "id": "11_9_fb_1",
+          "type": "fill_blank",
+          "sentence": "Abbasi döneminde Bağdat'ta kurulan büyük bilim ve tercüme merkezine _____ denir.",
+          "answer": "Beytü'l-Hikme",
+          "hint": "B harfi ile başlar",
+          "explanation": "Beytü'l-Hikme, İslam medeniyetinin altın çağında bilginin yayılmasına büyük katkı sağlamıştır."
+        },
+        {
+          "id": "11_9_fb_2",
+          "type": "fill_blank",
+          "sentence": "'El-Kanun fi't-Tıb' adlı eserin yazarı _____'dir.",
+          "answer": "İbn Sina",
+          "hint": "İ harfi ile başlar",
+          "explanation": "İbn Sina'nın bu eseri Ortaçağ Avrupası'nda yüzyıllarca tıp okulu ders kitabı olarak kullanılmıştır."
+        },
+        {
+          "id": "11_9_fb_3",
+          "type": "fill_blank",
+          "sentence": "Altın varak ve renkli boyalarla yapılan İslam kitap bezeme sanatına _____ denir.",
+          "answer": "tezhip",
+          "hint": "T harfi ile başlar",
+          "explanation": "Tezhip, özellikle Kur'an yazmalarında yaygın olarak kullanılmıştır."
+        },
+        {
+          "id": "11_9_fb_4",
+          "type": "fill_blank",
+          "sentence": "İslam dünyasında dini ve pozitif bilimlerin birlikte öğretildiği yükseköğretim kurumuna _____ denir.",
+          "answer": "medrese",
+          "hint": "M harfi ile başlar",
+          "explanation": "Medreseler, modern üniversitelerin öncülü sayılan İslam eğitim kurumlarıdır."
+        }
+
+      ]
+    },
+
+    {
+      "unit_id": 10,
+      "grade": 11,
+      "name": "İslam ve Bilim",
+      "description": "İslam'ın bilime bakışı, Müslüman bilginler ve bilimsel miras",
+      "questions": [
+
+        {
+          "id": "11_10_mc_1",
+          "type": "multiple_choice",
+          "question": "Kur'an-ı Kerim'de en çok tekrarlanan emirlerden biri hangisidir?",
+          "options": [
+            "Savaş",
+            "Oku / Düşün / Gözlemle",
+            "Ibadet et",
+            "Oruç tut"
+          ],
+          "correct_index": 1,
+          "explanation": "Kur'an'da okuma, düşünme, gözlem yapma ve akıl yürütmeye çağıran pek çok ayet yer alır; bu durum İslam'ın bilime verdiği önemi yansıtır."
+        },
+        {
+          "id": "11_10_mc_2",
+          "type": "multiple_choice",
+          "question": "Cebir biliminin kurucusu kabul edilen Müslüman bilgin kimdir?",
+          "options": [
+            "İbn Sina",
+            "El-Biruni",
+            "El-Harezmi",
+            "El-Kindi"
+          ],
+          "correct_index": 2,
+          "explanation": "El-Harezmi, 'Kitab el-Muhtasar fi Hisab el-Cebr ve'l-Mukabele' adlı eseriyle cebir ilmini sistemli hale getirmiş; 'algoritma' kelimesi onun adından türemiştir."
+        },
+        {
+          "id": "11_10_mc_3",
+          "type": "multiple_choice",
+          "question": "Batı dünyasında 'Averroes' olarak bilinen İslam filozofu kimdir?",
+          "options": [
+            "El-Farabi",
+            "İbn Sina",
+            "İbn Rüşd",
+            "El-Gazali"
+          ],
+          "correct_index": 2,
+          "explanation": "İbn Rüşd (Averroes), Aristoteles'in eserlerine yaptığı şerhlerle Batı felsefesini derinden etkilemiş; Ortaçağ Avrupa üniversitelerinde ders kitabı olarak okunmuştur."
+        },
+        {
+          "id": "11_10_mc_4",
+          "type": "multiple_choice",
+          "question": "'Algoritma' kelimesi hangi Müslüman bilginin adından türemiştir?",
+          "options": [
+            "İbn Rüşd",
+            "El-Kindi",
+            "El-Harezmi",
+            "İbn Battuta"
+          ],
+          "correct_index": 2,
+          "explanation": "Algoritma kelimesi, El-Harezmi'nin Latince adı 'Algoritmi'den türemiştir."
+        },
+        {
+          "id": "11_10_mc_5",
+          "type": "multiple_choice",
+          "question": "İslam'a göre bilim ile din ilişkisi nasıl tanımlanabilir?",
+          "options": [
+            "Çatışma içindedir",
+            "Birbirinden tamamen bağımsızdır",
+            "Uyum ve tamamlayıcılık içindedir",
+            "Bilim dini ortadan kaldırır"
+          ],
+          "correct_index": 2,
+          "explanation": "İslam anlayışında bilim ve din çatışmaz; aksine evrenin araştırılması Allah'ı tanımanın bir yolu olarak görülür."
+        },
+
+        {
+          "id": "11_10_fc_1",
+          "type": "flashcard",
+          "term": "El-Harezmi",
+          "definition": "Cebir bilimini sistemleştiren ve adından 'algoritma' kelimesinin türediği 9. yüzyıl Müslüman matematikçi.",
+          "hint": "Cebir ve algoritmanın babası"
+        },
+        {
+          "id": "11_10_fc_2",
+          "type": "flashcard",
+          "term": "İbn Rüşd (Averroes)",
+          "definition": "Aristoteles'e yaptığı şerhlerle Batı felsefesini etkileyen Endülüslü Müslüman düşünür.",
+          "hint": "Aristoteles yorumcusu"
+        },
+        {
+          "id": "11_10_fc_3",
+          "type": "flashcard",
+          "term": "El-Farabi",
+          "definition": "İslam felsefesinin kurucusu sayılan; müzik ve siyaset felsefesiyle de tanınan Türk-İslam düşünürü.",
+          "hint": "İslam felsefesinin kurucusu"
+        },
+        {
+          "id": "11_10_fc_4",
+          "type": "flashcard",
+          "term": "İbn Battuta",
+          "definition": "14. yüzyılda yaşamış, Asya, Afrika ve Avrupa'yı gezen Müslüman seyyah ve coğrafyacı.",
+          "hint": "Büyük Müslüman seyyah"
+        },
+        {
+          "id": "11_10_fc_5",
+          "type": "flashcard",
+          "term": "İlk Emir: Oku",
+          "definition": "Kur'an'ın Hz. Muhammed'e gelen ilk emri; okuma ve öğrenmeyi İslam'ın temel değerlerinden biri yapar.",
+          "hint": "Alak Suresi'nin başlangıcı"
+        },
+
+        {
+          "id": "11_10_mt_1",
+          "type": "matching",
+          "instruction": "Müslüman bilginleri alanlarıyla eşleştir.",
+          "pairs": [
+            {"term": "El-Harezmi", "definition": "Cebir ve algoritma"},
+            {"term": "İbn Sina",   "definition": "Tıp"},
+            {"term": "El-Farabi",  "definition": "Felsefe ve müzik"},
+            {"term": "İbn Rüşd",   "definition": "Aristoteles yorumculuğu"},
+            {"term": "İbn Battuta","definition": "Seyahat ve coğrafya"}
+          ]
+        },
+        {
+          "id": "11_10_mt_2",
+          "type": "matching",
+          "instruction": "Bilgini eseriyle eşleştir.",
+          "pairs": [
+            {"term": "İbn Sina",    "definition": "El-Kanun fi't-Tıb"},
+            {"term": "El-Harezmi", "definition": "Kitab el-Cebr ve'l-Mukabele"},
+            {"term": "El-Biruni",  "definition": "El-Kanun el-Mesudi"},
+            {"term": "El-Farabi",  "definition": "El-Medinetü'l-Fazıla"}
+          ]
+        },
+
+        {
+          "id": "11_10_fb_1",
+          "type": "fill_blank",
+          "sentence": "Cebir ilmini sistemleştiren Müslüman bilgin _____'dir.",
+          "answer": "El-Harezmi",
+          "hint": "E harfi ile başlar",
+          "explanation": "El-Harezmi'nin çalışmaları modern matematiğin temellerini atmıştır."
+        },
+        {
+          "id": "11_10_fb_2",
+          "type": "fill_blank",
+          "sentence": "'Algoritma' kelimesi _____ adlı Müslüman matematikçinin isminden türemiştir.",
+          "answer": "El-Harezmi",
+          "hint": "Cebirin babası",
+          "explanation": "Latince'de 'Algoritmi' olarak bilinen El-Harezmi'nin adı zamanla 'algoritma' kelimesine dönüşmüştür."
+        },
+        {
+          "id": "11_10_fb_3",
+          "type": "fill_blank",
+          "sentence": "Batı dünyasında 'Averroes' olarak bilinen Müslüman düşünür _____'dir.",
+          "answer": "İbn Rüşd",
+          "hint": "İ harfi ile başlar",
+          "explanation": "İbn Rüşd'ün Aristoteles yorumları Ortaçağ Avrupası'nda büyük etki bırakmıştır."
+        },
+        {
+          "id": "11_10_fb_4",
+          "type": "fill_blank",
+          "sentence": "Kur'an'ın Hz. Muhammed'e inen ilk emri '_____ ' dir.",
+          "answer": "Oku",
+          "hint": "O harfi ile başlar",
+          "explanation": "Alak Suresi'nin ilk kelimesi olan 'Oku' emri, İslam'ın bilgiye verdiği önemi simgeler."
+        }
+
+      ]
+    },
+
+    {
+      "unit_id": 11,
+      "grade": 11,
+      "name": "Asr-ı Saadetten Örnek Şahsiyetler",
+      "description": "Dört halife ve ilk Müslümanların yaşamları, örnek kişilikleri",
+      "questions": [
+
+        {
+          "id": "11_11_mc_1",
+          "type": "multiple_choice",
+          "question": "Hz. Muhammed'den sonra ilk halife kim olmuştur?",
+          "options": [
+            "Hz. Ali",
+            "Hz. Ömer",
+            "Hz. Ebu Bekir",
+            "Hz. Osman"
+          ],
+          "correct_index": 2,
+          "explanation": "Hz. Ebu Bekir, Hz. Muhammed'in vefatından sonra seçilen ilk halifedir (632-634)."
+        },
+        {
+          "id": "11_11_mc_2",
+          "type": "multiple_choice",
+          "question": "Kur'an-ı Kerim'in kitap haline getirilmesi (mushaf) hangi halife döneminde gerçekleşmiştir?",
+          "options": [
+            "Hz. Ebu Bekir",
+            "Hz. Ömer",
+            "Hz. Osman",
+            "Hz. Ali"
+          ],
+          "correct_index": 2,
+          "explanation": "Kur'an, Hz. Osman döneminde standart bir mushaf haline getirilmiş ve kopyaları İslam topraklarına dağıtılmıştır."
+        },
+        {
+          "id": "11_11_mc_3",
+          "type": "multiple_choice",
+          "question": "Hz. Ömer'in halifeliğine işaret eden en önemli özellik nedir?",
+          "options": [
+            "Ticaretteki başarısı",
+            "Adaleti ve hukuk anlayışı",
+            "Kur'an'ı ezberlemiş olması",
+            "Mekke'yi fethetmesi"
+          ],
+          "correct_index": 1,
+          "explanation": "Hz. Ömer, adaleti ve güçlü hukuk anlayışıyla tanınmış; İslam hukukunun uygulanmasında temel ilkeler koymuştur."
+        },
+        {
+          "id": "11_11_mc_4",
+          "type": "multiple_choice",
+          "question": "İlk Müslümanlar arasında 'Allah'ın Kılıcı' lakabıyla tanınan sahabe kimdir?",
+          "options": [
+            "Hz. Ali",
+            "Hz. Hamza",
+            "Hz. Halid bin Velid",
+            "Hz. Talha"
+          ],
+          "correct_index": 2,
+          "explanation": "Hz. Halid bin Velid, İslam tarihinin en büyük komutanlarından biri olarak kabul edilmiş ve 'Allah'ın Kılıcı' lakabını almıştır."
+        },
+        {
+          "id": "11_11_mc_5",
+          "type": "multiple_choice",
+          "question": "Hz. Ali'nin Hz. Muhammed ile akrabalık bağı nedir?",
+          "options": [
+            "Dayısının oğlu",
+            "Amcasının oğlu ve damadı",
+            "Kayınbiraderi",
+            "Dedesi"
+          ],
+          "correct_index": 1,
+          "explanation": "Hz. Ali, Hz. Muhammed'in amcası Ebu Talib'in oğludur; aynı zamanda Hz. Muhammed'in kızı Hz. Fatıma ile evlenerek damadı olmuştur."
+        },
+
+        {
+          "id": "11_11_fc_1",
+          "type": "flashcard",
+          "term": "Hz. Ebu Bekir",
+          "definition": "Hz. Muhammed'in en yakın dostu ve ilk halife (632-634); 'Sıddık' lakabıyla anılır.",
+          "hint": "İlk halife, Sıddık"
+        },
+        {
+          "id": "11_11_fc_2",
+          "type": "flashcard",
+          "term": "Hz. Ömer",
+          "definition": "İkinci halife (634-644); adaleti ve güçlü devlet yönetimiyle İslam devletini genişletmiştir.",
+          "hint": "İkinci halife, adalet sembolü"
+        },
+        {
+          "id": "11_11_fc_3",
+          "type": "flashcard",
+          "term": "Hz. Osman",
+          "definition": "Üçüncü halife (644-656); Kur'an'ı standart mushaf haline getiren halife.",
+          "hint": "Üçüncü halife, Kur'an mushafı"
+        },
+        {
+          "id": "11_11_fc_4",
+          "type": "flashcard",
+          "term": "Hz. Ali",
+          "definition": "Dördüncü halife (656-661); Hz. Muhammed'in amcasının oğlu ve damadı.",
+          "hint": "Dördüncü halife, peygamberin damadı"
+        },
+        {
+          "id": "11_11_fc_5",
+          "type": "flashcard",
+          "term": "Sahabe",
+          "definition": "Hz. Muhammed'i hayatında gören ve Müslüman olarak vefat eden kişilerin genel adı.",
+          "hint": "Hz. Muhammed'in ashabı"
+        },
+
+        {
+          "id": "11_11_mt_1",
+          "type": "matching",
+          "instruction": "Dört halifeyi halifelik sıralarıyla eşleştir.",
+          "pairs": [
+            {"term": "1. Halife", "definition": "Hz. Ebu Bekir"},
+            {"term": "2. Halife", "definition": "Hz. Ömer"},
+            {"term": "3. Halife", "definition": "Hz. Osman"},
+            {"term": "4. Halife", "definition": "Hz. Ali"}
+          ]
+        },
+        {
+          "id": "11_11_mt_2",
+          "type": "matching",
+          "instruction": "Halifeleri öne çıkan özellikleriyle eşleştir.",
+          "pairs": [
+            {"term": "Hz. Ebu Bekir", "definition": "İlk halife, 'Sıddık' lakabı"},
+            {"term": "Hz. Ömer",      "definition": "Adalet ve güçlü yönetim"},
+            {"term": "Hz. Osman",     "definition": "Kur'an'ı mushaf haline getirdi"},
+            {"term": "Hz. Ali",       "definition": "Peygamberin amcaoğlu ve damadı"}
+          ]
+        },
+
+        {
+          "id": "11_11_fb_1",
+          "type": "fill_blank",
+          "sentence": "Hz. Muhammed'den sonra ilk halife _____ olmuştur.",
+          "answer": "Hz. Ebu Bekir",
+          "hint": "E harfi ile başlar",
+          "explanation": "Hz. Ebu Bekir, Hz. Muhammed'in en yakın arkadaşı olup 632-634 yılları arasında halifelik yapmıştır."
+        },
+        {
+          "id": "11_11_fb_2",
+          "type": "fill_blank",
+          "sentence": "Kur'an'ın standart mushaf haline getirilmesi _____ döneminde gerçekleşmiştir.",
+          "answer": "Hz. Osman",
+          "hint": "O harfi ile başlar",
+          "explanation": "Hz. Osman, farklı kıraatlerin önüne geçmek amacıyla standart bir Kur'an mushafı hazırlatmıştır."
+        },
+        {
+          "id": "11_11_fb_3",
+          "type": "fill_blank",
+          "sentence": "Hz. Ali, Hz. Muhammed'in amcasının oğlu ve aynı zamanda _____'dır.",
+          "answer": "damadı",
+          "hint": "Kızıyla evlendi",
+          "explanation": "Hz. Ali, Hz. Muhammed'in kızı Hz. Fatıma ile evlenmiştir."
+        },
+        {
+          "id": "11_11_fb_4",
+          "type": "fill_blank",
+          "sentence": "Hz. Muhammed'i hayatında görmüş ve iman etmiş kişilere _____ denir.",
+          "answer": "sahabe",
+          "hint": "S harfi ile başlar",
+          "explanation": "Sahabe, İslam'ın ilk ve en güvenilir aktarıcıları kabul edilir."
+        }
+
+      ]
+    },
+
+    {
+      "unit_id": 12,
+      "grade": 11,
+      "name": "İslam Tasavvufu",
+      "description": "Tasavvuf, tarikatlar, manevi arınma ve önemli sufi düşünürler",
+      "questions": [
+
+        {
+          "id": "11_12_mc_1",
+          "type": "multiple_choice",
+          "question": "Tasavvuf ne anlama gelir?",
+          "options": [
+            "İslam hukukunun uygulanması",
+            "Allah'a manevi yollarla yaklaşmayı amaçlayan iç disiplin",
+            "Kur'an'ın dışarıdan ezber yöntemi",
+            "İslam'da savaş felsefesi"
+          ],
+          "correct_index": 1,
+          "explanation": "Tasavvuf; nefsi arındırarak, Allah sevgisini ve manevi olgunluğu ön plana çıkararak O'na yaklaşmayı hedefleyen bir iç disiplin ve yaşam anlayışıdır."
+        },
+        {
+          "id": "11_12_mc_2",
+          "type": "multiple_choice",
+          "question": "Mevlana Celaleddin Rumi'nin kaleme aldığı ünlü eser hangisidir?",
+          "options": [
+            "Divan-ı Hikmet",
+            "Mesnevi",
+            "Risale-i Nur",
+            "İhya-u Ulumiddin"
+          ],
+          "correct_index": 1,
+          "explanation": "Mesnevi, Mevlana'nın yaklaşık 25.000 beyitten oluşan ve tasavvufi öğretileri hikayeler aracılığıyla anlatan başyapıtıdır."
+        },
+        {
+          "id": "11_12_mc_3",
+          "type": "multiple_choice",
+          "question": "'Divan-ı Hikmet' adlı eserin sahibi kim dir?",
+          "options": [
+            "Mevlana",
+            "Yunus Emre",
+            "Hacı Bektaş Veli",
+            "Ahmet Yesevi"
+          ],
+          "correct_index": 3,
+          "explanation": "Ahmet Yesevi, Orta Asya'da İslam'ın yayılmasına büyük katkı sağlayan Türk sufi şairidir; 'Divan-ı Hikmet' onun en önemli eseridir."
+        },
+        {
+          "id": "11_12_mc_4",
+          "type": "multiple_choice",
+          "question": "Tasavvufta 'seyr-i süluk' ne anlama gelir?",
+          "options": [
+            "Hacca gitmek",
+            "Manevi olgunlaşma yolculuğu",
+            "Kur'an öğrenmek",
+            "İslam'ın beş şartını yerine getirmek"
+          ],
+          "correct_index": 1,
+          "explanation": "Seyr-i süluk; müridin nefsi arındırarak manevi makamlarda ilerleyip Allah'a yaklaşma sürecini ifade eder."
+        },
+        {
+          "id": "11_12_mc_5",
+          "type": "multiple_choice",
+          "question": "Yunus Emre'nin şiirlerindeki temel tema nedir?",
+          "options": [
+            "Savaş ve zafer",
+            "Ticaret ve refah",
+            "Allah sevgisi, insan sevgisi ve hoşgörü",
+            "Devlet yönetimi"
+          ],
+          "correct_index": 2,
+          "explanation": "Yunus Emre'nin şiirleri; Allah sevgisini, evrensel insan sevgisini, hoşgörüyü ve ölüm karşısındaki tevazuyu yansıtır."
+        },
+
+        {
+          "id": "11_12_fc_1",
+          "type": "flashcard",
+          "term": "Tasavvuf",
+          "definition": "Nefsi arındırarak Allah'a manevi yollarla yaklaşmayı hedefleyen İslami iç disiplin.",
+          "hint": "Manevi arınma yolu"
+        },
+        {
+          "id": "11_12_fc_2",
+          "type": "flashcard",
+          "term": "Mevlana",
+          "definition": "13. yüzyıl Konya'sında yaşamış; Mesnevi adlı eseri ve sema ayiniyle tanınan büyük sufi şair.",
+          "hint": "Mesnevi ve sema"
+        },
+        {
+          "id": "11_12_fc_3",
+          "type": "flashcard",
+          "term": "Yunus Emre",
+          "definition": "Allah ve insan sevgisini, hoşgörüyü sade Türkçeyle anlatan 13-14. yüzyıl Anadolu sufi şairi.",
+          "hint": "Anadolu'nun sevgi şairi"
+        },
+        {
+          "id": "11_12_fc_4",
+          "type": "flashcard",
+          "term": "Ahmet Yesevi",
+          "definition": "Orta Asya'da İslam'ı yayan, 'Divan-ı Hikmet' adlı eserin sahibi Türk sufi şairi.",
+          "hint": "Orta Asya'nın piri"
+        },
+        {
+          "id": "11_12_fc_5",
+          "type": "flashcard",
+          "term": "Seyr-i Süluk",
+          "definition": "Tasavvufta müridin manevi olgunlaşma yolculuğu; nefsi arındırıp Allah'a yaklaşma süreci.",
+          "hint": "Manevi yolculuk"
+        },
+
+        {
+          "id": "11_12_mt_1",
+          "type": "matching",
+          "instruction": "Sufi düşünürleri eserleriyle eşleştir.",
+          "pairs": [
+            {"term": "Mevlana",      "definition": "Mesnevi"},
+            {"term": "Ahmet Yesevi","definition": "Divan-ı Hikmet"},
+            {"term": "Yunus Emre",  "definition": "İlahi şiirler"},
+            {"term": "El-Gazali",   "definition": "İhya-u Ulumiddin"}
+          ]
+        },
+        {
+          "id": "11_12_mt_2",
+          "type": "matching",
+          "instruction": "Tasavvuf kavramlarını tanımlarıyla eşleştir.",
+          "pairs": [
+            {"term": "Tasavvuf",    "definition": "Manevi arınma yolu"},
+            {"term": "Seyr-i süluk","definition": "Manevi olgunlaşma yolculuğu"},
+            {"term": "Mürşid",     "definition": "Manevi rehber"},
+            {"term": "Mürit",      "definition": "Manevi yola giren talip"}
+          ]
+        },
+
+        {
+          "id": "11_12_fb_1",
+          "type": "fill_blank",
+          "sentence": "Mevlana'nın yaklaşık 25.000 beyitten oluşan başyapıtına _____ denir.",
+          "answer": "Mesnevi",
+          "hint": "M harfi ile başlar",
+          "explanation": "Mesnevi, tasavvufi öğretileri hikâyeler aracılığıyla aktaran dünya edebiyatının önemli eserlerinden biridir."
+        },
+        {
+          "id": "11_12_fb_2",
+          "type": "fill_blank",
+          "sentence": "Ahmet Yesevi'nin Orta Asya'da İslam'ı yaymak için kaleme aldığı eserin adı _____'dir.",
+          "answer": "Divan-ı Hikmet",
+          "hint": "D harfi ile başlar",
+          "explanation": "Divan-ı Hikmet, sade ve anlaşılır Türkçesiyle geniş halk kitlelerine ulaşmıştır."
+        },
+        {
+          "id": "11_12_fb_3",
+          "type": "fill_blank",
+          "sentence": "Tasavvufta müridin manevi makamlarda ilerlemesine _____ denir.",
+          "answer": "seyr-i süluk",
+          "hint": "S harfi ile başlar",
+          "explanation": "Seyr-i süluk, tasavvuf yolunun temel kavramlarından biridir."
+        },
+        {
+          "id": "11_12_fb_4",
+          "type": "fill_blank",
+          "sentence": "Allah ve insan sevgisini sade Türkçeyle anlatan Anadolu'nun büyük sufi şairi _____'dir.",
+          "answer": "Yunus Emre",
+          "hint": "Y harfi ile başlar",
+          "explanation": "Yunus Emre, Türk tasavvuf şiirinin en önemli temsilcisi kabul edilir."
+        }
+
+      ]
+    }
+
+  ]
+}

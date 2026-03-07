@@ -1,0 +1,416 @@
+{% extends "app_base.html" %}
+{% block title %}Quiz Sonucu — KavramLingo{% endblock %}
+
+{% block head %}
+<style>
+  .result-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  /* ── Hero sonuç kartı ────────────────────────────────────────────────────── */
+  .result-hero {
+    border-radius: 24px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    border: none;
+  }
+
+  .result-hero.perfect {
+    background: linear-gradient(135deg, #06D6A0 0%, #059669 100%);
+    box-shadow: 0 8px 32px rgba(6,214,160,0.35);
+  }
+
+  .result-hero.good {
+    background: linear-gradient(135deg, var(--kl-primary) 0%, var(--kl-accent) 100%);
+    box-shadow: 0 8px 32px rgba(67,97,238,0.28);
+  }
+
+  .result-hero.poor {
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    box-shadow: 0 8px 32px rgba(245,158,11,0.28);
+  }
+
+  /* Nokta deseni */
+  .result-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1.5px, transparent 1.5px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+
+  .result-hero-inner { position: relative; z-index: 1; }
+
+  .result-emoji {
+    font-size: 3.5rem;
+    display: block;
+    margin-bottom: 0.5rem;
+    animation: popIn 0.5s cubic-bezier(.4,0,.2,1) both;
+  }
+
+  @keyframes popIn {
+    0%   { transform: scale(0.3); opacity: 0; }
+    80%  { transform: scale(1.1); }
+    100% { transform: scale(1);   opacity: 1; }
+  }
+
+  .result-title {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 0.3rem;
+    line-height: 1.2;
+  }
+
+  .result-subtitle {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 1.5rem;
+  }
+
+  /* XP büyük sayı */
+  .result-xp-big {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255,255,255,0.18);
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50px;
+    padding: 10px 24px;
+    backdrop-filter: blur(8px);
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #fff;
+  }
+
+  /* ── İstatistik satırı ───────────────────────────────────────────────────── */
+  .result-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .stat-card {
+    background: #fff;
+    border-radius: 18px;
+    border: 2px solid var(--kl-border);
+    padding: 1.25rem 1rem;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(67,97,238,0.06);
+  }
+
+  .stat-icon {
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+
+  .stat-value {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--kl-text);
+    line-height: 1;
+    margin-bottom: 0.2rem;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--kl-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── Mükemmel bonus bandı ────────────────────────────────────────────────── */
+  .perfect-bonus-band {
+    background: linear-gradient(90deg, #ECFDF5, #D1FAE5);
+    border: 2px solid #A7F3D0;
+    border-radius: 16px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #065F46;
+  }
+
+  .perfect-bonus-band .bi { font-size: 1.3rem; color: var(--kl-success); }
+
+  /* ── Yeni rozetler ───────────────────────────────────────────────────────── */
+  .new-badges-card {
+    background: #fff;
+    border-radius: 20px;
+    border: 2px solid var(--kl-border);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 12px rgba(67,97,238,0.06);
+  }
+
+  .new-badges-title {
+    font-size: 0.78rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--kl-muted);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .new-badges-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .new-badge-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: linear-gradient(135deg, #FFF9C4, #FFE066);
+    border: 1.5px solid #FCD34D;
+    border-radius: 50px;
+    padding: 6px 14px;
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: #78350F;
+  }
+
+  /* ── Cevap detayları ─────────────────────────────────────────────────────── */
+  .answers-card {
+    background: #fff;
+    border-radius: 20px;
+    border: 2px solid var(--kl-border);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 12px rgba(67,97,238,0.06);
+  }
+
+  .answers-title {
+    font-size: 0.78rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--kl-muted);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .answer-row {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--kl-bg);
+  }
+
+  .answer-row:last-child { border-bottom: none; }
+
+  .answer-dot {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  .answer-dot.correct { background: #ECFDF5; color: var(--kl-success); }
+  .answer-dot.wrong   { background: #FFF1F3; color: var(--kl-danger); }
+
+  .answer-qid {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--kl-muted);
+    flex: 1;
+  }
+
+  .answer-score {
+    font-size: 0.88rem;
+    font-weight: 900;
+    color: var(--kl-primary);
+    white-space: nowrap;
+  }
+
+  .answer-score.neg { color: var(--kl-danger); }
+
+  /* ── Butonlar ────────────────────────────────────────────────────────────── */
+  .result-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .btn-result {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 14px;
+    border-radius: 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.97rem;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+
+  .btn-result-primary {
+    background: var(--kl-primary);
+    color: #fff;
+    box-shadow: 0 5px 0 var(--kl-primary-dark);
+  }
+
+  .btn-result-primary:hover  { transform: translateY(-2px); box-shadow: 0 7px 0 var(--kl-primary-dark); color: #fff; }
+  .btn-result-primary:active { transform: translateY(3px);  box-shadow: 0 2px 0 var(--kl-primary-dark); }
+
+  .btn-result-outline {
+    background: #fff;
+    color: var(--kl-primary);
+    border-color: var(--kl-border);
+  }
+
+  .btn-result-outline:hover { border-color: var(--kl-primary); background: #F5F7FF; color: var(--kl-primary); }
+
+  @media (max-width: 500px) {
+    .result-stats    { grid-template-columns: 1fr 1fr; }
+    .result-actions  { grid-template-columns: 1fr; }
+    .result-title    { font-size: 1.45rem; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="result-wrap">
+
+  <!-- ── Hero ──────────────────────────────────────────────────────────────── -->
+  {% set pct = (result.correct_count / result.total_q * 100) | int if result.total_q else 0 %}
+  {% if result.is_perfect %}
+    {% set hero_cls = 'perfect' %}
+    {% set emoji     = '🏆' %}
+    {% set hero_msg  = 'Mükemmel!' %}
+    {% set hero_sub  = 'Tüm soruları doğru yanıtladın!' %}
+  {% elif pct >= 60 %}
+    {% set hero_cls = 'good' %}
+    {% set emoji     = '🎉' %}
+    {% set hero_msg  = 'Harika İş!' %}
+    {% set hero_sub  = 'Çok iyi bir performans gösterdin.' %}
+  {% else %}
+    {% set hero_cls = 'poor' %}
+    {% set emoji     = '💪' %}
+    {% set hero_msg  = 'Devam Et!' %}
+    {% set hero_sub  = 'Pratik yaparak daha iyiye ulaşabilirsin.' %}
+  {% endif %}
+
+  <div class="result-hero {{ hero_cls }}">
+    <div class="result-hero-inner">
+      <span class="result-emoji">{{ emoji }}</span>
+      <div class="result-title">{{ hero_msg }}</div>
+      <div class="result-subtitle">{{ hero_sub }}</div>
+      <div class="result-xp-big">
+        <i class="bi bi-star-fill"></i>
+        +{{ result.total_score }} XP
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Mükemmel bonus bandı ──────────────────────────────────────────────── -->
+  {% if result.perfect_bonus > 0 %}
+  <div class="perfect-bonus-band">
+    <i class="bi bi-award-fill"></i>
+    <span>Mükemmel tamamlama bonusu: <strong>+{{ result.perfect_bonus }} XP</strong> eklendi!</span>
+  </div>
+  {% endif %}
+
+  <!-- ── İstatistikler ─────────────────────────────────────────────────────── -->
+  <div class="result-stats">
+    <div class="stat-card">
+      <span class="stat-icon" style="color:var(--kl-success);">✅</span>
+      <div class="stat-value">{{ result.correct_count }}</div>
+      <div class="stat-label">Doğru</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-icon" style="color:var(--kl-danger);">❌</span>
+      <div class="stat-value">{{ result.wrong_count }}</div>
+      <div class="stat-label">Yanlış</div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-icon" style="color:var(--kl-primary);">📊</span>
+      <div class="stat-value">{{ pct }}%</div>
+      <div class="stat-label">Başarı</div>
+    </div>
+  </div>
+
+  <!-- ── Yeni rozetler ─────────────────────────────────────────────────────── -->
+  {% if new_badges %}
+  <div class="new-badges-card">
+    <div class="new-badges-title">
+      <i class="bi bi-award-fill" style="color:var(--kl-warning);"></i>
+      Yeni Rozetler!
+    </div>
+    <div class="new-badges-list">
+      {% for b in new_badges %}
+      <div class="new-badge-pill">
+        <i class="bi bi-award-fill"></i>
+        {{ b }}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- ── Cevap detayları ────────────────────────────────────────────────────── -->
+  {% if result.answers %}
+  <div class="answers-card">
+    <div class="answers-title">
+      <i class="bi bi-list-check" style="color:var(--kl-primary);"></i>
+      Cevap Detayları
+    </div>
+    {% for ans in result.answers %}
+    <div class="answer-row">
+      <div class="answer-dot {{ 'correct' if ans.is_correct else 'wrong' }}">
+        {% if ans.is_correct %}<i class="bi bi-check-lg"></i>
+        {% else %}<i class="bi bi-x-lg"></i>{% endif %}
+      </div>
+      <div class="answer-qid">
+        Soru {{ loop.index }}
+        {% if ans.time is not none %}
+          <span style="font-weight:600;color:var(--kl-muted);"> · {{ "%.1f"|format(ans.time) }}s</span>
+        {% endif %}
+      </div>
+      {% set bd = result.breakdown[loop.index0] if result.breakdown is defined else none %}
+      {% if bd %}
+      <div class="answer-score {{ 'neg' if bd.score < 0 else '' }}">
+        {{ '+' if bd.score >= 0 else '' }}{{ bd.score }} XP
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- ── Aksiyon butonları ──────────────────────────────────────────────────── -->
+  <div class="result-actions">
+    <a href="{{ url_for('dashboard.index') }}" class="btn-result btn-result-primary">
+      <i class="bi bi-house-fill"></i> Ana Sayfa
+    </a>
+    <a href="{{ url_for('dashboard.index') }}" class="btn-result btn-result-outline">
+      <i class="bi bi-arrow-repeat"></i> Tekrar Dene
+    </a>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,150 @@
+{% extends "quiz/_quiz_base.html" %}
+{% block title %}Eşleştirme — KavramLingo{% endblock %}
+
+{% block quiz_head %}
+<style>
+  .match-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .match-col-label {
+    font-size: 0.72rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--kl-muted);
+    margin-bottom: 0.6rem;
+    text-align: center;
+  }
+
+  .match-term-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.85rem 1rem;
+    background: #EEF1FD;
+    border-radius: 14px;
+    border: 2px solid #C7D3FC;
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: var(--kl-primary);
+    min-height: 56px;
+    margin-bottom: 0.5rem;
+  }
+
+  .match-num {
+    width: 26px; height: 26px;
+    border-radius: 8px;
+    background: var(--kl-primary);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 900;
+    flex-shrink: 0;
+  }
+
+  .match-select-wrap { position: relative; margin-bottom: 0.5rem; }
+
+  .match-select {
+    width: 100%;
+    padding: 0.85rem 2.5rem 0.85rem 1rem;
+    border-radius: 14px;
+    border: 2.5px solid var(--kl-border);
+    background: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--kl-text);
+    appearance: none;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    min-height: 56px;
+  }
+
+  .match-select:focus {
+    outline: none;
+    border-color: var(--kl-primary);
+    box-shadow: 0 0 0 3px rgba(67,97,238,0.12);
+  }
+
+  .match-select-wrap::after {
+    content: '\F282';
+    font-family: 'bootstrap-icons';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--kl-muted);
+    pointer-events: none;
+    font-size: 0.85rem;
+  }
+
+  .btn-kl-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 14px;
+    background: var(--kl-primary);
+    color: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 5px 0 var(--kl-primary-dark);
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+  .btn-kl-submit:hover  { transform: translateY(-2px); box-shadow: 0 7px 0 var(--kl-primary-dark); }
+  .btn-kl-submit:active { transform: translateY(3px);  box-shadow: 0 2px 0 var(--kl-primary-dark); }
+
+  @media (max-width: 500px) {
+    .match-grid { grid-template-columns: 1fr; }
+  }
+</style>
+{% endblock %}
+
+{% block quiz_content %}
+<p class="quiz-question-text">Kavramları doğru tanımlarıyla eşleştirin.</p>
+
+<form method="POST" action="{{ url_for('quiz.answer') }}">
+  <div class="match-grid">
+    <!-- Sol: kavramlar -->
+    <div>
+      <div class="match-col-label"><i class="bi bi-list-ul"></i> Kavramlar</div>
+      {% for pair in question.pairs %}
+      <div class="match-term-item">
+        <div class="match-num">{{ loop.index }}</div>
+        {{ pair.left }}
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Sağ: dropdown seçim -->
+    <div>
+      <div class="match-col-label"><i class="bi bi-chat-square-text-fill"></i> Tanımlar</div>
+      {% set all_rights = question.pairs | map(attribute='right') | list %}
+      {% for pair in question.pairs %}
+      <div class="match-select-wrap">
+        <select name="match_{{ loop.index0 }}" class="match-select" required>
+          <option value="" disabled selected>Seçin…</option>
+          {% for right in all_rights %}
+          <option value="{{ right }}">{{ right }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <button type="submit" class="btn-kl-submit">
+    <i class="bi bi-check2-circle"></i>
+    {% if current_index == total %}Sonucu Gör{% else %}Sonraki Soru{% endif %}
+  </button>
+</form>
+{% endblock %}
