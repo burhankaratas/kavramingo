@@ -78,30 +78,6 @@ COMBO_THRESHOLDS: dict[int, float] = {
 }
 
 
-# ── Yardımcı ──────────────────────────────────────────────────────────────────
-
-def _combo_multiplier(combo_count: int) -> float:
-    """Mevcut combo sayısına göre çarpanı döndür."""
-    result = 1.0
-    for threshold, mult in sorted(COMBO_THRESHOLDS.items(), reverse=True):
-        if combo_count >= threshold:
-            result = mult
-            break
-    return result
-
-
-def _time_bonus(time_taken: float | None) -> float:
-    """
-    Kalan süreye göre bonus puan hesapla.
-    time_taken: soruya harcanan süre (saniye). None ise bonus eklenmez.
-    """
-    if time_taken is None or time_taken < 0:
-        return 0.0
-    remaining = max(0.0, MAX_TIME_PER_QUESTION - time_taken)
-    ratio = remaining / MAX_TIME_PER_QUESTION          # 0.0 – 1.0
-    return round(ratio * MAX_TIME_BONUS, 2)
-
-
 # ── Ana fonksiyonlar ──────────────────────────────────────────────────────────
 
 def calculate_answer_score(
@@ -125,17 +101,31 @@ def calculate_answer_score(
     int: Puan (minimum 0, negatife düşmez).
          Yanlış cevap −WRONG_PENALTY döndürebilir; toplam hesabında 0'a çekilir.
     """
-    if not is_correct:
-        # Yanlış cevap cezası; negatif değer döner, toplam 0'a çekilir
+    if is_correct is False:
         return -WRONG_PENALTY
 
-    multiplier  = TYPE_MULTIPLIERS.get(quiz_type, 1.0)
-    base        = BASE_SCORE * multiplier
-    t_bonus     = _time_bonus(time_taken)
-    c_mult      = _combo_multiplier(combo_count)
+    else:
+        tip_carpani = TYPE_MULTIPLIERS[quiz_type]
+        temel_puan  = BASE_SCORE * tip_carpani
 
-    raw = (base + t_bonus) * c_mult
-    return max(0, round(raw))
+        if time_taken is None or time_taken < 0:
+            sure_bonusu = 0.0
+        else:
+            kalan_sure  = MAX_TIME_PER_QUESTION - time_taken
+            kalan_sure  = max(0.0, kalan_sure)
+            oran        = kalan_sure / MAX_TIME_PER_QUESTION
+            sure_bonusu = oran * MAX_TIME_BONUS
+
+        combo_carpani = 1.0
+        for (esik, carpan) in sorted(COMBO_THRESHOLDS.items(), reverse=True):
+            if combo_count >= esik:
+                combo_carpani = carpan
+                break
+
+        ham_puan = (temel_puan + sure_bonusu) * combo_carpani
+        sonuc    = round(ham_puan)
+        sonuc    = max(0, sonuc)
+        return sonuc
 
 
 def calculate_quiz_score(
