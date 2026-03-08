@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KavramLingo — Din Kültürü Öğrenmenin Yeni Yolu</title>
+
+  <!-- Google Fonts: Nunito -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Bootstrap 5 + Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+
+  <style>
+    /* ── Tokens ──────────────────────────────────────────────────────────── */
+    :root {
+      --kl-primary:      #4361EE;
+      --kl-primary-dark: #3A0CA3;
+      --kl-accent:       #7209B7;
+      --kl-success:      #06D6A0;
+      --kl-warning:      #FFB703;
+      --kl-danger:       #EF233C;
+      --kl-bg:           #F0F2FF;
+      --kl-text:         #1B1F3B;
+      --kl-muted:        #6B7280;
+      --kl-border:       #E2E8F0;
+      --kl-card:         #FFFFFF;
+      --radius-lg:       20px;
+      --radius-xl:       28px;
+      --shadow-card:     0 4px 24px rgba(67, 97, 238, 0.10);
+      --shadow-hover:    0 12px 40px rgba(67, 97, 238, 0.18);
+    }
+
+    /* ── Reset / Base ────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--kl-bg);
+      color: var(--kl-text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── Navbar ──────────────────────────────────────────────────────────── */
+    .kl-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(240, 242, 255, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--kl-border);
+      padding: 0 2rem;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .kl-nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .kl-nav-logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--kl-primary), var(--kl-accent));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(67,97,238,.3);
+    }
+
+    .kl-nav-logo-text {
+      font-weight: 900;
+      font-size: 1.25rem;
+      color: var(--kl-text);
+    }
+
+    .kl-nav-logo-text span {
+      color: var(--kl-primary);
+    }
+
+    .kl-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .kl-nav-links a {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--kl-muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    .kl-nav-links a:hover { color: var(--kl-primary); }
+
+    .kl-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* ── Button System ───────────────────────────────────────────────────── */
+    .btn-kl {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      border: none;
+      border-radius: 14px;
+      padding: 11px 24px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform .12s, box-shadow .12s, background .2s;
+      white-space: nowrap;
+    }
+
+    .btn-kl-primary {
+      background: var(--kl-primary);
+      color: #fff;
+      box-shadow: 0 5px 0 var(--kl-primary-dark);
+    }
+
+    .btn-kl-primary:hover {
+      background: #3558e0;
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 7px 0 var(--kl-primary-dark);
+    }
+
+    .btn-kl-primary:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 var(--kl-primary-dark);
+    }
+
+    .btn-kl-outline {
+      background: transparent;
+      color: var(--kl-primary);
+      border: 2.5px solid var(--kl-primary);
+      box-shadow: none;
+    }
+
+    .btn-kl-outline:hover {
+      background: rgba(67,97,238,.07);
+      color: var(--kl-primary);
+      transform: translateY(-1px);
+    }
+
+    .btn-kl-ghost {
+      background: rgba(255,255,255,.15);
+      color: #fff;
+      border: 2px solid rgba(255,255,255,.35);
+    }
+
+    .btn-kl-ghost:hover {
+      background: rgba(255,255,255,.25);
+      color: #fff;
+    }
+
+    .btn-kl-lg {
+      font-size: 1.1rem;
+      padding: 15px 36px;
+      border-radius: 18px;
+    }
+
+    /* ── Hero ────────────────────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 96px 2rem 80px;
+      background: linear-gradient(135deg, #1B1F3B 0%, #3A0CA3 45%, #7209B7 100%);
+    }
+
+    /* Decorative blobs */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -120px; right: -100px;
+      width: 520px; height: 520px;
+      background: radial-gradient(circle, rgba(67,97,238,.45) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -60px;
+      width: 380px; height: 380px;
+      background: radial-gradient(circle, rgba(6,214,160,.3) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 64px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 99px;
+      padding: 6px 16px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: rgba(255,255,255,.9);
+      margin-bottom: 20px;
+    }
+
+    .hero-badge-dot {
+      width: 8px; height: 8px;
+      background: var(--kl-success);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: .6; transform: scale(1.3); }
+    }
+
+    .hero-headline {
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      font-weight: 900;
+      line-height: 1.15;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+
+    .hero-headline-accent {
+      background: linear-gradient(90deg, #06D6A0, #FFB703);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: rgba(255,255,255,.72);
+      max-width: 480px;
+      margin-bottom: 36px;
+      line-height: 1.65;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .hero-cta-note {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: rgba(255,255,255,.5);
+      margin-top: 14px;
+    }
+
+    /* Hero visual: card mockup */
+    .hero-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .mock-card {
+      background: rgba(255,255,255,.1);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: var(--radius-xl);
+      padding: 20px 24px;
+      color: #fff;
+    }
+
+    .mock-card-sm { padding: 14px 18px; }
+
+    .mock-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .mock-icon {
+      width: 40px; height: 40px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .mock-title { font-size: 0.78rem; font-weight: 700; opacity: .6; text-transform: uppercase; letter-spacing: .06em; }
+    .mock-value { font-size: 1.05rem; font-weight: 800; }
+
+    .mock-progress-bar {
+      height: 8px;
+      background: rgba(255,255,255,.15);
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .mock-progress-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--kl-success), #06D6A0cc);
+    }
+
+    .mock-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .mock-option {
+      background: rgba(255,255,255,.08);
+      border: 1.5px solid rgba(255,255,255,.12);
+      border-radius: 12px;
+      padding: 9px 14px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mock-option.correct {
+      background: rgba(6,214,160,.18);
+      border-color: var(--kl-success);
+    }
+
+    .mock-option-letter {
+      width: 24px; height: 24px;
+      border-radius: 8px;
+      background: rgba(255,255,255,.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .mock-option.correct .mock-option-letter {
+      background: var(--kl-success);
+      color: #fff;
+    }
+
+    .mock-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .mock-stat {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mock-stat-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+
+    .mock-stat-val { font-size: 1.05rem; font-weight: 900; }
+    .mock-stat-lbl { font-size: 0.72rem; font-weight: 600; opacity: .6; }
+
+    /* ── Section shared ──────────────────────────────────────────────────── */
+    section { padding: 88px 2rem; }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(67,97,238,.1);
+      color: var(--kl-primary);
+      border-radius: 99px;
+      padding: 5px 14px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 900;
+      line-height: 1.2;
+      color: var(--kl-text);
+      margin-bottom: 12px;
+    }
+
+    .section-sub {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--kl-muted);
+      max-width: 560px;
+      line-height: 1.65;
+    }
+
+    /* ── Features ────────────────────────────────────────────────────────── */
+    #ozellikler { background: var(--kl-card); }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-top: 52px;
+    }
+
+    .feature-card {
+      background: var(--kl-bg);
+      border: 1.5px solid var(--kl-border);
+      border-radius: var(--radius-xl);
+      padding: 32px 24px;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--kl-primary);
+    }
+
+    .feature-icon-wrap {
+      width: 56px; height: 56px;
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+    }
+
+    .feature-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--kl-text);
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--kl-muted);
+      line-height: 1.6;
+    }
+
+    /* ── Quiz Types ──────────────────────────────────────────────────────── */
+    #quiz-tipleri { background: var(--kl-bg); }
+
+    .quiz-types-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 52px;
+    }
+
+    .qt-card {
+      background: var(--kl-card);
+      border: 1.5px solid var(--kl-border);
+      border-radius: var(--radius-xl);
+      padding: 32px 36px;
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .qt-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .qt-icon-wrap {
+      width: 64px; height: 64px;
+      border-radius: 18px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+
+    .qt-name {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--kl-text);
+      margin-bottom: 6px;
+    }
+
+    .qt-desc {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--kl-muted);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .qt-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border-radius: 99px;
+      padding: 4px 12px;
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    /* ── Nasıl Çalışır ───────────────────────────────────────────────────── */
+    #nasil-calisir { background: var(--kl-card); }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 52px;
+      position: relative;
+    }
+
+    .steps-grid::before {
+      content: '';
+      position: absolute;
+      top: 38px; left: calc(16.66% + 16px); right: calc(16.66% + 16px);
+      height: 2px;
+      background: linear-gradient(90deg, var(--kl-primary), var(--kl-accent));
+      z-index: 0;
+    }
+
+    .step-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-number {
+      width: 76px; height: 76px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--kl-primary), var(--kl-accent));
+      color: #fff;
+      font-size: 1.6rem;
+      font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(67,97,238,.35);
+    }
+
+    .step-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--kl-text);
+      margin-bottom: 10px;
+    }
+
+    .step-desc {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--kl-muted);
+      line-height: 1.6;
+    }
+
+    /* ── Stats ───────────────────────────────────────────────────────────── */
+    #istatistikler {
+      background: linear-gradient(135deg, #1B1F3B 0%, #3A0CA3 60%, #7209B7 100%);
+      padding: 72px 2rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .stat-item {
+      text-align: center;
+      color: #fff;
+    }
+
+    .stat-num {
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 8px;
+      background: linear-gradient(90deg, #06D6A0, #FFB703);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-lbl {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: rgba(255,255,255,.65);
+    }
+
+    /* ── CTA Section ─────────────────────────────────────────────────────── */
+    #basla {
+      background: var(--kl-bg);
+      padding: 96px 2rem;
+    }
+
+    .cta-box {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .cta-emoji {
+      font-size: 3.5rem;
+      display: block;
+      margin-bottom: 24px;
+    }
+
+    .cta-title {
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      font-weight: 900;
+      color: var(--kl-text);
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .cta-sub {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--kl-muted);
+      margin-bottom: 36px;
+      line-height: 1.65;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ── Footer ──────────────────────────────────────────────────────────── */
+    footer {
+      background: #1B1F3B;
+      padding: 40px 2rem;
+      color: rgba(255,255,255,.5);
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .footer-logo-icon {
+      width: 34px; height: 34px;
+      background: linear-gradient(135deg, var(--kl-primary), var(--kl-accent));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px;
+      color: #fff;
+    }
+
+    .footer-logo-text {
+      font-weight: 900;
+      font-size: 1.05rem;
+      color: rgba(255,255,255,.85);
+    }
+
+    .footer-logo-text span { color: var(--kl-primary); }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      color: rgba(255,255,255,.45);
+      text-decoration: none;
+      font-weight: 700;
+      transition: color .2s;
+    }
+
+    .footer-links a:hover { color: rgba(255,255,255,.85); }
+
+    /* ── Responsive ──────────────────────────────────────────────────────── */
+    @media (max-width: 991px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+      .hero-visual { max-width: 480px; margin: 0 auto; }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .quiz-types-grid { grid-template-columns: 1fr; }
+      .kl-nav-links { display: none; }
+    }
+
+    @media (max-width: 767px) {
+      .hero { padding: 64px 1.25rem 56px; }
+      section { padding: 64px 1.25rem; }
+      .features-grid { grid-template-columns: 1fr; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .steps-grid::before { display: none; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-inner { flex-direction: column; gap: 20px; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+      .qt-card { flex-direction: column; padding: 24px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════════════ NAVBAR -->
+  <nav class="kl-nav">
+    <a href="#" class="kl-nav-logo">
+      <div class="kl-nav-logo-icon">📖</div>
+      <span class="kl-nav-logo-text">Kavram<span>Lingo</span></span>
+    </a>
+
+    <ul class="kl-nav-links">
+      <li><a href="#ozellikler">Özellikler</a></li>
+      <li><a href="#quiz-tipleri">Quiz Tipleri</a></li>
+      <li><a href="#nasil-calisir">Nasıl Çalışır</a></li>
+    </ul>
+
+    <div class="kl-nav-actions">
+      <a href="{{ url_for('auth.login') }}" class="btn-kl btn-kl-outline">Giriş Yap</a>
+      <a href="{{ url_for('auth.register') }}" class="btn-kl btn-kl-primary">Ücretsiz Başla</a>
+    </div>
+  </nav>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════════ HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+
+      <!-- Left: Text -->
+      <div>
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          9. – 12. Sınıf müfredatı kapsanıyor
+        </div>
+
+        <h1 class="hero-headline">
+          Din Kültürü'nü<br/>
+          <span class="hero-headline-accent">öğrenmek artık<br/>çok daha eğlenceli.</span>
+        </h1>
+
+        <p class="hero-sub">
+          Oyunlaştırılmış quizler, günlük seri ödülleri ve anlık geri bildirimle
+          kavramları gerçekten öğren — ezberleme.
+        </p>
+
+        <div class="hero-cta">
+          <a href="{{ url_for('auth.register') }}" class="btn-kl btn-kl-primary btn-kl-lg">
+            <i class="bi bi-rocket-takeoff-fill"></i>
+            Ücretsiz Başla
+          </a>
+          <a href="{{ url_for('auth.login') }}" class="btn-kl btn-kl-ghost btn-kl-lg">
+            Giriş Yap
+          </a>
+        </div>
+        <p class="hero-cta-note">Hesap açmak ücretsiz · Kredi kartı gerekmez</p>
+      </div>
+
+      <!-- Right: Mock UI -->
+      <div class="hero-visual">
+        <!-- Quiz card -->
+        <div class="mock-card">
+          <div style="font-size:.72rem;font-weight:800;opacity:.55;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;">
+            <i class="bi bi-lightning-charge-fill" style="color:var(--kl-warning)"></i>
+            &nbsp;Çoktan Seçmeli · İslam'ın Temel Kavramları
+          </div>
+          <div style="font-size:1.0rem;font-weight:800;margin-bottom:14px;">
+            Kur'an-ı Kerim kaç yılda tamamlanmıştır?
+          </div>
+          <div class="mock-options">
+            <div class="mock-option">
+              <div class="mock-option-letter">A</div>
+              10 yılda
+            </div>
+            <div class="mock-option">
+              <div class="mock-option-letter">B</div>
+              15 yılda
+            </div>
+            <div class="mock-option correct">
+              <div class="mock-option-letter">C</div>
+              23 yılda
+              <i class="bi bi-check-circle-fill ms-auto" style="color:var(--kl-success);font-size:1rem"></i>
+            </div>
+            <div class="mock-option">
+              <div class="mock-option-letter">D</div>
+              40 yılda
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats row -->
+        <div class="mock-row">
+          <div class="mock-card mock-card-sm">
+            <div class="mock-stat">
+              <div class="mock-stat-icon" style="background:rgba(255,183,3,.2);">🔥</div>
+              <div>
+                <div class="mock-stat-val">12 Gün</div>
+                <div class="mock-stat-lbl">Güncel Seri</div>
+              </div>
+            </div>
+          </div>
+          <div class="mock-card mock-card-sm">
+            <div class="mock-stat">
+              <div class="mock-stat-icon" style="background:rgba(6,214,160,.2);">⚡</div>
+              <div>
+                <div class="mock-stat-val">2.480 XP</div>
+                <div class="mock-stat-lbl">Toplam Puan</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress card -->
+        <div class="mock-card mock-card-sm">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <span style="font-size:.85rem;font-weight:800;">İslam'ın Temel İlkeleri</span>
+            <span style="font-size:.78rem;font-weight:700;opacity:.55;">15 / 20</span>
+          </div>
+          <div class="mock-progress-bar">
+            <div class="mock-progress-fill" style="width:75%"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════ ÖZELLİKLER -->
+  <section id="ozellikler">
+    <div class="section-inner">
+      <div class="section-eyebrow"><i class="bi bi-stars"></i> Neden KavramLingo?</div>
+      <h2 class="section-title">Öğrenmek sıkıcı olmak zorunda değil.</h2>
+      <p class="section-sub">
+        Her özellik, sınav kaygısını azaltacak ve kavramları uzun süre aklında tutacak şekilde tasarlandı.
+      </p>
+
+      <div class="features-grid">
+
+        <div class="feature-card">
+          <div class="feature-icon-wrap" style="background:rgba(67,97,238,.12);">🎮</div>
+          <div class="feature-name">Oyunlaştırılmış Öğrenme</div>
+          <div class="feature-desc">
+            XP kazan, rozetler topla, seri ödülleri ile her gün motive kal. Öğrenmek bir oyun gibi hissettiriyor.
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-wrap" style="background:rgba(6,214,160,.12);">📊</div>
+          <div class="feature-name">Anlık Geri Bildirim</div>
+          <div class="feature-desc">
+            Her cevabın ardından doğru-yanlış göster, açıklamayla pekiştir. Yanlış öğrenmek yok.
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-wrap" style="background:rgba(114,9,183,.12);">🎯</div>
+          <div class="feature-name">Sınıf Bazlı Müfredat</div>
+          <div class="feature-desc">
+            9., 10., 11. ve 12. sınıf müfredatı ayrı ayrı kurgulanmış; ders konunuzu bulun, odaklanın.
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-wrap" style="background:rgba(255,183,3,.12);">🔥</div>
+          <div class="feature-name">Günlük Seri & Hedef</div>
+          <div class="feature-desc">
+            Günlük quiz hedefi belirle. Serinizi kırmadan çalışmayı alışkanlığa dönüştür.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════ QUIZ TİPLERİ -->
+  <section id="quiz-tipleri">
+    <div class="section-inner">
+      <div class="section-eyebrow"><i class="bi bi-grid-3x3-gap-fill"></i> 4 Farklı Quiz Tipi</div>
+      <h2 class="section-title">Her kavram, farklı bir yolla pekiştirilir.</h2>
+      <p class="section-sub">
+        Tek tip sorular beyin için yeterli değil. KavramLingo'da her ünite dört farklı
+        alıştırma tipiyle tamamlanır.
+      </p>
+
+      <div class="quiz-types-grid">
+
+        <div class="qt-card">
+          <div class="qt-icon-wrap" style="background:rgba(67,97,238,.1);">⚡</div>
+          <div>
+            <div class="qt-name">Çoktan Seçmeli</div>
+            <div class="qt-desc">
+              Hız ve doğruluk bir arada. Her doğru cevap XP kazandırır; süre bonusu ile puanını artır.
+            </div>
+            <span class="qt-pill" style="background:rgba(67,97,238,.1);color:var(--kl-primary);">
+              <i class="bi bi-lightning-fill"></i> Süre Bonusu Aktif
+            </span>
+          </div>
+        </div>
+
+        <div class="qt-card">
+          <div class="qt-icon-wrap" style="background:rgba(114,9,183,.1);">🔄</div>
+          <div>
+            <div class="qt-name">Eşleştirme</div>
+            <div class="qt-desc">
+              Kavramlar ve tanımları doğru şekilde eşleştir. İlişkilendirerek öğrenmek kalıcılığı artırır.
+            </div>
+            <span class="qt-pill" style="background:rgba(114,9,183,.1);color:var(--kl-accent);">
+              <i class="bi bi-arrow-left-right"></i> ×1.2 Puan Çarpanı
+            </span>
+          </div>
+        </div>
+
+        <div class="qt-card">
+          <div class="qt-icon-wrap" style="background:rgba(6,214,160,.1);">🃏</div>
+          <div>
+            <div class="qt-name">Flashcard</div>
+            <div class="qt-desc">
+              Kartı gör, tanımını hatırlamaya çalış, ardından kontrol et. Aktif geri çağırma ile kavramlar hafızana kazınır.
+            </div>
+            <span class="qt-pill" style="background:rgba(6,214,160,.1);color:#059669;">
+              <i class="bi bi-eye-fill"></i> Aktif Hatırlama
+            </span>
+          </div>
+        </div>
+
+        <div class="qt-card">
+          <div class="qt-icon-wrap" style="background:rgba(255,183,3,.1);">✏️</div>
+          <div>
+            <div class="qt-name">Boşluk Doldurma</div>
+            <div class="qt-desc">
+              Pasif tanıma değil, aktif üretim. Doğru kelimeyi kendin yaz; en yüksek XP çarpanı bu tipte.
+            </div>
+            <span class="qt-pill" style="background:rgba(255,183,3,.12);color:#9a6e00;">
+              <i class="bi bi-pencil-fill"></i> ×1.5 Puan Çarpanı
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════ NASIL ÇALIŞIR -->
+  <section id="nasil-calisir">
+    <div class="section-inner">
+      <div class="section-eyebrow"><i class="bi bi-map-fill"></i> Nasıl Çalışır?</div>
+      <h2 class="section-title">Üç adımda başla.</h2>
+      <p class="section-sub">
+        Onboarding'den ilk quize kadar geçen süre 2 dakika. Sadece başla.
+      </p>
+
+      <div class="steps-grid">
+
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <div class="step-title">Sınıfını Seç</div>
+          <div class="step-desc">
+            Hangi sınıfta olduğunu belirt; günlük quiz hedefini ayarla. Sana özel müfredat hazırlanır.
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <div class="step-title">Ünite & Quiz Seç</div>
+          <div class="step-desc">
+            Dashboarddan çalışmak istediğin üniteyi seç, dört quiz tipinden birini başlat. Her oturum 5 soruluk.
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <div class="step-title">Kazan & İlerle</div>
+          <div class="step-desc">
+            XP kazan, serinizi koruyun, rozetler toplayın. 20 oturumda üniteyi tamamla; bir sonrakine geç.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════ İSTATİSTİKLER -->
+  <section id="istatistikler">
+    <div class="stats-grid">
+
+      <div class="stat-item">
+        <div class="stat-num">4</div>
+        <div class="stat-lbl">Quiz Tipi</div>
+      </div>
+
+      <div class="stat-item">
+        <div class="stat-num">4</div>
+        <div class="stat-lbl">Sınıf Müfredatı</div>
+      </div>
+
+      <div class="stat-item">
+        <div class="stat-num">18</div>
+        <div class="stat-lbl">Kazanılabilir Rozet</div>
+      </div>
+
+      <div class="stat-item">
+        <div class="stat-num">5</div>
+        <div class="stat-lbl">Soru / Oturum</div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════ BÜYÜK CTA -->
+  <section id="basla">
+    <div class="cta-box">
+      <span class="cta-emoji">🚀</span>
+      <h2 class="cta-title">Hâlâ düşünüyor musun?</h2>
+      <p class="cta-sub">
+        Hesabını aç, sınıfını seç ve ilk quizini başlat. Tamamen ücretsiz.
+      </p>
+      <div class="cta-buttons">
+        <a href="{{ url_for('auth.register') }}" class="btn-kl btn-kl-primary btn-kl-lg">
+          <i class="bi bi-rocket-takeoff-fill"></i>
+          Hemen Başla
+        </a>
+        <a href="{{ url_for('auth.login') }}" class="btn-kl btn-kl-outline btn-kl-lg">
+          Giriş Yap
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════════ FOOTER -->
+  <footer>
+    <div class="footer-inner">
+
+      <a href="#" class="footer-logo">
+        <div class="footer-logo-icon">📖</div>
+        <span class="footer-logo-text">Kavram<span>Lingo</span></span>
+      </a>
+
+      <ul class="footer-links">
+        <li><a href="#ozellikler">Özellikler</a></li>
+        <li><a href="#quiz-tipleri">Quiz Tipleri</a></li>
+        <li><a href="#nasil-calisir">Nasıl Çalışır</a></li>
+        <li><a href="{{ url_for('auth.register') }}">Kayıt Ol</a></li>
+      </ul>
+
+      <span>© 2026 KavramLingo</span>
+
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Navbar scroll shadow
+    const nav = document.querySelector('.kl-nav');
+    window.addEventListener('scroll', () => {
+      nav.style.boxShadow = window.scrollY > 10
+        ? '0 4px 24px rgba(67,97,238,.1)'
+        : 'none';
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -4,6 +4,7 @@ import os
 from flask import render_template
 from flask_login import current_user, login_required
 
+
 from app.modules.dashboard import dashboard_bp
 from app.extensions import mysql
 from app.services.badge_service import get_user_streak
@@ -35,8 +36,9 @@ def _load_unit_info(unit_id: int) -> dict | None:
 
 
 @dashboard_bp.route("/")
-@login_required
 def index():
+    if not current_user.is_authenticated:
+        return render_template("landing/index.html")
     # ── Rozet verisi (DB) ──────────────────────────────────────────────────
     cur = mysql.connection.cursor()
 
