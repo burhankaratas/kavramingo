@@ -24,11 +24,13 @@ Bu dokuman, panel disindan toplu icerik yukleme (upsert) icindir.
 ## CSV Ornekleri
 
 Ornek dosyalar:
-- `storage/app/content-csv/unit-topic.sample.csv`
-- `storage/app/content-csv/mcq.sample.csv`
-- `storage/app/content-csv/flashcard.sample.csv`
-- `storage/app/content-csv/matching.sample.csv`
-- `storage/app/content-csv/fill-blank.sample.csv`
+- `docs/samples/unit-topic.sample.csv`
+- `docs/samples/mcq.sample.csv`
+- `docs/samples/flashcard.sample.csv`
+- `docs/samples/matching.sample.csv`
+- `docs/samples/fill-blank.sample.csv`
+
+Istersen bu dosyalari `storage/app/content-csv/` klasorune kopyalayip ordan da import edebilirsin.
 
 ## Import Sirasi
 

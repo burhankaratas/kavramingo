@@ -103,6 +103,22 @@ Servisler:
 - Laravel API: `http://127.0.0.1:8000/api/v1`
 - Filament panel: `http://127.0.0.1:8000/admin`
 
+### Tamamlandi Durumu
+
+Bu repo icerik yonetimi acisindan API tabanli akisa gecmistir:
+
+- Icerik kaynagi: Laravel API (`app/clients/ProjeTbtk`) + Filament panel
+- Flask onboarding/dashboard/quiz: API feed ile calisir
+- Toplu icerik yukleme: CSV upsert komutu (`app:import-content-csv`)
+
+Hizli son test:
+
+```bash
+./scripts/bootstrap_dev.sh
+./scripts/run_api.sh
+./scripts/run_flask.sh
+```
+
 Tablolar uygulama ilk çalıştığında `init_db()` tarafından **otomatik oluşturulur**. Elle SQL çalıştırmaya gerek yoktur.
 
 ---
@@ -209,10 +225,11 @@ Tablolar `app/db.py` içinde `CREATE TABLE IF NOT EXISTS` ile tanımlanmıştır
 
 - **Yeni içerik API (Laravel / ProjeTbtk)**: `/api/v1/*` endpointleri ve `/admin` paneli eklendi.
 - Flask onboarding ve dashboard, API modu aktifken içerik verisini `app/clients/kavram_api.py` üzerinden çeker.
+- Flask quiz akisi API feed (`/api/v1/quiz-feed`) uzerinden calisir.
 - API hazır değilse `.env` dosyasında `KAVRAM_API_MOCK=true` bırakılarak `mock_data.py` ile geliştirme yapılabilir.
 - **ORM kullanılmamıştır.** Tüm sorgular ham SQL + `DictCursor` ile yazılmıştır (`flask-mysqldb`).
 - **MySQL bağlantısı** `utf8mb4` charset ile açılır (emoji desteği için `config.py`'de `MYSQL_CHARSET = "utf8mb4"` zorunludur).
-- Backend bağlantısı (dashboard, quiz geçmişi) henüz tamamlanmamış olup arayüz mock veriyle çalışmaktadır.
+- Toplu icerik importu icin Laravel komutu: `app:import-content-csv`
 
 ---
 

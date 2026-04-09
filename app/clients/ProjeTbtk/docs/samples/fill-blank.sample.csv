@@ -1,0 +1,3 @@
+question_code,grade,unit_no,topic_no,difficulty,order,prompt,sentence_template,answer_text
+DKAB9-U1-K1-FB-001,9,1,1,medium,10,Cumledeki boslugu doldurun.,Islam'in ilk sarti ______ getirmektir.,sehadet
+DKAB9-U1-K1-FB-002,9,1,1,hard,20,Dogru kavrami yazin.,Allah'in birligine inanmak ______ olarak adlandirilir.,tevhid
