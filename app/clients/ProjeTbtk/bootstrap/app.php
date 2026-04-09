@@ -7,6 +7,10 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 return Application::configure(basePath: dirname(__DIR__))
+    ->withCommands([
+        \App\Console\Commands\CreateAdminUser::class,
+        \App\Console\Commands\ImportContentCsv::class,
+    ])
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         api: __DIR__.'/../routes/api.php',
