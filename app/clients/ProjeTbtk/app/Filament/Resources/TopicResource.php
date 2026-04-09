@@ -51,13 +51,13 @@ class TopicResource extends Resource
                         ignoreRecord: true,
                         modifyRuleUsing: function (Unique $rule, Forms\Get $get): Unique {
                             return $rule
-                                ->where('unit_id', (int) ($get('unit_id') ?? 0))
-                                ->whereNull('deleted_at');
+                                ->where('unit_id', (int) ($get('unit_id') ?? 0));
                         }
                     )
                     ->validationMessages([
                         'unique' => 'Bu unite icin ayni konu numarasi zaten var.',
-                    ]),
+                    ])
+                    ->helperText('Ayni unite icinde ayni konu numarasi tekrar edemez.'),
                 Forms\Components\TextInput::make('name')
                     ->label('Konu Adi')
                     ->required(),

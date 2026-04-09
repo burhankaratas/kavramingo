@@ -45,13 +45,13 @@ class UnitResource extends Resource
                         ignoreRecord: true,
                         modifyRuleUsing: function (Unique $rule, Forms\Get $get): Unique {
                             return $rule
-                                ->where('grade', (int) ($get('grade') ?? 0))
-                                ->whereNull('deleted_at');
+                                ->where('grade', (int) ($get('grade') ?? 0));
                         }
                     )
                     ->validationMessages([
                         'unique' => 'Bu sinifta ayni unite numarasi zaten var.',
-                    ]),
+                    ])
+                    ->helperText('Ayni sinifta ayni unite numarasi tekrar edemez.'),
                 Forms\Components\TextInput::make('name')
                     ->label('Unite Adi')
                     ->required(),

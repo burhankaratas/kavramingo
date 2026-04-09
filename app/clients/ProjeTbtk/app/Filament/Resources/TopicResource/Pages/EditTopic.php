@@ -3,12 +3,20 @@
 namespace App\Filament\Resources\TopicResource\Pages;
 
 use App\Filament\Resources\TopicResource;
+use App\Filament\Support\HandlesIntegrityError;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
 class EditTopic extends EditRecord
 {
+    use HandlesIntegrityError;
+
     protected static string $resource = TopicResource::class;
+
+    protected function handleRecordUpdate(\Illuminate\Database\Eloquent\Model $record, array $data): \Illuminate\Database\Eloquent\Model
+    {
+        return $this->runWithUniqueGuard(fn () => parent::handleRecordUpdate($record, $data));
+    }
 
     protected function getHeaderActions(): array
     {
