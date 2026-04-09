@@ -35,6 +35,7 @@ class EditQuestion extends EditRecord
             'right_text' => $pair->right_text,
             'order' => $pair->order,
         ])->all();
+        $data['concept_id'] = null;
 
         return $data;
     }
@@ -43,6 +44,7 @@ class EditQuestion extends EditRecord
     {
         /** @var Question $record */
         $data = QuestionResource::mutateDataToTopic($data);
+        unset($data['concept_id']);
 
         $mcq = $data['mcq'] ?? null;
         $flashcard = $data['flashcard'] ?? null;

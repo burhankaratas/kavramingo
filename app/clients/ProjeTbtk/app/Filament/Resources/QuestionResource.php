@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\QuestionResource\Pages;
+use App\Models\Concept;
 use App\Models\Question;
 use App\Models\Unit;
 use App\Support\UnitTopicResolver;
@@ -120,6 +121,28 @@ class QuestionResource extends Resource
                             ])
                             ->columns(3),
                     ]),
+
+                Forms\Components\Section::make('Kavram Destegi (Opsiyonel)')
+                    ->description('Soruya bagli kavram notu eklemek icin kullanilir.')
+                    ->schema([
+                        Forms\Components\Select::make('concept_id')
+                            ->label('Kavram')
+                            ->options(
+                                Concept::query()
+                                    ->with('topic.unit')
+                                    ->orderBy('topic_id')
+                                    ->orderBy('order')
+                                    ->get()
+                                    ->mapWithKeys(fn (Concept $c) => [
+                                        $c->id => ($c->topic?->unit?->grade ?? '?') . '. Sinif / ' . ($c->topic?->unit?->name ?? '-') . ' / ' . $c->name,
+                                    ])
+                                    ->all()
+                            )
+                            ->searchable()
+                            ->native(false)
+                            ->placeholder('Secmek zorunlu degil'),
+                    ])
+                    ->collapsed(),
             ]);
     }
 

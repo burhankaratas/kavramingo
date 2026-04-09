@@ -23,6 +23,11 @@ class ConceptResource extends Resource
     protected static ?string $pluralModelLabel = 'Kavram Bankasi';
     protected static ?string $navigationGroup = 'Ileri Seviye';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form

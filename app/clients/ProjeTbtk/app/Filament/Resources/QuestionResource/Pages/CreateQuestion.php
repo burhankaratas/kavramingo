@@ -14,6 +14,7 @@ class CreateQuestion extends CreateRecord
     protected function handleRecordCreation(array $data): Question
     {
         $data = QuestionResource::mutateDataToTopic($data);
+        unset($data['concept_id']);
 
         $mcq = $data['mcq'] ?? null;
         $flashcard = $data['flashcard'] ?? null;
