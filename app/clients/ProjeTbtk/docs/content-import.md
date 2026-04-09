@@ -9,7 +9,7 @@ Bu dokuman, panel disindan toplu icerik yukleme (upsert) icindir.
 ```
 
 `type` degerleri:
-- `unit-topic`
+- `unit`
 - `mcq`
 - `flashcard`
 - `matching`
@@ -17,7 +17,7 @@ Bu dokuman, panel disindan toplu icerik yukleme (upsert) icindir.
 
 ## Upsert Kurali
 
-- `unit-topic`: Unit icin unique anahtar `(grade, unit_no)`, Topic icin `(unit_id, topic_no)`
+- `unit`: Unit icin unique anahtar `(grade, unit_no)`
 - Soru tipleri: unique anahtar `question_code`
 - `question_code` varsa guncellenir, yoksa olusturulur
 
@@ -34,7 +34,7 @@ Istersen bu dosyalari `storage/app/content-csv/` klasorune kopyalayip ordan da i
 
 ## Import Sirasi
 
-1. `unit-topic`
+1. `unit`
 2. `mcq`
 3. `flashcard`
 4. `matching`
@@ -42,6 +42,8 @@ Istersen bu dosyalari `storage/app/content-csv/` klasorune kopyalayip ordan da i
 
 ## Notlar
 
+- Unit importu her unite icin otomatik bir "Genel" topic olusturur.
+- Panelde soru eklerken konu secimi yerine unite secersin; teknik olarak default topic kullanilir.
 - Matching importunda ayni `question_code` birden fazla satirda olmali (pair bazli).
 - Matching soru basina 3-6 cift disinda satirlar skip edilir.
 - Import transaction icinde calisir; hata olursa ilgili batch geri alinir.

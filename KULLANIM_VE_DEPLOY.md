@@ -145,7 +145,7 @@ cd app/clients/ProjeTbtk
 ```
 
 `type`:
-- `unit-topic`
+- `unit`
 - `mcq`
 - `flashcard`
 - `matching`
@@ -162,7 +162,7 @@ Ornek import:
 
 ```bash
 cd app/clients/ProjeTbtk
-/opt/lampp/bin/php artisan app:import-content-csv unit-topic docs/samples/unit-topic.sample.csv
+/opt/lampp/bin/php artisan app:import-content-csv unit docs/samples/unit-topic.sample.csv
 /opt/lampp/bin/php artisan app:import-content-csv mcq docs/samples/mcq.sample.csv
 ```
 

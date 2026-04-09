@@ -32,14 +32,14 @@ Komut:
 ```
 
 Type:
-- `unit-topic`
+- `unit`
 - `mcq`
 - `flashcard`
 - `matching`
 - `fill_blank`
 
 Ornek dosyalar:
-- `docs/samples/unit-topic.sample.csv`
+- `docs/samples/unit-topic.sample.csv` (unit importta kullanilir)
 - `docs/samples/mcq.sample.csv`
 - `docs/samples/flashcard.sample.csv`
 - `docs/samples/matching.sample.csv`

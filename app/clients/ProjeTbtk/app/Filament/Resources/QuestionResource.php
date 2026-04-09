@@ -3,8 +3,9 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\QuestionResource\Pages;
-use App\Models\Topic;
 use App\Models\Question;
+use App\Models\Unit;
+use App\Support\UnitTopicResolver;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -18,9 +19,9 @@ class QuestionResource extends Resource
     protected static ?string $model = Question::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?string $navigationLabel = 'Sorular';
+    protected static ?string $navigationLabel = 'Quiz Sorulari';
     protected static ?string $modelLabel = 'Soru';
-    protected static ?string $pluralModelLabel = 'Sorular';
+    protected static ?string $pluralModelLabel = 'Quiz Sorulari';
     protected static ?string $navigationGroup = 'Icerik';
 
     public static function form(Form $form): Form
@@ -28,15 +29,14 @@ class QuestionResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('topic_id')
-                    ->label('Konu')
+                    ->label('Unite')
                     ->options(
-                        Topic::query()
-                            ->with('unit')
-                            ->orderBy('unit_id')
-                            ->orderBy('topic_no')
+                        Unit::query()
+                            ->orderBy('grade')
+                            ->orderBy('unit_no')
                             ->get()
-                            ->mapWithKeys(fn (Topic $topic) => [
-                                $topic->id => ($topic->unit?->grade ?? '?') . '. Sinif / U' . ($topic->unit?->unit_no ?? '?') . ' / K' . $topic->topic_no . ' - ' . $topic->name,
+                            ->mapWithKeys(fn (Unit $unit) => [
+                                $unit->id => $unit->grade . '. Sinif / ' . $unit->unit_no . '. Unite - ' . $unit->name,
                             ])
                             ->all()
                     )
@@ -137,7 +137,8 @@ class QuestionResource extends Resource
                     ->label('Zorluk')
                     ->badge(),
                 Tables\Columns\TextColumn::make('topic.name')
-                    ->label('Konu')
+                    ->label('Unite')
+                    ->formatStateUsing(fn ($state, $record) => $record->topic?->unit?->name ?? '-')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('order')
                     ->label('Sira')
@@ -179,9 +180,20 @@ class QuestionResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->with(['topic', 'mcq', 'flashcard', 'fillBlank', 'matchingPairs'])
+            ->with(['topic.unit', 'mcq', 'flashcard', 'fillBlank', 'matchingPairs'])
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function mutateDataToTopic(array $data): array
+    {
+        $unitId = (int) ($data['topic_id'] ?? 0);
+        $topic = UnitTopicResolver::defaultTopicForUnitId($unitId);
+        if ($topic) {
+            $data['topic_id'] = $topic->id;
+        }
+
+        return $data;
     }
 }

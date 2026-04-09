@@ -9,13 +9,14 @@ use App\Models\McqQuestion;
 use App\Models\Question;
 use App\Models\Topic;
 use App\Models\Unit;
+use App\Support\UnitTopicResolver;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
 class ImportContentCsv extends Command
 {
     protected $signature = 'app:import-content-csv
-        {type : unit-topic|mcq|flashcard|matching|fill_blank}
+        {type : unit|mcq|flashcard|matching|fill_blank}
         {file : CSV dosya yolu}';
 
     protected $description = 'Import content CSV with upsert semantics';
@@ -37,7 +38,7 @@ class ImportContentCsv extends Command
         }
 
         return match ($type) {
-            'unit-topic' => $this->importUnitTopic($rows),
+            'unit' => $this->importUnit($rows),
             'mcq' => $this->importMcq($rows),
             'flashcard' => $this->importFlashcard($rows),
             'matching' => $this->importMatching($rows),
@@ -49,7 +50,7 @@ class ImportContentCsv extends Command
     private function unknownType(string $type): int
     {
         $this->error('Gecersiz type: ' . $type);
-        $this->line('Kullanilabilir: unit-topic, mcq, flashcard, matching, fill_blank');
+        $this->line('Kullanilabilir: unit, mcq, flashcard, matching, fill_blank');
         return self::FAILURE;
     }
 
@@ -110,15 +111,18 @@ class ImportContentCsv extends Command
             return null;
         }
 
+        // topic_no gelmezse, unite icin default topic kullan
+        if ($topicNo < 1) {
+            return UnitTopicResolver::defaultTopicForUnitId($unit->id);
+        }
+
         return Topic::query()->where('unit_id', $unit->id)->where('topic_no', $topicNo)->first();
     }
 
-    private function importUnitTopic(array $rows): int
+    private function importUnit(array $rows): int
     {
         $unitCreated = 0;
         $unitUpdated = 0;
-        $topicCreated = 0;
-        $topicUpdated = 0;
         $skipped = 0;
 
         DB::beginTransaction();
@@ -126,9 +130,8 @@ class ImportContentCsv extends Command
             foreach ($rows as $row) {
                 $grade = (int) ($row['grade'] ?? 0);
                 $unitNo = (int) ($row['unit_no'] ?? 0);
-                $topicNo = (int) ($row['topic_no'] ?? 0);
 
-                if (!in_array($grade, [9, 10, 11, 12], true) || $unitNo < 1 || $topicNo < 1) {
+                if (!in_array($grade, [9, 10, 11, 12], true) || $unitNo < 1) {
                     $skipped++;
                     continue;
                 }
@@ -156,26 +159,7 @@ class ImportContentCsv extends Command
                     $unitCreated++;
                 }
 
-                $topic = Topic::withTrashed()->where('unit_id', $unit->id)->where('topic_no', $topicNo)->first();
-                if ($topic) {
-                    $topic->fill([
-                        'name' => $row['topic_name'] ?? $topic->name,
-                        'order' => (int) ($row['topic_order'] ?? $topic->order ?? 0),
-                    ]);
-                    if ($topic->trashed()) {
-                        $topic->restore();
-                    }
-                    $topic->save();
-                    $topicUpdated++;
-                } else {
-                    Topic::create([
-                        'unit_id' => $unit->id,
-                        'topic_no' => $topicNo,
-                        'name' => $row['topic_name'] ?? ('Konu ' . $topicNo),
-                        'order' => (int) ($row['topic_order'] ?? 0),
-                    ]);
-                    $topicCreated++;
-                }
+                UnitTopicResolver::defaultTopicForUnitId($unit->id);
             }
 
             DB::commit();
@@ -186,7 +170,6 @@ class ImportContentCsv extends Command
         }
 
         $this->info("Unit created: $unitCreated, updated: $unitUpdated");
-        $this->info("Topic created: $topicCreated, updated: $topicUpdated");
         $this->line("Skipped rows: $skipped");
         return self::SUCCESS;
     }

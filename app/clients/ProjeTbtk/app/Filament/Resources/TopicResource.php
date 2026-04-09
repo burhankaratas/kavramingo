@@ -19,10 +19,11 @@ class TopicResource extends Resource
     protected static ?string $model = Topic::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?string $navigationLabel = 'Konular';
+    protected static ?string $navigationLabel = 'Konu Bankasi';
     protected static ?string $modelLabel = 'Konu';
-    protected static ?string $pluralModelLabel = 'Konular';
-    protected static ?string $navigationGroup = 'Icerik';
+    protected static ?string $pluralModelLabel = 'Konu Bankasi';
+    protected static ?string $navigationGroup = 'Ileri Seviye';
+    protected static ?int $navigationSort = 99;
 
     public static function form(Form $form): Form
     {

@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class QuizConfigResource extends Resource
 {
@@ -100,5 +101,10 @@ class QuizConfigResource extends Resource
             'view' => Pages\ViewQuizConfig::route('/{record}'),
             'edit' => Pages\EditQuizConfig::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with('unit');
     }
 }

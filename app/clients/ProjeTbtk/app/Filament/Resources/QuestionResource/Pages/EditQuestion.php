@@ -42,6 +42,8 @@ class EditQuestion extends EditRecord
     protected function handleRecordUpdate($record, array $data): Question
     {
         /** @var Question $record */
+        $data = QuestionResource::mutateDataToTopic($data);
+
         $mcq = $data['mcq'] ?? null;
         $flashcard = $data['flashcard'] ?? null;
         $fillBlank = $data['fill_blank'] ?? null;
