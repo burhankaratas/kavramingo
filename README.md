@@ -85,6 +85,24 @@ mysql -u root -e "CREATE DATABASE IF NOT EXISTS kavramingo_content CHARACTER SET
 python app.py
 ```
 
+### Geliştirme için hızlı başlatma
+
+```bash
+# bir kez kurulum / migration
+./scripts/bootstrap_dev.sh
+
+# terminal 1: Laravel content API
+./scripts/run_api.sh
+
+# terminal 2: Flask uygulama
+./scripts/run_flask.sh
+```
+
+Servisler:
+- Flask app: `http://127.0.0.1:5000`
+- Laravel API: `http://127.0.0.1:8000/api/v1`
+- Filament panel: `http://127.0.0.1:8000/admin`
+
 Tablolar uygulama ilk çalıştığında `init_db()` tarafından **otomatik oluşturulur**. Elle SQL çalıştırmaya gerek yoktur.
 
 ---
