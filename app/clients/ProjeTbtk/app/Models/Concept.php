@@ -5,19 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Concept extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
-        'unit_id',
+        'topic_id',
         'name',
         'definition',
         'order',
     ];
 
-    public function unit(): BelongsTo
+    public function topic(): BelongsTo
     {
-        return $this->belongsTo(Unit::class);
+        return $this->belongsTo(Topic::class);
     }
 
     public function descriptions(): HasMany

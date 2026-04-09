@@ -2,14 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\Api\ConceptController;
-use App\Http\Controllers\Api\UnitController;
+use App\Http\Controllers\Api\V1\QuestionFeedController;
+use App\Http\Controllers\Api\V1\UnitFeedController;
 
-// Ünite rotaları
-Route::get('/units', [UnitController::class, 'index']);
-Route::get('/units/{unit}', [UnitController::class, 'show']);
-Route::get('/units/{unit}/concepts', [UnitController::class, 'concepts']);
+Route::prefix('v1')->middleware('api.token:content:read')->group(function () {
+    Route::get('/unites', [UnitFeedController::class, 'index']);
+    Route::get('/unites/{unit}', [UnitFeedController::class, 'show']);
+    Route::get('/unites/{unit}/konular', [UnitFeedController::class, 'topics']);
+    Route::get('/konular/{topic}/kavramlar', [UnitFeedController::class, 'concepts']);
 
-// Kavram rotaları
-Route::get('/concepts', [ConceptController::class, 'index']);
-Route::get('/concepts/{concept}', [ConceptController::class, 'show']);
+    Route::get('/quiz-feed', [QuestionFeedController::class, 'quizFeed']);
+    Route::get('/placement-feed', [QuestionFeedController::class, 'placementFeed']);
+});
