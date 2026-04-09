@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Validation\Rules\Unique;
 
 class TopicResource extends Resource
 {
@@ -45,7 +46,18 @@ class TopicResource extends Resource
                     ->label('Konu No')
                     ->required()
                     ->numeric()
-                    ->minValue(1),
+                    ->minValue(1)
+                    ->unique(
+                        ignoreRecord: true,
+                        modifyRuleUsing: function (Unique $rule, Forms\Get $get): Unique {
+                            return $rule
+                                ->where('unit_id', (int) ($get('unit_id') ?? 0))
+                                ->whereNull('deleted_at');
+                        }
+                    )
+                    ->validationMessages([
+                        'unique' => 'Bu unite icin ayni konu numarasi zaten var.',
+                    ]),
                 Forms\Components\TextInput::make('name')
                     ->label('Konu Adi')
                     ->required(),

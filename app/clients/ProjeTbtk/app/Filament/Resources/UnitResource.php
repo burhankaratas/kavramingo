@@ -11,6 +11,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Validation\Rules\Unique;
 
 class UnitResource extends Resource
 {
@@ -39,7 +40,18 @@ class UnitResource extends Resource
                     ->label('Unite No')
                     ->required()
                     ->numeric()
-                    ->minValue(1),
+                    ->minValue(1)
+                    ->unique(
+                        ignoreRecord: true,
+                        modifyRuleUsing: function (Unique $rule, Forms\Get $get): Unique {
+                            return $rule
+                                ->where('grade', (int) ($get('grade') ?? 0))
+                                ->whereNull('deleted_at');
+                        }
+                    )
+                    ->validationMessages([
+                        'unique' => 'Bu sinifta ayni unite numarasi zaten var.',
+                    ]),
                 Forms\Components\TextInput::make('name')
                     ->label('Unite Adi')
                     ->required(),
