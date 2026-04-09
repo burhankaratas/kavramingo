@@ -7,6 +7,7 @@ load_dotenv()
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
     KAVRAM_API_BASE_URL = os.getenv("KAVRAM_API_BASE_URL", "http://localhost:8000")
+    KAVRAM_API_TOKEN = os.getenv("KAVRAM_API_TOKEN", "")
 
     MYSQL_HOST = os.getenv("DB_HOST", "127.0.0.1")
     MYSQL_PORT = int(os.getenv("DB_PORT", "3306"))

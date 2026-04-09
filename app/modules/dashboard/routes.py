@@ -1,38 +1,27 @@
-import json
-import os
-
 from flask import render_template
 from flask_login import current_user, login_required
 
+from app.clients.kavram_api import get_unite
 
 from app.modules.dashboard import dashboard_bp
 from app.extensions import mysql
 from app.services.badge_service import get_user_streak
 
 
-# ── Yardımcı: JSON'dan ünite bilgisi ─────────────────────────────────────────
+# ── Yardımcı: API'den ünite bilgisi ──────────────────────────────────────────
 
 def _load_unit_info(unit_id: int) -> dict | None:
-    """Verilen unit_id için JSON'dan {name, number, grade, total_questions} döndürür."""
-    base = os.path.join(os.path.dirname(__file__), "..", "..", "data", "quiz")
-    for grade in [9, 10, 11, 12]:
-        path = os.path.join(base, f"grade_{grade}.json")
-        try:
-            with open(path, encoding="utf-8") as f:
-                data = json.load(f)
-            units = data.get("units", [])
-            for idx, u in enumerate(units):
-                if u["unit_id"] == unit_id:
-                    return {
-                        "unit_id":         unit_id,
-                        "name":            u.get("name", f"Ünite {unit_id}"),
-                        "number":          idx + 1,
-                        "grade":           grade,
-                        "total_questions": len(u.get("questions", [])),
-                    }
-        except (FileNotFoundError, KeyError, json.JSONDecodeError):
-            pass
-    return None
+    payload = get_unite(unit_id)
+    if not payload:
+        return None
+
+    return {
+        "unit_id": unit_id,
+        "name": payload.get("name", f"Unite {unit_id}"),
+        "number": payload.get("unit_no", 1),
+        "grade": payload.get("grade", current_user.grade or 9),
+        "total_questions": 0,
+    }
 
 
 @dashboard_bp.route("/")

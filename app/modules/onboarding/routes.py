@@ -1,22 +1,32 @@
-import json
-import os
 from flask import render_template, redirect, url_for, flash, request, session
 from flask_login import login_required, current_user
 
+from app.clients.kavram_api import get_placement_feed
 from app.modules.onboarding import onboarding_bp
 from app.extensions import mysql
 
-# Path to placement questions JSON
-_QUESTIONS_PATH = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-    "data", "placement_questions.json"
-)
-
 
 def _load_questions(grade: int) -> list:
-    with open(_QUESTIONS_PATH, encoding="utf-8") as f:
-        data = json.load(f)
-    return data.get(str(grade), [])
+    payload = get_placement_feed(grade)
+    items = payload.get("items", []) if isinstance(payload, dict) else []
+
+    questions = []
+    for idx, item in enumerate(items, start=1):
+        unit = item.get("unit", {})
+        q = item.get("question", {})
+        choices = q.get("choices", {})
+        correct_choice = q.get("correct_choice", "A")
+        correct_text = choices.get(correct_choice, "")
+        questions.append({
+            "id": q.get("id", idx),
+            "topic": q.get("topic_name", "Konu"),
+            "question": q.get("prompt", ""),
+            "choices": [choices.get("A", ""), choices.get("B", ""), choices.get("C", ""), choices.get("D", "")],
+            "correct": correct_text,
+            "unit_id": unit.get("id"),
+            "unit_name": unit.get("name"),
+        })
+    return questions
 
 
 # ── Sınıf Seçimi ──────────────────────────────────────────────────────────────
@@ -87,6 +97,8 @@ def placement_test():
             "correct": current_q["correct"],
             "chosen": chosen,
             "is_correct": is_correct,
+            "unit_id": current_q.get("unit_id"),
+            "unit_name": current_q.get("unit_name"),
         })
         session["placement_answers"] = answers
         session["placement_index"] = index + 1
