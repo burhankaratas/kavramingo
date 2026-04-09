@@ -6,12 +6,10 @@ app/modules/progress/routes.py
 GET /ilerleme/    → sınıfa göre gruplu ünite kartları + progress barlar
 """
 
-import json
-import os
-
 from flask import render_template
 from flask_login import current_user, login_required
 
+from app.clients.kavram_api import get_unites
 from app.modules.progress import progress_bp
 from app.extensions import mysql
 
@@ -29,23 +27,27 @@ GRADE_META = {
 
 
 def _load_all_units() -> list[dict]:
-    """Tüm grade JSON'larından ünite listesini (grade bilgisiyle) döndürür."""
-    base = os.path.join(os.path.dirname(__file__), "..", "..", "data", "quiz")
+    """API'den tum uniteleri grade+numara ile dondurur."""
     units = []
-    for grade in [9, 10, 11, 12]:
-        path = os.path.join(base, f"grade_{grade}.json")
+    for u in get_unites(per_page=200):
         try:
-            with open(path, encoding="utf-8") as f:
-                data = json.load(f)
-            for idx, u in enumerate(data.get("units", [])):
-                units.append({
-                    "unit_id": u["unit_id"],
-                    "name":    u.get("name", f"Ünite {u['unit_id']}"),
-                    "number":  idx + 1,
-                    "grade":   grade,
-                })
-        except (FileNotFoundError, KeyError, json.JSONDecodeError):
-            pass
+            unit_id = int(u.get("id", 0))
+            grade = int(u.get("grade", 0))
+            number = int(u.get("unit_no", 1))
+        except (TypeError, ValueError):
+            continue
+
+        if unit_id <= 0 or grade not in (9, 10, 11, 12):
+            continue
+
+        units.append({
+            "unit_id": unit_id,
+            "name": u.get("name", f"Unite {unit_id}"),
+            "number": number,
+            "grade": grade,
+        })
+
+    units.sort(key=lambda x: (x["grade"], x["number"]))
     return units
 
 

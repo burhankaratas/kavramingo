@@ -6,13 +6,12 @@ Quiz Geçmişi — kullanıcının tüm quiz oturumlarını listeler.
 GET /gecmis/    → tarih sıralı oturum listesi (max 50), client-side filtre
 """
 
-import json
-import os
 from datetime import datetime
 
 from flask import render_template
 from flask_login import current_user, login_required
 
+from app.clients.kavram_api import get_unit_map
 from app.modules.history import history_bp
 from app.extensions import mysql
 
@@ -35,23 +34,7 @@ SESSION_LIMIT = 50
 
 
 def _load_unit_map() -> dict:
-    """Tüm grade JSON'larından {unit_id: {name, grade, number}} döndürür."""
-    base = os.path.join(os.path.dirname(__file__), "..", "..", "data", "quiz")
-    unit_map = {}
-    for grade in [9, 10, 11, 12]:
-        path = os.path.join(base, f"grade_{grade}.json")
-        try:
-            with open(path, encoding="utf-8") as f:
-                data = json.load(f)
-            for idx, u in enumerate(data.get("units", [])):
-                unit_map[u["unit_id"]] = {
-                    "name":   u.get("name", f"Ünite {u['unit_id']}"),
-                    "grade":  grade,
-                    "number": idx + 1,
-                }
-        except (FileNotFoundError, KeyError, json.JSONDecodeError):
-            pass
-    return unit_map
+    return get_unit_map()
 
 
 def _time_ago(dt: datetime) -> str:

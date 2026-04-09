@@ -1,5 +1,3 @@
-import json
-import os
 from datetime import datetime, timedelta
 
 from flask import render_template, redirect, url_for, flash, request, current_app
@@ -9,6 +7,7 @@ from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.modules.user import user_bp
+from app.clients.kavram_api import get_unit_map, get_unites
 from app.extensions import mysql, mail
 from app.models.user import User
 from app.services.badge_service import get_user_streak
@@ -53,19 +52,12 @@ _QUIZ_TYPE_MAP = {
 # ── Yardımcılar ───────────────────────────────────────────────────────────────
 
 def _load_unit_map() -> dict:
-    """Tüm grade JSON'larından {unit_id: (unit_name, grade)} sözlüğü döndürür."""
-    base = os.path.join(os.path.dirname(__file__), "..", "..", "data", "quiz")
-    unit_map = {}
-    for grade in [9, 10, 11, 12]:
-        path = os.path.join(base, f"grade_{grade}.json")
-        try:
-            with open(path, encoding="utf-8") as f:
-                data = json.load(f)
-            for u in data.get("units", []):
-                unit_map[u["unit_id"]] = (u.get("name", f"Ünite {u['unit_id']}"), grade)
-        except (FileNotFoundError, KeyError):
-            pass
-    return unit_map
+    """API'den {unit_id: (unit_name, grade)} sozlugu dondurur."""
+    api_map = get_unit_map()
+    out = {}
+    for uid, item in api_map.items():
+        out[uid] = (item.get("name", f"Unite {uid}"), int(item.get("grade", 9)))
+    return out
 
 
 def _time_ago(dt: datetime) -> str:
@@ -221,15 +213,15 @@ def profile():
         })
 
     # ── 6. Ünite ilerleme ─────────────────────────────────────────────────────
-    base_path = os.path.join(
-        os.path.dirname(__file__), "..", "..", "data", "quiz", f"grade_{grade}.json"
-    )
     grade_units = []
-    try:
-        with open(base_path, encoding="utf-8") as f:
-            grade_units = json.load(f).get("units", [])
-    except (FileNotFoundError, KeyError):
-        pass
+    for u in get_unites(grade=grade, per_page=200):
+        try:
+            grade_units.append({
+                "unit_id": int(u.get("id", 0)),
+                "name": u.get("name", ""),
+            })
+        except (TypeError, ValueError):
+            continue
 
     unit_progress = []
     if grade_units:
@@ -243,9 +235,12 @@ def profile():
         """, [uid] + unit_ids)
         done_map = {r["unite_id"]: r["done"] for r in cur.fetchall()}
         for u in grade_units:
-            done = done_map.get(u["unit_id"], 0)
+            uid_val = int(u.get("unit_id", 0) or 0)
+            if uid_val <= 0:
+                continue
+            done = done_map.get(uid_val, 0)
             unit_progress.append({
-                "name": u.get("name", f"Ünite {u['unit_id']}"),
+                "name": u.get("name", f"Unite {uid_val}"),
                 "pct":  min(100, int(done / 4 * 100)),
             })
 

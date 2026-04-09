@@ -36,12 +36,28 @@ def _unwrap(payload):
     return payload
 
 
-def get_unites():
-    """Tüm üniteleri döndürür."""
+def get_unites(grade=None, per_page=100, page=1):
+    """Tum uniteleri veya grade'e gore filtreli listeyi dondurur."""
     if _is_mock():
-        return mock_get_unites()
+        units = mock_get_unites()
+        if grade is None:
+            return units
+        try:
+            g = int(grade)
+            return [u for u in units if int(u.get("grade", 0)) == g]
+        except (TypeError, ValueError):
+            return units
     try:
-        resp = requests.get(f"{_base()}/api/v1/unites", headers=_headers(), timeout=7)
+        params = {"per_page": int(per_page), "page": int(page)}
+        if grade is not None:
+            params["grade"] = int(grade)
+
+        resp = requests.get(
+            f"{_base()}/api/v1/unites",
+            params=params,
+            headers=_headers(),
+            timeout=7,
+        )
         resp.raise_for_status()
         return _unwrap(resp.json())
     except requests.exceptions.RequestException:
@@ -161,3 +177,23 @@ def get_quiz_feed(grade, unit_id, quiz_type):
         return payload if isinstance(payload, dict) else {"questions": []}
     except requests.exceptions.RequestException:
         return {"questions": []}
+
+
+def get_unit_map() -> dict:
+    """{unit_id: {'name','grade','number'}} map'i dondurur."""
+    out = {}
+    for u in get_unites(per_page=200):
+        try:
+            uid = int(u.get("id", 0))
+        except (TypeError, ValueError):
+            continue
+
+        if uid <= 0:
+            continue
+
+        out[uid] = {
+            "name": u.get("name", f"Unite {uid}"),
+            "grade": int(u.get("grade", 9) or 9),
+            "number": int(u.get("unit_no", 1) or 1),
+        }
+    return out
