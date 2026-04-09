@@ -1,167 +1,61 @@
 """
 app/modules/library/routes.py
 ─────────────────────────────
-Ünite Kütüphanesi — tüm sınıfların tüm ünitelerine erişim.
+Unite Kutuphanesi - API tabanli listeleme.
 
-GET /library/            → tüm üniteler
-GET /library/?grade=9    → sadece 9. sınıf üniteleri
+GET /library/            -> tum uniteler
+GET /library/?grade=9    -> sadece 9. sinif uniteleri
 """
 
 from flask import render_template, request
 from flask_login import login_required
 
+from app.clients.kavram_api import get_unites
 from app.modules.library import library_bp
 
 
-# ── Ünite kataloğu (JSON'daki unit_id'lerle eşleşiyor) ───────────────────────
-UNITS = [
-    # 9. Sınıf
-    {
-        "unit_id": 1,
-        "grade": 9,
-        "number": 1,
-        "name": "Bilgi ve İnanç",
-        "description": "İslam inancının temelleri, iman esasları ve tevhid kavramı üzerine sorular.",
-        "question_count": 20,
-    },
-    {
-        "unit_id": 2,
-        "grade": 9,
-        "number": 2,
-        "name": "Kur'an-ı Kerim",
-        "description": "Kur'an'ın inişi, özellikleri, mucizeleri ve hayatımızdaki yeri.",
-        "question_count": 18,
-    },
-    {
-        "unit_id": 3,
-        "grade": 9,
-        "number": 3,
-        "name": "Hz. Muhammed'i Tanıyalım",
-        "description": "Peygamberimizin hayatı, kişiliği, görevleri ve sünnetinin önemi.",
-        "question_count": 22,
-    },
-    {
-        "unit_id": 4,
-        "grade": 9,
-        "number": 4,
-        "name": "İbadet",
-        "description": "İslam'ın beş şartı, ibadetlerin hikmetleri ve günlük hayata yansımaları.",
-        "question_count": 20,
-    },
-    # 10. Sınıf
-    {
-        "unit_id": 5,
-        "grade": 10,
-        "number": 1,
-        "name": "Kaza, Kader ve İnsan Özgürlüğü",
-        "description": "Kader inancı, özgür irade ve insan sorumluluğu arasındaki denge.",
-        "question_count": 18,
-    },
-    {
-        "unit_id": 6,
-        "grade": 10,
-        "number": 2,
-        "name": "Hz. Muhammed ve Aile Hayatı",
-        "description": "Peygamberimizin aile hayatı, evlilik anlayışı ve aile kurumuna katkıları.",
-        "question_count": 16,
-    },
-    {
-        "unit_id": 7,
-        "grade": 10,
-        "number": 3,
-        "name": "İslam'da Ahlak Anlayışı",
-        "description": "İslami ahlakın kaynakları, temel erdemler ve güzel ahlakın önemi.",
-        "question_count": 20,
-    },
-    {
-        "unit_id": 8,
-        "grade": 10,
-        "number": 4,
-        "name": "Din ve Laiklik",
-        "description": "Din-devlet ilişkisi, laiklik ilkesi ve Türkiye'deki uygulamaları.",
-        "question_count": 18,
-    },
-    # 11. Sınıf
-    {
-        "unit_id": 9,
-        "grade": 11,
-        "number": 1,
-        "name": "Din, Kültür ve Medeniyet",
-        "description": "İslam medeniyetinin kültüre katkıları, sanat, mimari ve bilime etkileri.",
-        "question_count": 20,
-    },
-    {
-        "unit_id": 10,
-        "grade": 11,
-        "number": 2,
-        "name": "İslam ve Bilim",
-        "description": "İslam'ın bilime bakışı, Müslüman bilim insanları ve bilimsel miras.",
-        "question_count": 18,
-    },
-    {
-        "unit_id": 11,
-        "grade": 11,
-        "number": 3,
-        "name": "Asr-ı Saadetten Örnek Şahsiyetler",
-        "description": "Hz. Peygamber döneminde yetişen sahabe ve onların İslam'a katkıları.",
-        "question_count": 22,
-    },
-    {
-        "unit_id": 12,
-        "grade": 11,
-        "number": 4,
-        "name": "İslam Tasavvufu",
-        "description": "Tasavvufun tanımı, temel kavramları, önemli tarikatlar ve temsilcileri.",
-        "question_count": 18,
-    },
-    # 12. Sınıf
-    {
-        "unit_id": 13,
-        "grade": 12,
-        "number": 1,
-        "name": "Bir Mesaj Olarak Din",
-        "description": "Dinin insan hayatındaki işlevi, evrensel mesajı ve insanlığa katkısı.",
-        "question_count": 16,
-    },
-    {
-        "unit_id": 14,
-        "grade": 12,
-        "number": 2,
-        "name": "Güncel Dini Meseleler",
-        "description": "Çağımızda din-bilim ilişkisi, din istismarı ve din özgürlüğü gibi konular.",
-        "question_count": 20,
-    },
-    {
-        "unit_id": 15,
-        "grade": 12,
-        "number": 3,
-        "name": "Diyanet İşleri Başkanlığı",
-        "description": "Diyanet'in kuruluşu, görevleri, yapısı ve toplumsal işlevleri.",
-        "question_count": 16,
-    },
-    {
-        "unit_id": 16,
-        "grade": 12,
-        "number": 4,
-        "name": "Din Görevlisinin Önemi",
-        "description": "Din görevlilerinin toplumsal rolü, nitelikleri ve mesleki sorumlulukları.",
-        "question_count": 14,
-    },
-]
-
 QUIZ_TYPES = [
-    {"key": "multiple_choice", "label": "Çoktan Seçmeli", "icon": "bi-check2-circle",     "color": "#4361EE"},
-    {"key": "flashcard",       "label": "Flashcard",       "icon": "bi-card-text",          "color": "#D9730D"},
-    {"key": "matching",        "label": "Eşleştirme",      "icon": "bi-shuffle",            "color": "#06D6A0"},
-    {"key": "fill_blank",      "label": "Boşluk Doldurma", "icon": "bi-pencil-fill",        "color": "#7209B7"},
+    {"key": "multiple_choice", "label": "Coktan Secmeli", "icon": "bi-check2-circle", "color": "#4361EE"},
+    {"key": "flashcard", "label": "Flashcard", "icon": "bi-card-text", "color": "#D9730D"},
+    {"key": "matching", "label": "Eslestirme", "icon": "bi-shuffle", "color": "#06D6A0"},
+    {"key": "fill_blank", "label": "Bosluk Doldurma", "icon": "bi-pencil-fill", "color": "#7209B7"},
 ]
 
 GRADE_META = {
-    9:  {"color": "#4361EE", "bg": "#EEF1FD", "label": "9. Sınıf"},
-    10: {"color": "#7209B7", "bg": "#F5F3FF", "label": "10. Sınıf"},
-    11: {"color": "#D9730D", "bg": "#FFF4E0", "label": "11. Sınıf"},
-    12: {"color": "#059669", "bg": "#ECFDF5", "label": "12. Sınıf"},
+    9: {"color": "#4361EE", "bg": "#EEF1FD", "label": "9. Sinif"},
+    10: {"color": "#7209B7", "bg": "#F5F3FF", "label": "10. Sinif"},
+    11: {"color": "#D9730D", "bg": "#FFF4E0", "label": "11. Sinif"},
+    12: {"color": "#059669", "bg": "#ECFDF5", "label": "12. Sinif"},
 }
+
+
+def _load_units() -> list[dict]:
+    payload = get_unites()
+    units_raw = payload if isinstance(payload, list) else []
+
+    units: list[dict] = []
+    for item in units_raw:
+        grade = int(item.get("grade", 0) or 0)
+        if grade not in (9, 10, 11, 12):
+            continue
+
+        unit_id = int(item.get("id", 0) or 0)
+        if unit_id <= 0:
+            continue
+
+        units.append(
+            {
+                "unit_id": unit_id,
+                "grade": grade,
+                "number": int(item.get("unit_no", 1) or 1),
+                "name": item.get("name", f"Unite {unit_id}"),
+                "description": item.get("description") or "Bu unite icin aciklama eklenmedi.",
+                "question_count": 0,
+            }
+        )
+
+    units.sort(key=lambda u: (u["grade"], u["number"]))
+    return units
 
 
 @library_bp.route("/")
@@ -169,16 +63,19 @@ GRADE_META = {
 def index():
     grade_filter = request.args.get("grade", "all")
 
+    all_units = _load_units()
+
     if grade_filter in ("9", "10", "11", "12"):
-        filtered = [u for u in UNITS if u["grade"] == int(grade_filter)]
+        filtered = [u for u in all_units if u["grade"] == int(grade_filter)]
     else:
         grade_filter = "all"
-        filtered = UNITS
+        filtered = all_units
 
-    # Filtrelenmiş üniteleri sınıfa göre grupla (template'de kolay kullanım için)
-    grouped = {}
+    grouped: dict[int, list[dict]] = {}
     for u in filtered:
         grouped.setdefault(u["grade"], []).append(u)
+
+    grade_counts = {g: len([u for u in all_units if u["grade"] == g]) for g in (9, 10, 11, 12)}
 
     return render_template(
         "library/index.html",
@@ -187,5 +84,6 @@ def index():
         grade_filter=grade_filter,
         quiz_types=QUIZ_TYPES,
         grade_meta=GRADE_META,
-        total_units=len(UNITS),
+        total_units=len(all_units),
+        grade_counts=grade_counts,
     )
