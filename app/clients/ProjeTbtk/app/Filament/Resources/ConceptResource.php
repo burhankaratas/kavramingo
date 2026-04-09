@@ -18,6 +18,10 @@ class ConceptResource extends Resource
     protected static ?string $model = Concept::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationLabel = 'Kavramlar';
+    protected static ?string $modelLabel = 'Kavram';
+    protected static ?string $pluralModelLabel = 'Kavramlar';
+    protected static ?string $navigationGroup = 'Icerik';
 
     public static function form(Form $form): Form
     {

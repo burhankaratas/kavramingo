@@ -16,6 +16,10 @@ class PlacementRuleResource extends Resource
     protected static ?string $model = PlacementRule::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationLabel = 'Yerlestirme Kurallari';
+    protected static ?string $modelLabel = 'Yerlestirme Kurali';
+    protected static ?string $pluralModelLabel = 'Yerlestirme Kurallari';
+    protected static ?string $navigationGroup = 'Icerik';
 
     public static function form(Form $form): Form
     {

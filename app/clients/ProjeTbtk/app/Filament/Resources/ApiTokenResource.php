@@ -18,6 +18,10 @@ class ApiTokenResource extends Resource
     protected static ?string $model = ApiToken::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationLabel = 'API Tokenlari';
+    protected static ?string $modelLabel = 'API Tokeni';
+    protected static ?string $pluralModelLabel = 'API Tokenlari';
+    protected static ?string $navigationGroup = 'Sistem';
 
     public static ?string $plainToken = null;
 
@@ -52,7 +56,22 @@ class ApiTokenResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('scopes')
                     ->label('Scopes')
-                    ->formatStateUsing(fn ($state) => implode(', ', $state ?? [])),
+                    ->formatStateUsing(function ($state): string {
+                        if (is_array($state)) {
+                            return implode(', ', $state);
+                        }
+
+                        if (is_string($state)) {
+                            $decoded = json_decode($state, true);
+                            if (is_array($decoded)) {
+                                return implode(', ', $decoded);
+                            }
+
+                            return $state;
+                        }
+
+                        return '-';
+                    }),
                 Tables\Columns\IconColumn::make('is_active')
                     ->label('Aktif')
                     ->boolean(),

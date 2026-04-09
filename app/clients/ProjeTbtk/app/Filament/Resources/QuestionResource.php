@@ -18,6 +18,10 @@ class QuestionResource extends Resource
     protected static ?string $model = Question::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationLabel = 'Sorular';
+    protected static ?string $modelLabel = 'Soru';
+    protected static ?string $pluralModelLabel = 'Sorular';
+    protected static ?string $navigationGroup = 'Icerik';
 
     public static function form(Form $form): Form
     {

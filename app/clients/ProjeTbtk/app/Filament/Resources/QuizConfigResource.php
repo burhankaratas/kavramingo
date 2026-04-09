@@ -16,6 +16,10 @@ class QuizConfigResource extends Resource
     protected static ?string $model = QuizConfig::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationLabel = 'Quiz Ayarlari';
+    protected static ?string $modelLabel = 'Quiz Ayari';
+    protected static ?string $pluralModelLabel = 'Quiz Ayarlari';
+    protected static ?string $navigationGroup = 'Icerik';
 
     public static function form(Form $form): Form
     {
