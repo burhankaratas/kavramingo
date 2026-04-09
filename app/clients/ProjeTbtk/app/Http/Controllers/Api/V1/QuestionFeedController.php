@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Concept;
 use App\Models\Question;
 use App\Models\Topic;
 use App\Models\Unit;
@@ -38,6 +39,16 @@ class QuestionFeedController extends Controller
             ->limit((int) $configuredCount)
             ->get();
 
+        $mappedQuestions = $this->mapQuestions($questions);
+
+        if ($validated['quiz_type'] === 'flashcard' && count($mappedQuestions) < (int) $configuredCount) {
+            $needed = (int) $configuredCount - count($mappedQuestions);
+            $mappedQuestions = array_merge(
+                $mappedQuestions,
+                $this->conceptFlashcardsForUnit($unit, $needed, $mappedQuestions)
+            );
+        }
+
         return $this->ok([
             'unit' => [
                 'id' => $unit->id,
@@ -47,7 +58,7 @@ class QuestionFeedController extends Controller
             ],
             'quiz_type' => $validated['quiz_type'],
             'question_count' => (int) $configuredCount,
-            'questions' => $this->mapQuestions($questions),
+            'questions' => $mappedQuestions,
         ]);
     }
 
@@ -145,5 +156,54 @@ class QuestionFeedController extends Controller
 
             return $base;
         })->values()->all();
+    }
+
+    private function conceptFlashcardsForUnit(Unit $unit, int $limit, array $existingMapped): array
+    {
+        if ($limit <= 0) {
+            return [];
+        }
+
+        $existingCodes = [];
+        foreach ($existingMapped as $item) {
+            $code = (string) ($item['question_code'] ?? '');
+            if ($code !== '') {
+                $existingCodes[$code] = true;
+            }
+        }
+
+        $concepts = Concept::query()
+            ->whereHas('topic', fn ($q) => $q->where('unit_id', $unit->id))
+            ->whereNotNull('definition')
+            ->where('definition', '<>', '')
+            ->inRandomOrder()
+            ->limit($limit * 3)
+            ->get();
+
+        $cards = [];
+        foreach ($concepts as $concept) {
+            $code = 'concept_' . $concept->id;
+            if (isset($existingCodes[$code])) {
+                continue;
+            }
+
+            $cards[] = [
+                'id' => (int) $concept->id,
+                'question_code' => $code,
+                'quiz_type' => 'flashcard',
+                'difficulty' => 'easy',
+                'prompt' => null,
+                'topic_id' => $concept->topic_id,
+                'topic_name' => $concept->topic?->name,
+                'front_text' => $concept->name,
+                'back_text' => $concept->definition,
+            ];
+
+            if (count($cards) >= $limit) {
+                break;
+            }
+        }
+
+        return $cards;
     }
 }
