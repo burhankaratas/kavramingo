@@ -4,7 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ConceptResource\Pages;
 use App\Models\Concept;
-use App\Models\Topic;
+use App\Models\Unit;
+use App\Support\UnitTopicResolver;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -23,25 +24,19 @@ class ConceptResource extends Resource
     protected static ?string $pluralModelLabel = 'Kavram Bankasi';
     protected static ?string $navigationGroup = 'Ileri Seviye';
 
-    public static function shouldRegisterNavigation(): bool
-    {
-        return false;
-    }
-
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('topic_id')
-                    ->label('Konu')
+                Forms\Components\Select::make('unit_id')
+                    ->label('Unite')
                     ->options(
-                        Topic::query()
-                            ->with('unit')
-                            ->orderBy('unit_id')
-                            ->orderBy('topic_no')
+                        Unit::query()
+                            ->orderBy('grade')
+                            ->orderBy('unit_no')
                             ->get()
-                            ->mapWithKeys(fn (Topic $topic) => [
-                                $topic->id => ($topic->unit?->grade ?? '?') . '. Sinif / U' . ($topic->unit?->unit_no ?? '?') . ' / K' . $topic->topic_no . ' - ' . $topic->name,
+                            ->mapWithKeys(fn (Unit $unit) => [
+                                $unit->id => $unit->grade . '. Sinif / ' . $unit->unit_no . '. Unite - ' . $unit->name,
                             ])
                             ->all()
                     )
@@ -66,8 +61,8 @@ class ConceptResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('topic.name')
-                    ->label('Konu')
+                Tables\Columns\TextColumn::make('topic.unit.name')
+                    ->label('Unite')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->label('Kavram')
@@ -121,8 +116,22 @@ class ConceptResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
+            ->with('topic.unit')
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function mutateDataToTopic(array $data): array
+    {
+        $unitId = (int) ($data['unit_id'] ?? 0);
+        $topic = UnitTopicResolver::defaultTopicForUnitId($unitId);
+        if ($topic) {
+            $data['topic_id'] = $topic->id;
+        }
+
+        unset($data['unit_id']);
+
+        return $data;
     }
 }
