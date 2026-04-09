@@ -144,3 +144,20 @@ def get_placement_feed(grade):
         return resp.json()
     except requests.exceptions.RequestException:
         return {"items": []}
+
+
+def get_quiz_feed(grade, unit_id, quiz_type):
+    if _is_mock():
+        return {"questions": []}
+    try:
+        resp = requests.get(
+            f"{_base()}/api/v1/quiz-feed",
+            params={"grade": grade, "unit_id": unit_id, "quiz_type": quiz_type},
+            headers=_headers(),
+            timeout=7,
+        )
+        resp.raise_for_status()
+        payload = resp.json()
+        return payload if isinstance(payload, dict) else {"questions": []}
+    except requests.exceptions.RequestException:
+        return {"questions": []}

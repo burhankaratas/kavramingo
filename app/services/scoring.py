@@ -15,28 +15,10 @@ Kurallar (kullanıcı tarafından belirlendi):
 ─────────────────────────────────────────────
 KENDI SORULARINI EKLEMEK / DEĞİŞTİRMEK İÇİN:
   Bu dosyayı değiştirmene gerek yok.
-  Soruları app/data/quiz/grade_X.json dosyalarında düzenle.
+  Sorular API/panel tarafindan yonetilir.
 
-  JSON yapısı:
-    "id"            → benzersiz kimlik, değiştirme (9_1_mc_1 gibi)
-    "type"          → multiple_choice | flashcard | matching | fill_blank
-    "question"      → soru metni (multiple_choice / fill_blank için)
-    "options"       → seçenekler listesi (sadece multiple_choice)
-    "correct_index" → doğru seçeneğin indeksi 0'dan başlar (sadece multiple_choice)
-    "answer"        → doğru cevap metni (fill_blank için)
-    "pairs"         → eşleşme çiftleri listesi (matching için)
-    "term/definition"→ kavram ve tanımı (flashcard için)
-    "explanation"   → cevap sonrası gösterilecek açıklama
-    "hint"          → ipucu metni
-
-  Yeni soru eklemek:
-    İlgili grade_X.json dosyasını aç, ilgili ünitenin "questions" listesine
-    aynı yapıda yeni bir nesne ekle. id'yi sıradaki numarayla ver.
-    Örnek: "9_1_mc_6" (9. sınıf, ünite 1, multiple_choice, 6. soru)
-
-  Mevcut soruyu değiştirmek:
-    Sadece "question", "options", "correct_index" veya "answer" alanını güncelle.
-    "id" alanını ASLA değiştirme; bu alan quiz_answers tablosunda referans olarak kullanılır.
+  Icerik ekleme/guncelleme/silme islemleri icin Laravel Filament panelini kullan:
+  /admin
 ─────────────────────────────────────────────
 """
 

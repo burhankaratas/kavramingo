@@ -13,19 +13,15 @@ Tasarım ilkeleri:
 
 from __future__ import annotations
 
-import json
-import os
 import random
 from datetime import datetime
 
 from flask import session
 
+from app.clients.kavram_api import get_quiz_feed
 from app.services.scoring import calculate_quiz_score
 
 # ── Sabitler ─────────────────────────────────────────────────────────────────
-
-QUIZ_DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "quiz")
-"""JSON soru dosyalarının bulunduğu klasör."""
 
 QUESTIONS_PER_SESSION = 5
 """Bir oturumda sorulacak soru sayısı."""
@@ -36,22 +32,73 @@ SESSION_KEY = "quiz"
 
 # ── Yardımcı ─────────────────────────────────────────────────────────────────
 
-def _grade_file(grade: int) -> str:
-    return os.path.join(QUIZ_DATA_DIR, f"grade_{grade}.json")
+QUIZ_TYPE_TO_API = {
+    "multiple_choice": "mcq",
+    "flashcard": "flashcard",
+    "matching": "matching",
+    "fill_blank": "fill_blank",
+}
 
 
-def _load_grade_data(grade: int) -> dict:
-    path = _grade_file(grade)
-    with open(path, encoding="utf-8") as f:
-        return json.load(f)
+def _normalize_question(api_q: dict, local_type: str) -> dict:
+    qid = str(api_q.get("question_code") or api_q.get("id") or "0")
 
+    if local_type == "multiple_choice":
+        choices = api_q.get("choices", {})
+        letters = ["A", "B", "C", "D"]
+        options = [choices.get(letter, "") for letter in letters]
+        correct_letter = api_q.get("correct_choice", "A")
+        try:
+            correct_index = letters.index(correct_letter)
+        except ValueError:
+            correct_index = 0
+        return {
+            "id": qid,
+            "type": local_type,
+            "question": api_q.get("prompt", ""),
+            "options": options,
+            "correct_index": correct_index,
+            "topic": api_q.get("topic_name", ""),
+        }
 
-def _get_unit(grade: int, unit_id: int) -> dict | None:
-    data = _load_grade_data(grade)
-    for unit in data.get("units", []):
-        if unit["unit_id"] == unit_id:
-            return unit
-    return None
+    if local_type == "flashcard":
+        return {
+            "id": qid,
+            "type": local_type,
+            "term": api_q.get("front_text", api_q.get("prompt", "")),
+            "definition": api_q.get("back_text", ""),
+            "topic": api_q.get("topic_name", ""),
+        }
+
+    if local_type == "matching":
+        pairs = api_q.get("pairs", [])
+        normalized_pairs = []
+        for pair in pairs:
+            normalized_pairs.append({
+                "term": pair.get("left_text", ""),
+                "definition": pair.get("right_text", ""),
+            })
+        return {
+            "id": qid,
+            "type": local_type,
+            "pairs": normalized_pairs,
+            "topic": api_q.get("topic_name", ""),
+        }
+
+    if local_type == "fill_blank":
+        sentence = api_q.get("sentence_template", "")
+        if "___" not in sentence:
+            sentence = sentence.replace(api_q.get("answer_text", ""), "___")
+        return {
+            "id": qid,
+            "type": local_type,
+            "sentence": sentence,
+            "answer": api_q.get("answer_text", ""),
+            "similarity_threshold": int(api_q.get("similarity_threshold", 85)),
+            "topic": api_q.get("topic_name", ""),
+        }
+
+    return {"id": qid, "type": local_type}
 
 
 # ── Public API ───────────────────────────────────────────────────────────────
@@ -71,20 +118,25 @@ def start_session(grade: int, unit_id: int, quiz_type: str) -> bool:
     True  → oturum başlatıldı
     False → ünite veya o tipteki soru bulunamadı
     """
-    unit = _get_unit(grade, unit_id)
-    if not unit:
+    api_type = QUIZ_TYPE_TO_API.get(quiz_type)
+    if not api_type:
         return False
 
-    all_qs = [q for q in unit.get("questions", []) if q["type"] == quiz_type]
-    if not all_qs:
+    payload = get_quiz_feed(grade, unit_id, api_type)
+    all_api_questions = payload.get("questions", []) if isinstance(payload, dict) else []
+    if not all_api_questions:
         return False
 
-    chosen = random.sample(all_qs, min(QUESTIONS_PER_SESSION, len(all_qs)))
+    normalized = [_normalize_question(q, quiz_type) for q in all_api_questions]
+    chosen = random.sample(normalized, min(QUESTIONS_PER_SESSION, len(normalized)))
+
+    unit_payload = payload.get("unit", {}) if isinstance(payload, dict) else {}
+    unit_name = unit_payload.get("name", "")
 
     session[SESSION_KEY] = {
         "grade":      grade,
         "unit_id":    unit_id,
-        "unit_name":  unit.get("name", ""),
+        "unit_name":  unit_name,
         "quiz_type":  quiz_type,
         "questions":  chosen,
         "current":    0,          # mevcut soru indeksi
@@ -228,9 +280,9 @@ def finish_session(user_id: int, mysql) -> dict:
 
         # ── quiz_answers satırları ───────────────────────────────────────────
         for ans in state["answers"]:
-            # kavram_id: soru ID'sinin son parçasını (sıra no) sayısal olarak al
+            # kavram_id: soru kodu numerik degilse 0 fallback
             try:
-                kavram_id = int(ans["question_id"].split("_")[-1])
+                kavram_id = int(ans["question_id"])
             except (ValueError, AttributeError):
                 kavram_id = 0
 

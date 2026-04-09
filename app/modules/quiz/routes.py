@@ -17,6 +17,7 @@ Sorgu parametreleri (index GET):
 """
 
 import time
+import unicodedata
 
 from flask import (
     abort,
@@ -170,18 +171,36 @@ def answer():
         pairs      = q.get("pairs", [])
         correct    = 0
         given_map  = {}
+        total_pairs = len(pairs)
         for i, pair in enumerate(pairs):
             val = request.form.get(f"match_{i}", "").strip()
             given_map[i] = val
             if val == pair.get("definition", ""):
                 correct += 1
         given      = str(given_map)
-        is_correct = (correct == len(pairs))
+        # kısmi puan: 3-6 ciftte en az yarisini dogru yapan "dogru" kabul edilir
+        threshold = max(1, (total_pairs + 1) // 2)
+        is_correct = (correct >= threshold)
 
     elif quiz_type == "fill_blank":
-        given_raw  = (request.form.get("answer", "") or "").strip().lower()
+        def _norm_text(s: str) -> str:
+            s = (s or "").strip().lower()
+            s = unicodedata.normalize("NFKD", s)
+            s = "".join(ch for ch in s if not unicodedata.combining(ch))
+            return s.replace("ı", "i")
+
+        def _similarity(a: str, b: str) -> float:
+            if not a and not b:
+                return 1.0
+            import difflib
+            return difflib.SequenceMatcher(None, a, b).ratio()
+
+        given_raw  = (request.form.get("answer", "") or "").strip()
         given      = given_raw
-        is_correct = given_raw == q.get("answer", "").strip().lower()
+        norm_given = _norm_text(given_raw)
+        norm_ans   = _norm_text(q.get("answer", ""))
+        threshold  = float(q.get("similarity_threshold", 85)) / 100.0
+        is_correct = _similarity(norm_given, norm_ans) >= threshold
 
     quiz_engine.record_answer(given, is_correct, time_taken)
 
