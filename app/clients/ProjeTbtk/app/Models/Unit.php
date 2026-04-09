@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Unit extends Model
+{
+    protected $fillable = [
+        'name',
+        'description',
+        'order',
+    ];
+
+    public function concepts(): HasMany
+    {
+        return $this->hasMany(Concept::class)->orderBy('order');
+    }
+}
