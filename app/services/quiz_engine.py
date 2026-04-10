@@ -168,7 +168,12 @@ def get_session_state() -> dict | None:
     return session.get(SESSION_KEY)
 
 
-def record_answer(given_answer: str, is_correct: bool, time_taken: float | None = None) -> None:
+def record_answer(
+    given_answer: str,
+    is_correct: bool,
+    time_taken: float | None = None,
+    meta: dict | None = None,
+) -> None:
     """
     Mevcut sorunun cevabını kaydeder ve bir sonraki soruya geçer.
 
@@ -183,12 +188,16 @@ def record_answer(given_answer: str, is_correct: bool, time_taken: float | None 
         return
 
     question = state["questions"][state["current"]]
-    state["answers"].append({
+    row = {
         "question_id": question["id"],
         "given":       given_answer,
         "is_correct":  is_correct,
         "time":        time_taken,
-    })
+    }
+    if meta:
+        row.update(meta)
+
+    state["answers"].append(row)
     state["current"] += 1
     session.modified = True
 

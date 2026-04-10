@@ -151,6 +151,7 @@ def answer():
     # ── Cevap doğruluğunu tip'e göre kontrol et ──────────────────────────────
     given      = ""
     is_correct = False
+    answer_meta = {}
 
     if quiz_type == "multiple_choice":
         try:
@@ -200,9 +201,16 @@ def answer():
         norm_given = _norm_text(given_raw)
         norm_ans   = _norm_text(q.get("answer", ""))
         threshold  = float(q.get("similarity_threshold", 85)) / 100.0
-        is_correct = _similarity(norm_given, norm_ans) >= threshold
+        sim = _similarity(norm_given, norm_ans)
+        is_correct = sim >= threshold
+        answer_meta = {
+            "expected": q.get("answer", ""),
+            "similarity": round(sim * 100, 1),
+            "threshold": int(float(q.get("similarity_threshold", 85))),
+            "hint": (q.get("answer", "")[:1] + "...") if q.get("answer") else "",
+        }
 
-    quiz_engine.record_answer(given, is_correct, time_taken)
+    quiz_engine.record_answer(given, is_correct, time_taken, meta=answer_meta)
 
     if quiz_engine.is_finished():
         return redirect(url_for("quiz.result"))

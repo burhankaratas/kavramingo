@@ -53,6 +53,17 @@
     margin-top: 0.4rem;
   }
 
+  .fb-hint {
+    margin-top: 0.65rem;
+    background: #EEF2FF;
+    border: 1px dashed #A5B4FC;
+    border-radius: 12px;
+    padding: 0.55rem 0.75rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #3730A3;
+  }
+
   .btn-kl-submit {
     display: flex;
     align-items: center;
@@ -99,6 +110,12 @@
       required
     />
     <div class="fb-case-note">Büyük/küçük harf farkı gözetilmez.</div>
+    {% if question.answer %}
+    <div class="fb-hint">
+      <i class="bi bi-lightbulb-fill"></i>
+      Ipucu: Cevap <strong>{{ question.answer[:1] }}...</strong> ile baslar.
+    </div>
+    {% endif %}
   </div>
 
   <button type="submit" class="btn-kl-submit">

@@ -390,6 +390,15 @@
         {% if ans.time is not none %}
           <span style="font-weight:600;color:var(--kl-muted);"> · {{ "%.1f"|format(ans.time) }}s</span>
         {% endif %}
+        {% if result.quiz_type == 'fill_blank' %}
+          <div style="margin-top:4px;font-size:0.78rem;color:var(--kl-muted);font-weight:700;">
+            Senin cevabin: <strong style="color:var(--kl-text)">{{ ans.given or '-' }}</strong>
+            · Dogru cevap: <strong style="color:var(--kl-success)">{{ ans.expected or '-' }}</strong>
+            {% if ans.similarity is defined %}
+              · Benzerlik: <strong>{{ ans.similarity }}%</strong>
+            {% endif %}
+          </div>
+        {% endif %}
       </div>
       {% set bd = result.breakdown[loop.index0] if result.breakdown is defined else none %}
       {% if bd %}
