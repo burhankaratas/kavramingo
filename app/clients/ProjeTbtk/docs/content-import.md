@@ -47,3 +47,18 @@ Istersen bu dosyalari `storage/app/content-csv/` klasorune kopyalayip ordan da i
 - Matching importunda ayni `question_code` birden fazla satirda olmali (pair bazli).
 - Matching soru basina 3-6 cift disinda satirlar skip edilir.
 - Import transaction icinde calisir; hata olursa ilgili batch geri alinir.
+
+## Kavramlardan Otomatik Eslestirme Uretimi
+
+Kavram bankasindaki kayitlardan otomatik matching sorulari uretmek icin:
+
+```bash
+/opt/lampp/bin/php artisan app:generate-matching-from-concepts --pair-count=4 --max-per-unit=200
+```
+
+Secenekler:
+- `--grade=9|10|11|12` -> sadece secili sinif
+- `--pair-count=3..6` -> bir sorudaki cift sayisi
+- `--max-per-unit=0|N` -> unite basi maksimum soru (0 = limitsiz)
+
+Komut upsert mantiginda calisir; ayni kombinasyon kodu varsa gunceller.
