@@ -62,3 +62,20 @@ Secenekler:
 - `--max-per-unit=0|N` -> unite basi maksimum soru (0 = limitsiz)
 
 Komut upsert mantiginda calisir; ayni kombinasyon kodu varsa gunceller.
+
+## Kavramlardan Otomatik Bosluk Doldurma Uretimi
+
+Kavram tanimlarindan otomatik bosluk doldurma sorulari uretmek icin:
+
+```bash
+/opt/lampp/bin/php artisan app:generate-fillblank-from-concepts --variants=2 --max-per-unit=300
+```
+
+Secenekler:
+- `--grade=9|10|11|12` -> sadece secili sinif
+- `--variants=1|2` -> kavram basi soru varyanti (2 onerilir)
+- `--max-per-unit=0|N` -> unite basi maksimum soru (0 = limitsiz)
+
+Soru kalibi ornegi:
+- `<kavram tanimi> Bu kavrama ___ denir.`
+- `Tanim: <kavram tanimi> Yukaridaki tanimin kavrami: ___`

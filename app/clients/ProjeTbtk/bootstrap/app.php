@@ -11,6 +11,7 @@ return Application::configure(basePath: dirname(__DIR__))
         \App\Console\Commands\CreateAdminUser::class,
         \App\Console\Commands\ImportContentCsv::class,
         \App\Console\Commands\GenerateMatchingFromConcepts::class,
+        \App\Console\Commands\GenerateFillBlankFromConcepts::class,
     ])
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
