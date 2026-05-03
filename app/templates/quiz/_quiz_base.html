@@ -126,6 +126,22 @@
   .quiz-timer-fill.warn  { background: var(--kl-warning); }
   .quiz-timer-fill.alert { background: var(--kl-danger); }
 
+  .quiz-timeout-warning {
+    display: none;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 1rem;
+    background: #FEF2F2;
+    border: 1.5px solid #FCA5A5;
+    color: #B91C1C;
+    border-radius: 12px;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.82rem;
+    font-weight: 800;
+  }
+
+  .quiz-timeout-warning.show { display: flex; }
+
   /* İpucu */
   .quiz-hint {
     display: flex;
@@ -191,6 +207,11 @@
       <div class="quiz-timer-fill" id="timerFill"></div>
     </div>
 
+    <div class="quiz-timeout-warning" id="timeoutWarning">
+      <i class="bi bi-alarm-fill"></i>
+      <span>Süre doldu. Bu soru yanlış sayıldı, sonraki soruya geçiliyor.</span>
+    </div>
+
     {% block quiz_content %}{% endblock %}
   </div>
 
@@ -209,9 +230,34 @@
 (function() {
   var maxTime = {{ max_time | default(30) }};
   var fill    = document.getElementById('timerFill');
+  var warning = document.getElementById('timeoutWarning');
   if (!fill) return;
 
   var start = Date.now();
+  var timedOut = false;
+  var submitted = false;
+  var form = document.querySelector('.quiz-card form');
+
+  if (form) {
+    form.addEventListener('submit', function() {
+      submitted = true;
+    });
+  }
+
+  function autoSubmitTimeout() {
+    if (!form || submitted) return;
+
+    var hidden = document.createElement('input');
+    hidden.type = 'hidden';
+    hidden.name = 'timed_out';
+    hidden.value = '1';
+    form.appendChild(hidden);
+
+    submitted = true;
+    setTimeout(function() {
+      form.submit();
+    }, 1100);
+  }
 
   function tick() {
     var elapsed = (Date.now() - start) / 1000;
@@ -222,7 +268,16 @@
     else if (ratio < 0.6) fill.className = 'quiz-timer-fill warn';
     else fill.className = 'quiz-timer-fill';
 
-    if (ratio > 0) requestAnimationFrame(tick);
+    if (ratio > 0) {
+      requestAnimationFrame(tick);
+      return;
+    }
+
+    if (!timedOut) {
+      timedOut = true;
+      if (warning) warning.classList.add('show');
+      autoSubmitTimeout();
+    }
   }
   requestAnimationFrame(tick);
 })();

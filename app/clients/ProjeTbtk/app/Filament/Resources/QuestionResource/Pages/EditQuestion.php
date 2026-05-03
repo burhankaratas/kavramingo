@@ -27,7 +27,7 @@ class EditQuestion extends EditRecord
         $record = $this->record;
         $record->load(['mcq', 'flashcard', 'fillBlank', 'matchingPairs']);
 
-        $data['mcq'] = $record->mcq?->only(['choice_a', 'choice_b', 'choice_c', 'choice_d', 'correct_choice']);
+        $data['mcq'] = $record->mcq?->only(['choice_a', 'choice_b', 'choice_c', 'choice_d', 'choice_e', 'correct_choice']);
         $data['flashcard'] = $record->flashcard?->only(['front_text', 'back_text']);
         $data['fill_blank'] = $record->fillBlank?->only(['sentence_template', 'answer_text']);
         $data['matching_pairs'] = $record->matchingPairs->map(fn ($pair) => [

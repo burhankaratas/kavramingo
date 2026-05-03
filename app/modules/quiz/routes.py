@@ -34,6 +34,7 @@ from app.extensions import mysql
 from app.modules.quiz import quiz_bp
 from app.services import quiz_engine
 from app.services.badge_service import check_badges
+from app.services.learning_path import can_start_quiz, ensure_steps_for_user, unlock_next_step
 from app.services.scoring import MAX_TIME_PER_QUESTION, format_score_summary
 
 # ── Yardımcı ─────────────────────────────────────────────────────────────────
@@ -54,6 +55,13 @@ QUIZ_TYPE_TEMPLATES = {
 
 VALID_QUIZ_TYPES = set(QUIZ_TYPE_LABELS.keys())
 VALID_GRADES     = {9, 10, 11, 12}
+
+QUIZ_TYPE_TO_STEP = {
+    "multiple_choice": 1,
+    "flashcard": 2,
+    "matching": 3,
+    "fill_blank": 4,
+}
 
 
 # ── Routes ────────────────────────────────────────────────────────────────────
@@ -79,6 +87,11 @@ def index():
     if quiz_type not in VALID_QUIZ_TYPES:
         flash("Lütfen kütüphaneden bir quiz tipi seçerek başlayın.", "warning")
         return redirect(url_for("library.index"))
+
+    ensure_steps_for_user(current_user.id, grade, mysql)
+    if not can_start_quiz(current_user.id, unit_id, quiz_type, mysql):
+        flash("Bu adım henüz kilitli. Önce önceki adımı tamamlayın.", "warning")
+        return redirect(url_for("dashboard.index"))
 
     ok = quiz_engine.start_session(grade, unit_id, quiz_type)
     if not ok:
@@ -147,6 +160,10 @@ def answer():
     # ── Süre hesapla ─────────────────────────────────────────────────────────
     q_start   = session.pop("q_start", None)
     time_taken = round(time.time() - q_start, 2) if q_start else None
+    timed_out = request.form.get("timed_out") == "1"
+
+    if timed_out:
+        time_taken = MAX_TIME_PER_QUESTION
 
     # ── Cevap doğruluğunu tip'e göre kontrol et ──────────────────────────────
     given      = ""
@@ -154,20 +171,36 @@ def answer():
     answer_meta = {}
 
     if quiz_type == "multiple_choice":
-        try:
-            chosen_idx = int(request.form.get("choice", -1))
-        except ValueError:
+        if timed_out:
             chosen_idx = -1
+        else:
+            try:
+                chosen_idx = int(request.form.get("choice", -1))
+            except ValueError:
+                chosen_idx = -1
         given      = str(chosen_idx)
         is_correct = (chosen_idx == q.get("correct_index", -1))
 
     elif quiz_type == "flashcard":
         # Flashcard: kullanıcı "Biliyorum" / "Bilmiyorum" tıklar
-        verdict    = request.form.get("verdict", "no")
+        verdict    = "no" if timed_out else request.form.get("verdict", "no")
         given      = verdict
         is_correct = (verdict == "yes")
 
     elif quiz_type == "matching":
+        if timed_out:
+            given = "{}"
+            is_correct = False
+            quiz_engine.record_answer(given, is_correct, time_taken, meta=answer_meta)
+
+            if quiz_engine.is_finished():
+                return redirect(url_for("quiz.result"))
+
+            session["q_start"] = time.time()
+            session.modified = True
+            flash("Sure doldu, bu soru yanlis sayildi.", "warning")
+            return redirect(url_for("quiz.question"))
+
         # Eşleştirme: form'da pairs[left_idx] = right_text şeklinde gelir
         pairs      = q.get("pairs", [])
         correct    = 0
@@ -196,7 +229,7 @@ def answer():
             import difflib
             return difflib.SequenceMatcher(None, a, b).ratio()
 
-        given_raw  = (request.form.get("answer", "") or "").strip()
+        given_raw  = "" if timed_out else (request.form.get("answer", "") or "").strip()
         given      = given_raw
         norm_given = _norm_text(given_raw)
         norm_ans   = _norm_text(q.get("answer", ""))
@@ -211,6 +244,9 @@ def answer():
         }
 
     quiz_engine.record_answer(given, is_correct, time_taken, meta=answer_meta)
+
+    if timed_out:
+        flash("Sure doldu, bu soru yanlis sayildi.", "warning")
 
     if quiz_engine.is_finished():
         return redirect(url_for("quiz.result"))
@@ -239,6 +275,19 @@ def result():
             return redirect(url_for("dashboard.index"))
 
         result_data = quiz_engine.finish_session(current_user.id, mysql)
+
+        try:
+            step_no = QUIZ_TYPE_TO_STEP.get(state.get("quiz_type", ""))
+            if step_no and state.get("unit_id"):
+                unlock_next_step(
+                    user_id=current_user.id,
+                    unit_id=int(state["unit_id"]),
+                    completed_step=step_no,
+                    grade=int(state.get("grade") or current_user.grade or 9),
+                    mysql=mysql,
+                )
+        except Exception:
+            pass
 
         # Yeni rozetleri kontrol et
         new_badges = []

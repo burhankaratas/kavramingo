@@ -145,6 +145,24 @@ def init_db(app):
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci;
         """)
 
+        # ── progress_steps (duolingo benzeri adim takibi) ────────────────────
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS progress_steps (
+                id            INT AUTO_INCREMENT PRIMARY KEY,
+                user_id       INT         NOT NULL,
+                unite_id      INT         NOT NULL,
+                step_no       INT         NOT NULL COMMENT '1..4',
+                status        VARCHAR(20) NOT NULL DEFAULT 'locked'
+                                   COMMENT 'locked | in_progress | completed',
+                completed_at  DATETIME    DEFAULT NULL,
+                updated_at    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP
+                                   ON UPDATE CURRENT_TIMESTAMP,
+                CONSTRAINT fk_ps_user FOREIGN KEY (user_id)
+                    REFERENCES users(id) ON DELETE CASCADE,
+                CONSTRAINT uq_ps_user_unit_step UNIQUE (user_id, unite_id, step_no)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci;
+        """)
+
         # ── quiz_answers ───────────────────────────────────────────────────────
         cur.execute("""
             CREATE TABLE IF NOT EXISTS quiz_answers (

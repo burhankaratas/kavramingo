@@ -6,6 +6,7 @@ from app.clients.kavram_api import get_unite
 from app.modules.dashboard import dashboard_bp
 from app.extensions import mysql
 from app.services.badge_service import get_user_streak
+from app.services.learning_path import get_path_for_user
 
 
 # ── Yardımcı: API'den ünite bilgisi ──────────────────────────────────────────
@@ -146,9 +147,29 @@ def index():
 
     cur2.close()
 
+    learning_path = get_path_for_user(current_user.id, current_user.grade or 9, mysql)
+    next_activity = None
+    for unit in learning_path:
+        for step in unit["steps"]:
+            if step["status"] == "in_progress":
+                next_activity = {
+                    "unit_id": unit["unit_id"],
+                    "unit_no": unit["unit_no"],
+                    "unit_name": unit["name"],
+                    "quiz_type": step["quiz_type"],
+                    "step_no": step["step_no"],
+                    "step_title": step["title"],
+                    "grade": current_user.grade or 9,
+                }
+                break
+        if next_activity:
+            break
+
     return render_template(
         "dashboard/index.html",
         current_unit=current_unit,
+        learning_path=learning_path,
+        next_activity=next_activity,
         badges=badges_preview,
         earned_total=len(earned_map),
         total_badges=len(all_badges),

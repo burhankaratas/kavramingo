@@ -17,11 +17,15 @@ def _load_questions(grade: int) -> list:
         choices = q.get("choices", {})
         correct_choice = q.get("correct_choice", "A")
         correct_text = choices.get(correct_choice, "")
+        choice_letters = ["A", "B", "C", "D", "E"]
+        normalized_choices = [choices.get(letter, "") for letter in choice_letters]
+        normalized_choices = [c for c in normalized_choices if str(c).strip()]
+
         questions.append({
             "id": q.get("id", idx),
             "topic": q.get("topic_name", "Konu"),
             "question": q.get("prompt", ""),
-            "choices": [choices.get("A", ""), choices.get("B", ""), choices.get("C", ""), choices.get("D", "")],
+            "choices": normalized_choices,
             "correct": correct_text,
             "unit_id": unit.get("id"),
             "unit_name": unit.get("name"),
@@ -71,6 +75,10 @@ def placement_test():
 
     questions = _load_questions(current_user.grade)
     total = len(questions)
+
+    if total == 0:
+        flash("Yerleştirme soruları şu an yüklenemedi. Lütfen birazdan tekrar deneyin.", "warning")
+        return redirect(url_for("onboarding.class_select"))
 
     # Session başlat
     if "placement_answers" not in session:

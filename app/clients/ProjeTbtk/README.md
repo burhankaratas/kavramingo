@@ -20,7 +20,7 @@ API:
 ## Admin Kullanici
 
 ```bash
-/opt/lampp/bin/php artisan app:create-admin "Kavramingo Admin" "admin@kavramingo.local" "Admin123!"
+/opt/lampp/bin/php artisan app:create-admin "Kavramingo Admin" "<admin_email>" "<strong_admin_password>"
 ```
 
 ## CSV Import (Upsert)
@@ -47,3 +47,16 @@ Ornek dosyalar:
 
 Detaylar:
 - `docs/content-import.md`
+
+## Kavramlardan Otomatik MCQ Uretimi
+
+Her unite icin kavram ve tanimlardan 5 sikli (A-B-C-D-E) MCQ uretmek icin:
+
+```bash
+/opt/lampp/bin/php artisan app:generate-mcq-from-concepts --per-unit=50 --difficulty=easy
+```
+
+Secenekler:
+- `--grade=9|10|11|12` -> sadece secili sinif
+- `--per-unit=50` -> unite basi soru sayisi
+- `--difficulty=easy|medium|hard` -> soru zorluk etiketi

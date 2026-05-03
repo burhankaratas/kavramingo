@@ -10,6 +10,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withCommands([
         \App\Console\Commands\CreateAdminUser::class,
         \App\Console\Commands\ImportContentCsv::class,
+        \App\Console\Commands\GenerateMcqFromConcepts::class,
         \App\Console\Commands\GenerateMatchingFromConcepts::class,
         \App\Console\Commands\GenerateFillBlankFromConcepts::class,
     ])

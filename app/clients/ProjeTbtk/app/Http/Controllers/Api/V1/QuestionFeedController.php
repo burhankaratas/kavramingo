@@ -113,9 +113,13 @@ class QuestionFeedController extends Controller
 
     private function mapQuestions($questions): array
     {
-        $questions->load(['topic', 'mcq', 'flashcard', 'fillBlank', 'matchingPairs']);
+        foreach ($questions as $question) {
+            if ($question instanceof Question) {
+                $question->load(['topic', 'mcq', 'flashcard', 'fillBlank', 'matchingPairs']);
+            }
+        }
 
-        return $questions->map(function (Question $question) {
+        return collect($questions)->map(function (Question $question) {
             $base = [
                 'id' => $question->id,
                 'question_code' => $question->question_code,
@@ -132,6 +136,7 @@ class QuestionFeedController extends Controller
                     'B' => $question->mcq->choice_b,
                     'C' => $question->mcq->choice_c,
                     'D' => $question->mcq->choice_d,
+                    'E' => $question->mcq->choice_e,
                 ];
                 $base['correct_choice'] = $question->mcq->correct_choice;
             }

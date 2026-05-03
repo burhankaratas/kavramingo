@@ -281,3 +281,63 @@ def mock_get_kavram(kavram_id):
 def mock_get_random_kavramlar(unite_id, limit=10):
     havuz = _KAVRAM_BY_UNITE.get(unite_id, [])
     return random.sample(havuz, min(limit, len(havuz)))
+
+
+def mock_get_placement_feed(grade, limit=10):
+    """Placement-test akisi icin API benzeri soru payload'i uretir."""
+    try:
+        grade_int = int(grade)
+    except (TypeError, ValueError):
+        grade_int = 9
+
+    units = [u for u in UNITES if int(u.get("grade", 0)) == grade_int]
+    if not units:
+        return {"items": []}
+
+    topic_name_by_id = {k["id"]: k["name"] for k in KONULAR}
+    unit_by_id = {u["id"]: u for u in units}
+
+    pool = []
+    for unit in units:
+        for kavram in _KAVRAM_BY_UNITE.get(unit["id"], []):
+            pool.append((unit, kavram))
+
+    if not pool:
+        return {"items": []}
+
+    random.shuffle(pool)
+    selected = pool[: min(int(limit), len(pool))]
+
+    grade_definitions = [k["definition"] for _, k in pool]
+    all_definitions = [k["definition"] for k in KAVRAMLAR]
+
+    items = []
+    for idx, (unit, kavram) in enumerate(selected, start=1):
+        correct = kavram["definition"]
+        distractor_pool = [d for d in grade_definitions if d != correct]
+        if len(distractor_pool) < 4:
+            distractor_pool = [d for d in all_definitions if d != correct]
+
+        distractors = random.sample(distractor_pool, 4)
+        options = distractors + [correct]
+        random.shuffle(options)
+
+        letters = ["A", "B", "C", "D", "E"]
+        choices = {letters[i]: options[i] for i in range(5)}
+        correct_choice = next(letter for letter, text in choices.items() if text == correct)
+
+        items.append({
+            "unit": {
+                "id": unit["id"],
+                "name": unit.get("name", f"Unite {unit['id']}")
+            },
+            "question": {
+                "id": kavram.get("id", idx),
+                "topic_name": topic_name_by_id.get(kavram.get("konu_id"), "Konu"),
+                "prompt": f"'{kavram.get('term', 'Bu kavram')}' kavraminin aciklamasi hangisidir?",
+                "choices": choices,
+                "correct_choice": correct_choice,
+            },
+        })
+
+    return {"items": items}

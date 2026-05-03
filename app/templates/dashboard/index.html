@@ -626,9 +626,109 @@
     box-shadow: 0 7px 0 #04A87E;
   }
 
-  .btn-kl-library:active {
-    transform: translateY(3px);
-    box-shadow: 0 2px 0 #04A87E;
+.btn-kl-library:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 #04A87E;
+}
+
+  /* ── Ogrenme Hatti ───────────────────────────────────────────────────── */
+  .path-card {
+    background: #fff;
+    border-radius: 22px;
+    border: 2px solid var(--kl-border);
+    padding: 1.5rem;
+    box-shadow: 0 2px 14px rgba(67,97,238,0.06);
+    margin-bottom: 1.25rem;
+  }
+
+  .path-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .path-unit {
+    border: 1.5px solid var(--kl-border);
+    border-radius: 16px;
+    padding: 0.85rem 0.9rem;
+    background: #fff;
+  }
+
+  .path-unit.locked {
+    opacity: 0.65;
+    background: #FAFBFF;
+  }
+
+  .path-unit-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .path-unit-title {
+    font-size: 0.86rem;
+    font-weight: 900;
+    color: var(--kl-text);
+  }
+
+  .path-unit-pct {
+    font-size: 0.76rem;
+    font-weight: 800;
+    color: var(--kl-muted);
+  }
+
+  .path-track {
+    height: 8px;
+    border-radius: 8px;
+    background: var(--kl-bg);
+    overflow: hidden;
+    margin-bottom: 0.55rem;
+  }
+
+  .path-fill {
+    height: 100%;
+    border-radius: 8px;
+    background: linear-gradient(90deg, var(--kl-primary), var(--kl-accent));
+  }
+
+  .path-steps {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+  }
+
+  .step-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--kl-border);
+    background: var(--kl-bg);
+    color: var(--kl-muted);
+    font-size: 0.78rem;
+    font-weight: 900;
+  }
+
+  .step-dot.completed {
+    border-color: var(--kl-success);
+    background: #ECFDF5;
+    color: var(--kl-success);
+  }
+
+  .step-dot.active {
+    border-color: var(--kl-primary);
+    background: #EEF1FD;
+    color: var(--kl-primary);
+  }
+
+  .step-dot.locked {
+    background: #F3F5FA;
+    color: #B8C0CF;
   }
 
   /* ── Responsive ──────────────────────────────────────────────────────────── */
@@ -753,7 +853,38 @@
       <i class="bi bi-arrow-right" style="color:var(--kl-primary);font-size:1rem;flex-shrink:0;"></i>
     </a>
 
-    {% if current_unit %}
+    {% if next_activity %}
+    <div class="continue-card mb-4">
+      <div class="kl-card-title">
+        <i class="bi bi-signpost-split-fill" style="color:var(--kl-primary);font-size:1rem;"></i>
+        Ogrenme Hatti: Siradaki Adim
+      </div>
+
+      <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.85rem;">
+        <div class="continue-unit-badge" style="margin-bottom:0;">
+          <i class="bi bi-collection-fill"></i>
+          Unite {{ next_activity.unit_no }}
+        </div>
+        <span style="display:inline-flex;align-items:center;gap:0.3rem;
+                     background:#EEF1FD;color:var(--kl-primary);
+                     border-radius:50px;padding:4px 10px;
+                     font-size:0.72rem;font-weight:800;">
+          <i class="bi bi-diagram-3-fill"></i> Adim {{ next_activity.step_no }} / 4
+        </span>
+      </div>
+
+      <div class="continue-unit-name">{{ next_activity.unit_name }}</div>
+      <div class="continue-topic">
+        <i class="bi bi-lightning-charge-fill" style="color:var(--kl-warning);"></i>
+        {{ next_activity.step_title }}
+      </div>
+
+      <a href="{{ url_for('quiz.index', grade=next_activity.grade, unit_id=next_activity.unit_id, quiz_type=next_activity.quiz_type) }}"
+         class="btn-kl-continue">
+        <i class="bi bi-play-fill"></i> Bu Adima Basla
+      </a>
+    </div>
+    {% elif current_unit %}
     {# Sınıf renk haritası #}
     {% set _gc = {9: '#4361EE', 10: '#7209B7', 11: '#D9730D', 12: '#059669'} %}
     {% set _gb = {9: '#EEF1FD', 10: '#F5F3FF', 11: '#FFF4E0', 12: '#ECFDF5'} %}
@@ -865,6 +996,35 @@
 
   <!-- ── Sağ: Sidebar ────────────────────────────────────────────────── -->
   <div class="col-12 col-lg-4">
+
+    {% if learning_path %}
+    <div class="path-card">
+      <div class="kl-card-title" style="margin-bottom:0.8rem;">
+        <i class="bi bi-signpost-2-fill" style="color:var(--kl-primary);font-size:1rem;"></i>
+        Ogrenme Hatti
+      </div>
+
+      <div class="path-list">
+        {% for unit in learning_path[:4] %}
+        {% set has_active = (unit.steps | selectattr('status', 'equalto', 'in_progress') | list | length) > 0 %}
+        {% set is_locked = (unit.progress_pct == 0 and not has_active) %}
+        <div class="path-unit {{ 'locked' if is_locked else '' }}">
+          <div class="path-unit-head">
+            <div class="path-unit-title">{{ unit.unit_no }}. Unite</div>
+            <div class="path-unit-pct">{{ unit.progress_pct }}%</div>
+          </div>
+          <div class="path-track"><div class="path-fill" style="width:{{ unit.progress_pct }}%;"></div></div>
+          <div class="path-steps">
+            {% for step in unit.steps %}
+              <span class="step-dot {{ 'completed' if step.status == 'completed' else ('active' if step.status == 'in_progress' else 'locked') }}"
+                    title="{{ step.title }}">{{ step.step_no }}</span>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
 
     <!-- Günlük Hedef kartı -->
     <div class="kl-card mb-4">

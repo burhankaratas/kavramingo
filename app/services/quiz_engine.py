@@ -45,7 +45,8 @@ def _normalize_question(api_q: dict, local_type: str) -> dict:
 
     if local_type == "multiple_choice":
         choices = api_q.get("choices", {})
-        letters = ["A", "B", "C", "D"]
+        all_letters = ["A", "B", "C", "D", "E"]
+        letters = [letter for letter in all_letters if str(choices.get(letter, "")).strip()]
         options = [choices.get(letter, "") for letter in letters]
         correct_letter = api_q.get("correct_choice", "A")
         try:

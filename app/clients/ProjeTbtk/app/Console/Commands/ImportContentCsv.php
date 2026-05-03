@@ -218,6 +218,7 @@ class ImportContentCsv extends Command
                         'choice_b' => $row['choice_b'] ?? '',
                         'choice_c' => $row['choice_c'] ?? '',
                         'choice_d' => $row['choice_d'] ?? '',
+                        'choice_e' => $row['choice_e'] ?? '',
                         'correct_choice' => strtoupper($row['correct_choice'] ?? 'A'),
                     ]
                 );

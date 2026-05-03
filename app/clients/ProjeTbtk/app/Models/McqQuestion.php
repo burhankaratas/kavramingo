@@ -13,6 +13,7 @@ class McqQuestion extends Model
         'choice_b',
         'choice_c',
         'choice_d',
+        'choice_e',
         'correct_choice',
     ];
 

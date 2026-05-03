@@ -78,12 +78,12 @@ Ilk admin kullaniciyi olustur:
 
 ```bash
 cd app/clients/ProjeTbtk
-/opt/lampp/bin/php artisan app:create-admin "Kavramingo Admin" "admin@kavramingo.local" "Admin123!"
+/opt/lampp/bin/php artisan app:create-admin "Kavramingo Admin" "<admin_email>" "<strong_admin_password>"
 ```
 
 Panel girisi:
-- Email: `admin@kavramingo.local`
-- Sifre: `Admin123!`
+- Email: `<admin_email>`
+- Sifre: `<strong_admin_password>`
 
 Sonra sifreyi panelden degistirmen onerilir.
 
@@ -109,13 +109,13 @@ Gelistirme test token ornegi:
 
 ```bash
 cd app/clients/ProjeTbtk
-/opt/lampp/bin/php artisan tinker --execute="\App\Models\ApiToken::create(['name'=>'flask-read','token_hash'=>hash('sha256','ktk_dev_read_1234567890'),'scopes'=>['content:read'],'is_active'=>true]);"
+/opt/lampp/bin/php artisan tinker --execute="\App\Models\ApiToken::create(['name'=>'flask-read','token_hash'=>hash('sha256','<your_read_token>'),'scopes'=>['content:read'],'is_active'=>true]);"
 ```
 
 Flask `.env`:
 
 ```env
-KAVRAM_API_TOKEN=ktk_dev_read_1234567890
+KAVRAM_API_TOKEN=<your_read_token>
 ```
 
 ## 8) Icerik Yonetimi (Panel)

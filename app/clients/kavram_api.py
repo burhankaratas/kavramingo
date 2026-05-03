@@ -12,6 +12,7 @@ from app.clients.mock_data import (
     mock_get_kavramlar,
     mock_get_kavram,
     mock_get_random_kavramlar,
+    mock_get_placement_feed,
 )
 
 
@@ -133,11 +134,14 @@ def get_random_kavramlar(unite_id, limit=10):
         for i, item in enumerate(items, start=1):
             q = item.get("question", {})
             choices = q.get("choices", {})
+            letters = ["A", "B", "C", "D", "E"]
+            option_list = [choices.get(letter, "") for letter in letters]
+            option_list = [opt for opt in option_list if str(opt).strip()]
             out.append({
                 "id": q.get("id", i),
                 "topic": q.get("topic_name", "Konu"),
                 "question": q.get("prompt", ""),
-                "choices": [choices.get("A", ""), choices.get("B", ""), choices.get("C", ""), choices.get("D", "")],
+                "choices": option_list,
                 "correct": choices.get(q.get("correct_choice", "A"), ""),
                 "unit_id": item.get("unit", {}).get("id"),
             })
@@ -148,7 +152,7 @@ def get_random_kavramlar(unite_id, limit=10):
 
 def get_placement_feed(grade):
     if _is_mock():
-        return []
+        return mock_get_placement_feed(grade)
     try:
         resp = requests.get(
             f"{_base()}/api/v1/placement-feed",

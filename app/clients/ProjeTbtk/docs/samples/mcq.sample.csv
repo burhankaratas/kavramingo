@@ -1,3 +1,3 @@
-question_code,grade,unit_no,topic_no,difficulty,order,prompt,choice_a,choice_b,choice_c,choice_d,correct_choice
-DKAB9-U1-K1-MCQ-001,9,1,1,easy,10,Islam'in ilk sarti hangisidir?,Namaz,Zekat,Sehadet,Oruc,C
-DKAB9-U1-K1-MCQ-002,9,1,1,medium,20,Imanin sartlarindan biri hangisidir?,Sadaka,Ahiret gunune iman,Umre,Kurban,B
+question_code,grade,unit_no,topic_no,difficulty,order,prompt,choice_a,choice_b,choice_c,choice_d,choice_e,correct_choice
+DKAB9-U1-K1-MCQ-001,9,1,1,easy,10,Islam'in ilk sarti hangisidir?,Namaz,Zekat,Sehadet,Oruc,Hac,C
+DKAB9-U1-K1-MCQ-002,9,1,1,medium,20,Imanin sartlarindan biri hangisidir?,Sadaka,Ahiret gunune iman,Umre,Kurban,Tesbih,B

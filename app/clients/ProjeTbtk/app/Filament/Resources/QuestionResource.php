@@ -81,11 +81,12 @@ class QuestionResource extends Resource
                         Forms\Components\TextInput::make('mcq.choice_b')->label('Sik B')->required(),
                         Forms\Components\TextInput::make('mcq.choice_c')->label('Sik C')->required(),
                         Forms\Components\TextInput::make('mcq.choice_d')->label('Sik D')->required(),
+                        Forms\Components\TextInput::make('mcq.choice_e')->label('Sik E')->required(),
                         Forms\Components\Select::make('mcq.correct_choice')
                             ->label('Dogru Sik')
-                            ->options(['A' => 'A', 'B' => 'B', 'C' => 'C', 'D' => 'D'])
+                            ->options(['A' => 'A', 'B' => 'B', 'C' => 'C', 'D' => 'D', 'E' => 'E'])
                             ->required(),
-                    ])->columns(2),
+                    ])->columns(3),
 
                 Forms\Components\Section::make('Flashcard')
                     ->visible(fn (Forms\Get $get) => $get('quiz_type') === 'flashcard')

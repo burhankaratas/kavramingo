@@ -132,7 +132,7 @@
   <form method="POST" action="{{ url_for('onboarding.placement_test') }}" id="testForm">
 
     <div class="choices-list">
-      {% set letters = ['A', 'B', 'C', 'D'] %}
+      {% set letters = ['A', 'B', 'C', 'D', 'E'] %}
       {% for choice in question.choices %}
       <label class="choice-label">
         <input type="radio" name="answer" value="{{ choice }}" required />

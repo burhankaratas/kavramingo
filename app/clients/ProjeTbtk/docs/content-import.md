@@ -63,6 +63,24 @@ Secenekler:
 
 Komut upsert mantiginda calisir; ayni kombinasyon kodu varsa gunceller.
 
+## Kavramlardan Otomatik MCQ Uretimi
+
+Kavram ve tanimlardan 5 sikli MCQ (A-B-C-D-E) sorulari uretmek icin:
+
+```bash
+/opt/lampp/bin/php artisan app:generate-mcq-from-concepts --per-unit=50 --difficulty=easy
+```
+
+Secenekler:
+- `--grade=9|10|11|12` -> sadece secili sinif
+- `--per-unit=50` -> unite basi hedef soru sayisi
+- `--difficulty=easy|medium|hard` -> soru zorluk etiketi
+
+Notlar:
+- Sorular, uniteye bagli kavram tanimlarindan uretilir.
+- Her soru icin 1 dogru + 4 celdirici secenek kullanilir.
+- Kod formati: `AUTO-MCQ-U{unit_id}-Q{001..}`
+
 ## Kavramlardan Otomatik Bosluk Doldurma Uretimi
 
 Kavram tanimlarindan otomatik bosluk doldurma sorulari uretmek icin:
